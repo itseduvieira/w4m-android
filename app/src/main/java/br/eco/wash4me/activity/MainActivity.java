@@ -1,9 +1,9 @@
-package br.eco.washing4me.activity;
+package br.eco.wash4me.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import br.eco.washing4me.R;
+import br.eco.wash4me.R;
 
 public class MainActivity extends AppCompatActivity {
 

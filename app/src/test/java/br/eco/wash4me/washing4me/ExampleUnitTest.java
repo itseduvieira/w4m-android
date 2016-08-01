@@ -1,4 +1,4 @@
-package br.eco.washing4me.washing4me;
+package br.eco.wash4me.washing4me;
 
 import org.junit.Test;
 

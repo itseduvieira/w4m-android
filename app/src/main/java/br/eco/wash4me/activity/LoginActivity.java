@@ -1,4 +1,4 @@
-package br.eco.washing4me.activity;
+package br.eco.wash4me.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -32,7 +32,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.eco.washing4me.R;
+import br.eco.wash4me.R;
 
 import static android.Manifest.permission.READ_CONTACTS;
 

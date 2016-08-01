@@ -5,9 +5,9 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "br.eco.washing4me"
+        applicationId "br.eco.wash4me"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -26,8 +26,8 @@ dependencies {
     compile('com.mikepenz:materialdrawer:4.6.4@aar') {
         transitive = true
     }
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.google.android.gms:play-services:9.0.2'
+    compile 'com.android.support:appcompat-v7:24.1.1'
+    compile 'com.google.android.gms:play-services:9.2.1'
     compile 'com.mikepenz:google-material-typeface:2.2.0.1.original@aar'
-    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:design:24.1.1'
 }
