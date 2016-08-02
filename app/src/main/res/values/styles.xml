@@ -1,11 +1,22 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/w4mPrimary</item>
+        <item name="colorPrimaryDark">@color/w4mPrimaryDark</item>
+        <item name="colorAccent">@color/w4mAccent</item>
+    </style>
+
+    <style name="W4MTheme" parent="AppTheme">
+
+    </style>
+
+    <style name="W4MTheme.Toolbar" parent="W4MTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/w4mPrimary</item>
+        <item name="android:color">@color/w4mTextColorInverse</item>
     </style>
 
 </resources>
