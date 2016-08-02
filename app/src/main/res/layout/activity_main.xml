@@ -14,7 +14,7 @@
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
+            app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             style="@style/W4MTheme.Toolbar">
 
         </android.support.v7.widget.Toolbar>
@@ -27,8 +27,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:scaleType="center"
-            app:ico_icon="gmd_plus" />
+            android:scaleType="center" />
 
     </RelativeLayout>
 

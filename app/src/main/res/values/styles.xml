@@ -1,4 +1,5 @@
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -16,7 +17,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/w4mPrimary</item>
-        <item name="android:color">@color/w4mTextColorInverse</item>
+        <item name="android:elevation" tools:ignore="NewApi">4dp</item>
+        <item name="titleTextColor">@color/w4mTextColorInverse</item>
     </style>
 
 </resources>

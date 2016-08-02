@@ -13,7 +13,6 @@
     <string name="error_field_required">This field is required</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_settings">Settings</string>
-
     <!-- Strings related to Settings -->
 
     <!-- Drawer Strings -->
@@ -23,7 +22,6 @@
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
-
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history
@@ -83,4 +81,7 @@
     <string name="nav_sub_menu_item01">Sub Item 1</string>
     <string name="nav_sub_menu_item02">Sub Item 2</string>
     <string name="action_settings">Settings</string>
+    
+    <string name="example_name" translatable="false">Theodore E. Mosby</string>
+    <string name="example_car" translatable="false">Toyota Camry 2.5 Hybrid</string>
 </resources>
