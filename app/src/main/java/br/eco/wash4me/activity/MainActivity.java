@@ -1,5 +1,6 @@
 package br.eco.wash4me.activity;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -45,9 +46,21 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                menuItem.setChecked(true);
                 drawerLayout.closeDrawers();
-                Snackbar.make(drawerLayout, menuItem.getTitle(), Snackbar.LENGTH_LONG).show();
+
+                int id = menuItem.getItemId();
+
+                switch(id) {
+                    case R.id.navigation_item_settings:
+                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        break;
+                    case R.id.navigation_item_my_orders:
+                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        break;
+                    default:
+                        Snackbar.make(drawerLayout, menuItem.getTitle(), Snackbar.LENGTH_LONG).show();
+                }
+
                 return true;
             }
         });
@@ -67,5 +80,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+
+            return;
+        }
+
+        super.onBackPressed();
     }
 }

@@ -4,4 +4,5 @@
     <color name="w4mPrimaryDark">#0288D1</color>
     <color name="w4mAccent">#FF4081</color>
     <color name="w4mTextColorInverse">#FFFFFF</color>
+    <color name="w4mActivityBase">#FAFAFA</color>
 </resources>

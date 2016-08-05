@@ -10,7 +10,7 @@
     </style>
 
     <style name="W4MTheme" parent="AppTheme">
-
+        <item name="android:windowBackground">@color/w4mActivityBase</item>
     </style>
 
     <style name="W4MTheme.Toolbar" parent="W4MTheme">

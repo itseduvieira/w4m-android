@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/navigation_group1"
+        android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_item_attachment"
+            android:id="@+id/navigation_item_new_order"
             android:checked="true"
+            android:icon="@drawable/ic_add_shopping_cart_black_18dp"
+            android:title="@string/nav_item_new_order" />
+        <item
+            android:id="@+id/navigation_item_my_orders"
             android:icon="@drawable/ic_shopping_cart_black_18dp"
-            android:title="@string/nav_item_attachment" />
+            android:title="@string/nav_item_my_orders" />
         <item
-            android:id="@+id/navigation_item_images"
+            android:id="@+id/navigation_item_suppliers"
             android:icon="@drawable/ic_assignment_ind_black_18dp"
-            android:title="@string/nav_item_images" />
+            android:title="@string/nav_item_suppliers" />
         <item
-            android:id="@+id/navigation_item_location"
+            android:id="@+id/navigation_item_chat"
+            android:icon="@drawable/ic_chat_black_18dp"
+            android:title="@string/nav_item_chat" />
+        <item
+            android:id="@+id/navigation_item_settings"
             android:icon="@drawable/ic_settings_black_18dp"
-            android:title="@string/nav_item_location" />
+            android:title="@string/nav_item_settings" />
+
+    </group>
+    <group
+        android:id="@+id/navigation_group2"
+        android:checkableBehavior="none">
         <item
             android:id="@+id/navigation_item_exit"
             android:icon="@drawable/ic_power_settings_new_black_18dp"
-            android:title="@string/nav_item_location" />
+            android:title="@string/nav_item_exit" />
     </group>
-
-    <item android:title="@string/nav_sub_menu">
-        <menu>
-            <item
-                android:title="@string/nav_sub_menu_item01" />
-            <item
-                android:title="@string/nav_sub_menu_item02" />
-        </menu>
-    </item>
 
 </menu>
