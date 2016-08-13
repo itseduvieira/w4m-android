@@ -19,6 +19,7 @@
         android:visibility="gone" />
 
     <ScrollView
+        android:visibility="gone"
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,4 +77,22 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/btn_visitor"
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Visitor"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btn_member"
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Member"
+        android:textStyle="bold" />
 </LinearLayout>
