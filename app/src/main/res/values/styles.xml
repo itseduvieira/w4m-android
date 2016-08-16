@@ -1,5 +1,4 @@
-<resources
-    xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -17,8 +16,25 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="android:background">@color/w4mPrimary</item>
-        <item name="android:elevation" tools:ignore="NewApi">4dp</item>
+        <item name="elevation">4dp</item>
         <item name="titleTextColor">@color/w4mTextColorInverse</item>
+    </style>
+
+    <style name="W4MTheme.Toolbar.Large" parent="W4MTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">128dp</item>
+        <item name="android:background">@color/w4mPrimary</item>
+        <item name="elevation">4dp</item>
+        <item name="titleTextColor">@color/w4mTextColorInverse</item>
+    </style>
+
+    <style name="W4MTheme.FAB" parent="W4MTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="elevation">6dp</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:layout_marginEnd">@dimen/activity_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
     </style>
 
 </resources>
