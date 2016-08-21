@@ -6,8 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import br.eco.wash4me.R;
+import br.eco.wash4me.activity.base.W4MActivity;
 
-public class Splash extends AppCompatActivity {
+public class Splash extends W4MActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -22,7 +22,7 @@
 
     <style name="W4MTheme.Toolbar.Large" parent="W4MTheme">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">128dp</item>
+        <item name="android:layout_height">200dp</item>
         <item name="android:background">@color/w4mPrimary</item>
         <item name="elevation">4dp</item>
         <item name="titleTextColor">@color/w4mTextColorInverse</item>

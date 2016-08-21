@@ -34,13 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.eco.wash4me.R;
+import br.eco.wash4me.activity.base.W4MActivity;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends W4MActivity implements LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.

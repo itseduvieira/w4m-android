@@ -22,10 +22,11 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.eco.wash4me.R;
+import br.eco.wash4me.activity.base.W4MActivity;
 import br.eco.wash4me.data.OrderRepository;
 import br.eco.wash4me.entity.Order;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends W4MActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -82,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.navigation_item_my_orders:
                         startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        break;
+                    case R.id.navigation_item_suppliers:
+                        startActivity(new Intent(MainActivity.this, SuppliersActivity.class));
                         break;
                     default:
                         Snackbar.make(drawerLayout, menuItem.getTitle(), Snackbar.LENGTH_LONG).show();

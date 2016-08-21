@@ -34,7 +34,8 @@
             android:label="@string/title_activity_settings" />
         <activity android:name=".activity.OrderDetailActivity" />
         <activity android:name=".activity.ProductsActivity" />
-        <activity android:name=".activity.ProductDetailActivity"></activity>
+        <activity android:name=".activity.ProductDetailActivity" />
+        <activity android:name=".activity.SuppliersActivity"></activity>
     </application>
 
 </manifest>
