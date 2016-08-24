@@ -18,6 +18,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import br.eco.wash4me.activity.base.W4MApplication;
+import br.eco.wash4me.entity.Order;
 import br.eco.wash4me.entity.Supplier;
 import br.eco.wash4me.utils.Callback;
 
@@ -39,6 +40,18 @@ public class DataAccess {
 
     private DataAccess() {
         VolleyLog.setTag("w4m.app.volley");
+    }
+
+    public void getOrders(Context context, final Callback<List<Order>> callback) {
+        GsonRequest<Order[]> request = buildRequest(context, buildURL(ORDERS),
+                Order[].class, new Response.Listener<Order[]>() {
+                    @Override
+                    public void onResponse(Order[] orders) {
+                        callback.execute(Arrays.asList(orders));
+                    }
+                });
+
+        queueRequest(context, request);
     }
 
     public void getSuppliers(Context context, final Callback<List<Supplier>> callback) {
@@ -63,7 +76,7 @@ public class DataAccess {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //logErrorResponse(context, url, error);
+                        logErrorResponse(context, url, error);
                     }
                 });
     }
@@ -89,10 +102,6 @@ public class DataAccess {
         log(String.format("[onErrorResponse] ERR %s %s",
                 error.getClass().toString(),
                 error.getMessage()));
-
-        //if (MBActivity.isLoadShowing()) {
-        //    MBActivity.toggleProgressOff();
-        //}
     }
 
     private void queueRequest(Context context, GsonRequest jsonRequest) {
@@ -116,7 +125,7 @@ public class DataAccess {
     private String logQueue(Context context, GsonRequest request, Boolean idempotent) {
         Integer qtdRequests = getApplication().getQtdRequestsDebug(context);
 
-        //if(getApplication().getLoggedUser(context) != null) {
+        if(getApplication().isLogged()) {
             qtdRequests += 1;
             getApplication().setDebugInformation(context, qtdRequests, null);
             Long millis = new GregorianCalendar().getTimeInMillis() - getApplication().getLoginDateDebug(context);
@@ -128,7 +137,7 @@ public class DataAccess {
                     millis.toString(),
                     qtdRequests.toString(),
                     request.getUrl()));
-        //}
+        }
 
         return qtdRequests.toString();
     }
@@ -142,10 +151,6 @@ public class DataAccess {
                     Long millis = new GregorianCalendar().getTimeInMillis() - getApplication().getLoginDateDebug(context);
                     Long duration = 0l;
                     String tag = "0";
-
-                    //if(request.getUrl().contains("http://maps.googleapis.com/maps/api/staticmap")) {
-                    //    tag = "MAP";
-                    //}
 
                     if(request.getTag() != null) {
                         duration = millis - Long.valueOf(request.getTag().toString().split(":")[1]);
@@ -169,6 +174,6 @@ public class DataAccess {
     }
 
     public static void log(String msg) {
-        Log.d("mb.app.volley", msg);
+        Log.d("w4m.app.volley", msg);
     }
 }

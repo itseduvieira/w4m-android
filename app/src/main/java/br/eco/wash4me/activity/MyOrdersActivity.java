@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,10 +22,11 @@ import java.util.List;
 
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
-import br.eco.wash4me.data.OrderRepository;
+import br.eco.wash4me.data.DataAccess;
 import br.eco.wash4me.entity.Order;
+import br.eco.wash4me.utils.Callback;
 
-public class MainActivity extends W4MActivity {
+public class MyOrdersActivity extends W4MActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
@@ -39,7 +39,7 @@ public class MainActivity extends W4MActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_my_orders);
 
         bindViews();
 
@@ -62,13 +62,17 @@ public class MainActivity extends W4MActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         //recyclerLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerLayoutManager = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false);
+        recyclerLayoutManager = new LinearLayoutManager(MyOrdersActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(recyclerLayoutManager);
 
-        OrderRepository orderRepository = new OrderRepository();
-        List<Order> orders = orderRepository.getAll();
-        recyclerAdapter = new ColorAdapter(MainActivity.this, orders);
-        recyclerView.setAdapter(recyclerAdapter);
+        DataAccess dataAccess = DataAccess.getDataAccess();
+        dataAccess.getOrders(context, new Callback<List<Order>>() {
+            @Override
+            public void execute(List<Order> orders) {
+                recyclerAdapter = new ColorAdapter(MyOrdersActivity.this, orders);
+                recyclerView.setAdapter(recyclerAdapter);
+            }
+        });
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -79,13 +83,19 @@ public class MainActivity extends W4MActivity {
 
                 switch(id) {
                     case R.id.navigation_item_settings:
-                        startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                        startActivity(new Intent(MyOrdersActivity.this, SettingsActivity.class));
+                        break;
+                    case R.id.navigation_item_new_order:
+                        startActivity(new Intent(MyOrdersActivity.this, OrderDetailActivity.class));
                         break;
                     case R.id.navigation_item_my_orders:
-                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        startActivity(new Intent(MyOrdersActivity.this, MyOrdersActivity.class));
                         break;
                     case R.id.navigation_item_suppliers:
-                        startActivity(new Intent(MainActivity.this, SuppliersActivity.class));
+                        startActivity(new Intent(MyOrdersActivity.this, SuppliersActivity.class));
+                        break;
+                    case R.id.navigation_item_exit:
+                        logout();
                         break;
                     default:
                         Snackbar.make(drawerLayout, menuItem.getTitle(), Snackbar.LENGTH_LONG).show();
@@ -98,7 +108,7 @@ public class MainActivity extends W4MActivity {
         btnNewOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, OrderDetailActivity.class));
+                startActivity(new Intent(MyOrdersActivity.this, OrderDetailActivity.class));
             }
         });
     }

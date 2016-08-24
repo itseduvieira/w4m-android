@@ -6,10 +6,14 @@ import android.content.SharedPreferences;
 
 import java.util.GregorianCalendar;
 
+import br.eco.wash4me.entity.User;
+
 import static br.eco.wash4me.utils.Constants.*;
 
 public class W4MApplication extends Application {
     private static W4MApplication w4MApplication;
+
+    private User loggedUser;
 
     @Override
     public void onCreate() {
@@ -49,7 +53,36 @@ public class W4MApplication extends Application {
         editor.apply();
     }
 
+    public void clearDebugInformation(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.remove("qtdRequests");
+        editor.remove("loginDate");
+
+        editor.apply();
+    }
+
+    public User getLoggedUser() {
+        return loggedUser;
+    }
+
+    public void setLoggedUser(User loggedUser) {
+        this.loggedUser = loggedUser;
+    }
+
+    public Boolean isLogged() {
+        return getLoggedUser() != null;
+    }
+
     public String getWsUrl() {
-        return "http://localhost:3000/api";
+        Boolean local = isLogged() &&
+                getLoggedUser().getEmail().contains("@stg.wash4me.eco.br");
+
+        if(local) {
+            return "http://localhost:3000/api";
+        } else {
+            return "http://adm.wash4me.eco.br/api";
+        }
     }
 }
