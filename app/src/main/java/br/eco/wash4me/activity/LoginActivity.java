@@ -26,10 +26,14 @@ import com.facebook.login.widget.LoginButton;
 
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
+import br.eco.wash4me.data.DataAccess;
+import br.eco.wash4me.entity.Account;
+import br.eco.wash4me.entity.User;
+import br.eco.wash4me.utils.Callback;
+
+import static br.eco.wash4me.data.DataAccess.getDataAccess;
 
 public class LoginActivity extends W4MActivity {
-    private UserLoginTask mAuthTask = null;
-
     private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -78,6 +82,9 @@ public class LoginActivity extends W4MActivity {
 
     private void setupViews() {
         mEmailView.requestFocus();
+
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -131,10 +138,6 @@ public class LoginActivity extends W4MActivity {
     }
 
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
@@ -164,9 +167,13 @@ public class LoginActivity extends W4MActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            showProgress("Fazendo Login...", mEmailView.getWindowToken(), mPasswordView.getWindowToken());
+
+            Account account = new Account();
+            account.setUsername(email);
+            account.setPassword(password);
+
+            doLogin(account);
         }
     }
 
@@ -178,76 +185,25 @@ public class LoginActivity extends W4MActivity {
         return password.length() > 4;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+    private void doLogin(Account account) {
+        getDataAccess().doLogin(context, account, new Callback<User>() {
+            @Override
+            public void execute(User user) {
+                hideProgress();
 
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
                 finish();
 
                 startActivity(new Intent(LoginActivity.this, MyOrdersActivity.class));
-            } else {
+            }
+        }, new Callback<Void>() {
+            @Override
+            public void execute(Void aVoid) {
+                hideProgress();
+
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
+        });
     }
 }
 

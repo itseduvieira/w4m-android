@@ -37,7 +37,7 @@
         <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
     </style>
 
-    <style name="W4MTheme.Button" parent="W4MTheme">
+    <style name="W4MTheme.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
@@ -46,11 +46,11 @@
     </style>
 
     <style name="W4MTheme.Button.Primary" parent="W4MTheme.Button">
-        <item name="android:background">@color/w4mPrimary</item>
+        <item name="android:background">@drawable/btn_primary</item>
     </style>
 
     <style name="W4MTheme.Button.Accent" parent="W4MTheme.Button">
-        <item name="android:background">@color/w4mAccent</item>
+        <item name="android:background">@drawable/btn_accent</item>
     </style>
 
 </resources>

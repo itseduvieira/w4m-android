@@ -9,6 +9,7 @@ import br.eco.wash4me.activity.base.W4MActivity;
 import br.eco.wash4me.entity.Supplier;
 import br.eco.wash4me.utils.Callback;
 
+import static br.eco.wash4me.activity.base.W4MApplication.log;
 import static br.eco.wash4me.data.DataAccess.getDataAccess;
 
 public class SuppliersActivity extends W4MActivity {

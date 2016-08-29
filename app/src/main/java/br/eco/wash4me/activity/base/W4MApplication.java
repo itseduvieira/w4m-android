@@ -3,6 +3,7 @@ package br.eco.wash4me.activity.base;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.GregorianCalendar;
 
@@ -80,9 +81,13 @@ public class W4MApplication extends Application {
                 getLoggedUser().getEmail().contains("@stg.wash4me.eco.br");
 
         if(local) {
-            return "http://localhost:3000/api";
+            return "http://localhost:3000/api/v1";
         } else {
-            return "http://adm.wash4me.eco.br/api";
+            return "http://adm.wash4me.eco.br/api/v1";
         }
+    }
+
+    public static void log(String msg) {
+        Log.i("mb.app.general", msg);
     }
 }

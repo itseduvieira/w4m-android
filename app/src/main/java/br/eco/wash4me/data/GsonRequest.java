@@ -10,25 +10,47 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
+
+import static br.eco.wash4me.data.DataAccess.log;
 
 public class GsonRequest<T> extends Request<T> {
     private final Gson gson = new Gson();
     private final Class<T> clazz;
     private final Map<String, String> headers;
     private final Response.Listener<T> listener;
+    private String mRequestBody;
 
-    public GsonRequest(String url, Class<T> clazz, Map<String, String> headers,
+    public GsonRequest(String url, int method, Class<T> clazz, Map<String, String> headers, String parameters,
                        Response.Listener<T> listener, Response.ErrorListener errorListener) {
-        super(Method.GET, url, errorListener);
+        super(method, url, errorListener);
         this.clazz = clazz;
         this.headers = headers;
         this.listener = listener;
+        this.mRequestBody = parameters;
     }
 
     @Override
     public Map<String, String> getHeaders() throws AuthFailureError {
-        return headers != null ? headers : super.getHeaders();
+        headers.put("Content-Type", "application/json; charset=utf-8");
+        return headers;
+    }
+
+    @Override
+    public String getBodyContentType() {
+        return "application/json; charset=utf-8";
+    }
+
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+        try {
+            return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
+        } catch (UnsupportedEncodingException uee) {
+            log(String.format("Unsupported Encoding while trying to get the bytes of %s using %s",
+                    mRequestBody, "utf-8"));
+            return null;
+        }
     }
 
     @Override
