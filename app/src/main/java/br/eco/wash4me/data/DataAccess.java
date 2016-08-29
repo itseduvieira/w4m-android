@@ -53,7 +53,7 @@ public class DataAccess {
     }
 
     public void doLogin(Context context, Account account, final Callback<User> callback, final Callback<Void> errorCallback) {
-        Map<String, Object> parameters = new HashMap<>();
+        Map<String, String> parameters = new HashMap<>();
         parameters.put("username", account.getUsername());
         parameters.put("password", account.getPassword());
 
@@ -113,12 +113,12 @@ public class DataAccess {
 
     private <T> GsonRequest<T> buildRequest(final Context context, final String url, int method, Class<T> clazz,
                                             Response.Listener<T> listener, final Response.ErrorListener errorListener) {
-        return buildRequest(context, url, method, clazz, new HashMap<String, Object>(), listener, errorListener);
+        return buildRequest(context, url, method, clazz, new HashMap<String, String>(), listener, errorListener);
     }
 
-    private <T> GsonRequest<T> buildRequest(final Context context, final String url, int method, Class<T> clazz, Map<String, Object> parameters,
+    private <T> GsonRequest<T> buildRequest(final Context context, final String url, int method, Class<T> clazz, Map<String, String> parameters,
                                             Response.Listener<T> listener, final Response.ErrorListener errorListener) {
-        return new GsonRequest<T>(url, method, clazz, buildHeaders(), buildRequestBody(parameters), listener, new Response.ErrorListener() {
+        return new GsonRequest<T>(url, method, clazz, parameters, listener, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 logErrorResponse(context, url, error);
@@ -126,33 +126,6 @@ public class DataAccess {
                 errorListener.onErrorResponse(error);
             }
         });
-    }
-
-    private Map<String, String> buildHeaders() {
-        return new HashMap<>();
-    }
-
-    private String buildRequestBody(Object content) {
-        String output = null;
-        if ((content instanceof String) ||
-                (content instanceof JSONObject) ||
-                (content instanceof JSONArray)) {
-            output = content.toString();
-        } else if (content instanceof Map) {
-            Uri.Builder builder = new Uri.Builder();
-            HashMap hashMap = (HashMap) content;
-            if (hashMap != null) {
-                Iterator entries = hashMap.entrySet().iterator();
-                while (entries.hasNext()) {
-                    Map.Entry entry = (Map.Entry) entries.next();
-                    builder.appendQueryParameter(entry.getKey().toString(), entry.getValue().toString());
-                    entries.remove();
-                }
-                output = builder.build().getEncodedQuery();
-            }
-        }
-
-        return output;
     }
 
     private void logErrorResponse(Context context, String url, VolleyError error) {
@@ -168,7 +141,7 @@ public class DataAccess {
 
     private void queueRequest(Context context, GsonRequest jsonRequest) {
         jsonRequest.setRetryPolicy(new DefaultRetryPolicy(8000, 1,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
 
         logQueue(context, jsonRequest, false);
 
@@ -177,7 +150,7 @@ public class DataAccess {
 
     private void queueRequestNonIdempontent(Context context, GsonRequest jsonRequest) {
         jsonRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
 
         logQueue(context, jsonRequest, true);
 

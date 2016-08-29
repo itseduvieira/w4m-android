@@ -80,11 +80,11 @@ public class W4MApplication extends Application {
         Boolean local = isLogged() &&
                 getLoggedUser().getEmail().contains("@stg.wash4me.eco.br");
 
-        if(local) {
-            return "http://localhost:3000/api/v1";
-        } else {
+        //if(local) {
+        //    return "http://52.43.52.108/api/v1";
+        //} else {
             return "http://adm.wash4me.eco.br/api/v1";
-        }
+        //}
     }
 
     public static void log(String msg) {

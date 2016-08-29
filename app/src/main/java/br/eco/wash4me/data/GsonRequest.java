@@ -1,5 +1,7 @@
 package br.eco.wash4me.data;
 
+import android.net.Uri;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -9,48 +11,31 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-
-import static br.eco.wash4me.data.DataAccess.log;
 
 public class GsonRequest<T> extends Request<T> {
     private final Gson gson = new Gson();
     private final Class<T> clazz;
-    private final Map<String, String> headers;
     private final Response.Listener<T> listener;
-    private String mRequestBody;
+    private Map<String, String> mRequestBody;
 
-    public GsonRequest(String url, int method, Class<T> clazz, Map<String, String> headers, String parameters,
+    public GsonRequest(String url, int method, Class<T> clazz, Map<String, String> parameters,
                        Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(method, url, errorListener);
         this.clazz = clazz;
-        this.headers = headers;
         this.listener = listener;
         this.mRequestBody = parameters;
     }
 
     @Override
-    public Map<String, String> getHeaders() throws AuthFailureError {
-        headers.put("Content-Type", "application/json; charset=utf-8");
-        return headers;
-    }
-
-    @Override
-    public String getBodyContentType() {
-        return "application/json; charset=utf-8";
-    }
-
-    @Override
     public byte[] getBody() throws AuthFailureError {
-        try {
-            return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-        } catch (UnsupportedEncodingException uee) {
-            log(String.format("Unsupported Encoding while trying to get the bytes of %s using %s",
-                    mRequestBody, "utf-8"));
-            return null;
-        }
+        return mRequestBody == null ? super.getBody() : buildRequestBody(mRequestBody).getBytes();
     }
 
     @Override
@@ -72,5 +57,28 @@ public class GsonRequest<T> extends Request<T> {
         } catch (JsonSyntaxException e) {
             return Response.error(new ParseError(e));
         }
+    }
+
+    private String buildRequestBody(Object content) {
+        String output = null;
+        if ((content instanceof String) ||
+                (content instanceof JSONObject) ||
+                (content instanceof JSONArray)) {
+            output = content.toString();
+        } else if (content instanceof Map) {
+            Uri.Builder builder = new Uri.Builder();
+            HashMap hashMap = (HashMap) content;
+            if (hashMap != null) {
+                Iterator entries = hashMap.entrySet().iterator();
+                while (entries.hasNext()) {
+                    Map.Entry entry = (Map.Entry) entries.next();
+                    builder.appendQueryParameter(entry.getKey().toString(), entry.getValue().toString());
+                    entries.remove();
+                }
+                output = builder.build().getEncodedQuery();
+            }
+        }
+
+        return output;
     }
 }
