@@ -79,6 +79,6 @@ public class GsonRequest<T> extends Request<T> {
             }
         }
 
-        return output;
+        return output == null ? "" : output;
     }
 }

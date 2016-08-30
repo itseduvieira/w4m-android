@@ -3,22 +3,15 @@ package br.eco.wash4me.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.android.volley.toolbox.ImageLoader;
 
 import java.util.List;
 
@@ -27,21 +20,14 @@ import br.eco.wash4me.activity.base.W4MActivity;
 import br.eco.wash4me.data.DataAccess;
 import br.eco.wash4me.entity.Order;
 import br.eco.wash4me.utils.Callback;
-import de.hdodenhof.circleimageview.CircleImageView;
 
-import static br.eco.wash4me.activity.base.W4MApplication.log;
 import static br.eco.wash4me.data.DataAccess.getDataAccess;
 
 public class MyOrdersActivity extends W4MActivity {
-    private Toolbar toolbar;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
     private RecyclerView.LayoutManager recyclerLayoutManager;
     private FloatingActionButton btnNewOrder;
-    private CircleImageView profileImage;
-    private TextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,80 +38,10 @@ public class MyOrdersActivity extends W4MActivity {
         bindViews();
 
         setupViews();
-    }
 
-    private void bindViews() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        recyclerView = (RecyclerView) findViewById(R.id.products_list);
-        btnNewOrder = (FloatingActionButton) findViewById(R.id.fab_new_order);
+        setupToolbarMenu();
 
-        View hView =  navigationView.getHeaderView(0);
-        profileImage = (CircleImageView) hView.findViewById(R.id.profile_image);
-        userName = (TextView) hView.findViewById(R.id.name_user);
-    }
-
-    private void setupViews() {
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        assert actionBar != null;
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        profileImage.setImageBitmap(getW4MApplication().getLoggedUser().getProfilePicture());
-        userName.setText(getW4MApplication().getLoggedUser().getName());
-
-        //recyclerLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerLayoutManager = new LinearLayoutManager(MyOrdersActivity.this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(recyclerLayoutManager);
-
-        DataAccess dataAccess = getDataAccess();
-        dataAccess.getOrders(context, new Callback<List<Order>>() {
-            @Override
-            public void execute(List<Order> orders) {
-                recyclerAdapter = new ColorAdapter(MyOrdersActivity.this, orders);
-                recyclerView.setAdapter(recyclerAdapter);
-            }
-        });
-
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                drawerLayout.closeDrawers();
-
-                int id = menuItem.getItemId();
-
-                switch(id) {
-                    case R.id.navigation_item_settings:
-                        startActivity(new Intent(MyOrdersActivity.this, SettingsActivity.class));
-                        break;
-                    case R.id.navigation_item_new_order:
-                        startActivity(new Intent(MyOrdersActivity.this, OrderDetailActivity.class));
-                        break;
-                    case R.id.navigation_item_my_orders:
-                        startActivity(new Intent(MyOrdersActivity.this, MyOrdersActivity.class));
-                        break;
-                    case R.id.navigation_item_suppliers:
-                        startActivity(new Intent(MyOrdersActivity.this, SuppliersActivity.class));
-                        break;
-                    case R.id.navigation_item_exit:
-                        logout();
-                        break;
-                    default:
-                        Snackbar.make(drawerLayout, menuItem.getTitle(), Snackbar.LENGTH_LONG).show();
-                }
-
-                return true;
-            }
-        });
-
-        btnNewOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MyOrdersActivity.this, OrderDetailActivity.class));
-            }
-        });
+        setupNavigationDrawer();
     }
 
     @Override
@@ -141,15 +57,31 @@ public class MyOrdersActivity extends W4MActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawers();
+    private void bindViews() {
+        recyclerView = (RecyclerView) findViewById(R.id.products_list);
+        btnNewOrder = (FloatingActionButton) findViewById(R.id.fab_new_order);
+    }
 
-            return;
-        }
+    private void setupViews() {
+        //recyclerLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerLayoutManager = new LinearLayoutManager(MyOrdersActivity.this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(recyclerLayoutManager);
 
-        super.onBackPressed();
+        DataAccess dataAccess = getDataAccess();
+        dataAccess.getOrders(context, new Callback<List<Order>>() {
+            @Override
+            public void execute(List<Order> orders) {
+                recyclerAdapter = new ColorAdapter(MyOrdersActivity.this, orders);
+                recyclerView.setAdapter(recyclerAdapter);
+            }
+        });
+
+        btnNewOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MyOrdersActivity.this, OrderDetailActivity.class));
+            }
+        });
     }
 
     class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> {
@@ -183,7 +115,9 @@ public class MyOrdersActivity extends W4MActivity {
 
                     ((ColorAdapter) recyclerView.getAdapter()).getOrders().get(itemPosition);
 
-                    log(String.format("Clicked and Position is %d", itemPosition));
+                    Intent intent = new Intent(context, OrderDetailActivity.class);
+
+                    startActivity(intent);
                 }
             });
 

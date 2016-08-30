@@ -2,13 +2,17 @@ package br.eco.wash4me.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -37,6 +41,7 @@ public class LoginActivity extends W4MActivity {
     private Button btnVisitor;
     private Button btnMember;
     private LoginButton loginButton;
+    private LinearLayout mainView;
 
     private CallbackManager callbackManager;
 
@@ -71,6 +76,7 @@ public class LoginActivity extends W4MActivity {
         btnMember = (Button) findViewById(R.id.btn_member);
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
+        mainView = (LinearLayout) findViewById(R.id.login_main_view);
     }
 
     private void setupViews() {
@@ -100,7 +106,9 @@ public class LoginActivity extends W4MActivity {
         btnVisitor.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, MyOrdersActivity.class));
+                finish();
+
+                startActivity(new Intent(LoginActivity.this, ProductsActivity.class));
             }
         });
 
@@ -119,6 +127,8 @@ public class LoginActivity extends W4MActivity {
                     @Override
                     public void execute(User user) {
                         getW4MApplication().setLoggedUser(user);
+
+                        finish();
 
                         startActivity(new Intent(LoginActivity.this, MyOrdersActivity.class));
                     }
@@ -197,6 +207,8 @@ public class LoginActivity extends W4MActivity {
             public void execute(User user) {
                 hideProgress();
 
+                getW4MApplication().setLoggedUser(user);
+
                 finish();
 
                 startActivity(new Intent(LoginActivity.this, MyOrdersActivity.class));
@@ -206,8 +218,12 @@ public class LoginActivity extends W4MActivity {
             public void execute(Void aVoid) {
                 hideProgress();
 
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                Snackbar.make(mainView, "Usuário ou senha inválidos.", Snackbar.LENGTH_INDEFINITE)
+                        .setAction("ENTENDI", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) { }
+                        })
+                        .show();
             }
         });
     }
