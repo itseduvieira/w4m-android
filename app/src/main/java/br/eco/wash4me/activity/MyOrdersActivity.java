@@ -26,6 +26,8 @@ import br.eco.wash4me.data.DataAccess;
 import br.eco.wash4me.entity.Order;
 import br.eco.wash4me.utils.Callback;
 
+import static br.eco.wash4me.activity.base.W4MApplication.log;
+
 public class MyOrdersActivity extends W4MActivity {
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -136,45 +138,60 @@ public class MyOrdersActivity extends W4MActivity {
 
         super.onBackPressed();
     }
-}
 
-class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> {
-    private List<Order> mDataSet;
-    private Context mContext;
+    class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> {
+        private List<Order> mDataSet;
+        private Context mContext;
 
-    public ColorAdapter(Context context, List<Order> DataSet) {
-        mDataSet = DataSet;
-        mContext = context;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView;
-
-        public ViewHolder(View v) {
-            super(v);
-
-            mTextView = (TextView) v.findViewById(R.id.tv);
+        public ColorAdapter(Context context, List<Order> DataSet) {
+            mDataSet = DataSet;
+            mContext = context;
         }
-    }
 
-    @Override
-    public ColorAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.order_view, parent, false);
-        ViewHolder vh = new ViewHolder(v);
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public TextView mTextView;
 
-        return vh;
-    }
+            public ViewHolder(View v) {
+                super(v);
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Order item = mDataSet.get(position);
-        holder.mTextView.setText(item.toString());
-        //holder.mTextView.getLayoutParams().height = getRandomIntInRange(250,75);
-        //holder.mTextView.setBackgroundColor(getRandomHSVColor());
-    }
+                mTextView = (TextView) v.findViewById(R.id.tv);
+            }
+        }
 
-    @Override
-    public int getItemCount() {
-        return mDataSet.size();
+        @Override
+        public ColorAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(mContext).inflate(R.layout.order_view, parent, false);
+            ViewHolder vh = new ViewHolder(v);
+
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int itemPosition = recyclerView.indexOfChild(view);
+
+                    ((ColorAdapter) recyclerView.getAdapter()).getOrders().get(itemPosition);
+
+                    log(String.format("Clicked and Position is %d", itemPosition));
+                }
+            });
+
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            Order item = mDataSet.get(position);
+            holder.mTextView.setText(item.toString());
+            //holder.mTextView.getLayoutParams().height = getRandomIntInRange(250,75);
+            //holder.mTextView.setBackgroundColor(getRandomHSVColor());
+        }
+
+        @Override
+        public int getItemCount() {
+            return mDataSet.size();
+        }
+
+        public List<Order> getOrders() {
+            return mDataSet;
+        }
     }
 }

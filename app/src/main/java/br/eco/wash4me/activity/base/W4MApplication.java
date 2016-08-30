@@ -88,6 +88,6 @@ public class W4MApplication extends Application {
     }
 
     public static void log(String msg) {
-        Log.i("mb.app.general", msg);
+        Log.i("w4m.app.general", msg);
     }
 }
