@@ -1,11 +1,6 @@
 package br.eco.wash4me.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -26,17 +21,16 @@ import com.facebook.login.widget.LoginButton;
 
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
-import br.eco.wash4me.data.DataAccess;
 import br.eco.wash4me.entity.Account;
 import br.eco.wash4me.entity.User;
 import br.eco.wash4me.utils.Callback;
 
+import static br.eco.wash4me.activity.base.W4MApplication.log;
 import static br.eco.wash4me.data.DataAccess.getDataAccess;
 
 public class LoginActivity extends W4MActivity {
     private EditText mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
     private View mLoginFormView;
     private View loginUserType;
     private Button mEmailSignInButton;
@@ -69,7 +63,6 @@ public class LoginActivity extends W4MActivity {
 
     private void bindViews() {
         mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
         loginUserType = findViewById(R.id.login_user_type);
         mPasswordView = (EditText) findViewById(R.id.password);
         mEmailView = (EditText) findViewById(R.id.email);
@@ -122,7 +115,20 @@ public class LoginActivity extends W4MActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                startActivity(new Intent(LoginActivity.this, MyOrdersActivity.class));
+                getDataAccess().getFacebookLoginData(context, new Callback<User>() {
+                    @Override
+                    public void execute(User user) {
+                        getW4MApplication().setLoggedUser(user);
+
+                        startActivity(new Intent(LoginActivity.this, MyOrdersActivity.class));
+                    }
+                }, new Callback<Void>() {
+                    @Override
+                    public void execute(Void aVoid) {
+                        log("[setupViews.registerCallback] ERROR at get data from Facebook");
+                    }
+                });
+
             }
 
             @Override

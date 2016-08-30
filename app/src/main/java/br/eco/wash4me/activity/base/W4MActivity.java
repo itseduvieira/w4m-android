@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+
 import br.eco.wash4me.activity.LoginActivity;
 
 import static br.eco.wash4me.activity.base.W4MApplication.log;
@@ -78,6 +81,10 @@ public class W4MActivity extends AppCompatActivity {
     protected void logout() {
         getW4MApplication().setLoggedUser(null);
         getW4MApplication().clearDebugInformation(context);
+
+        if (AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logOut();
+        }
 
         Intent loginIntent = new Intent(context, LoginActivity.class);
         loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

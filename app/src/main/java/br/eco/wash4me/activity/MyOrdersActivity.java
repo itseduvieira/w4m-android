@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+
 import java.util.List;
 
 import br.eco.wash4me.R;
@@ -25,8 +27,10 @@ import br.eco.wash4me.activity.base.W4MActivity;
 import br.eco.wash4me.data.DataAccess;
 import br.eco.wash4me.entity.Order;
 import br.eco.wash4me.utils.Callback;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.eco.wash4me.activity.base.W4MApplication.log;
+import static br.eco.wash4me.data.DataAccess.getDataAccess;
 
 public class MyOrdersActivity extends W4MActivity {
     private Toolbar toolbar;
@@ -36,6 +40,8 @@ public class MyOrdersActivity extends W4MActivity {
     private RecyclerView.Adapter recyclerAdapter;
     private RecyclerView.LayoutManager recyclerLayoutManager;
     private FloatingActionButton btnNewOrder;
+    private CircleImageView profileImage;
+    private TextView userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,10 @@ public class MyOrdersActivity extends W4MActivity {
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
         recyclerView = (RecyclerView) findViewById(R.id.products_list);
         btnNewOrder = (FloatingActionButton) findViewById(R.id.fab_new_order);
+
+        View hView =  navigationView.getHeaderView(0);
+        profileImage = (CircleImageView) hView.findViewById(R.id.profile_image);
+        userName = (TextView) hView.findViewById(R.id.name_user);
     }
 
     private void setupViews() {
@@ -63,11 +73,14 @@ public class MyOrdersActivity extends W4MActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        profileImage.setImageBitmap(getW4MApplication().getLoggedUser().getProfilePicture());
+        userName.setText(getW4MApplication().getLoggedUser().getName());
+
         //recyclerLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerLayoutManager = new LinearLayoutManager(MyOrdersActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(recyclerLayoutManager);
 
-        DataAccess dataAccess = DataAccess.getDataAccess();
+        DataAccess dataAccess = getDataAccess();
         dataAccess.getOrders(context, new Callback<List<Order>>() {
             @Override
             public void execute(List<Order> orders) {

@@ -1,9 +1,12 @@
 package br.eco.wash4me.entity;
 
+import android.graphics.Bitmap;
+
 public class User {
     private Integer id;
     private String name;
     private String email;
+    private Bitmap profilePicture;
     private Type type = Type.VISITOR;
 
     public Integer getId() {
@@ -36,6 +39,14 @@ public class User {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Bitmap getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(Bitmap profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public enum Type {

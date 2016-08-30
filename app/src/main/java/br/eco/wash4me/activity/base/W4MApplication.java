@@ -77,8 +77,8 @@ public class W4MApplication extends Application {
     }
 
     public String getWsUrl() {
-        Boolean local = isLogged() &&
-                getLoggedUser().getEmail().contains("@stg.wash4me.eco.br");
+        //Boolean local = isLogged() &&
+        //        getLoggedUser().getEmail().contains("@stg.wash4me.eco.br");
 
         //if(local) {
         //    return "http://52.43.52.108/api/v1";

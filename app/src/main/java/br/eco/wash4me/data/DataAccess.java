@@ -1,8 +1,14 @@
 package br.eco.wash4me.data;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -11,10 +17,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -25,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MApplication;
 import br.eco.wash4me.entity.Account;
 import br.eco.wash4me.entity.Order;
@@ -38,7 +50,6 @@ public class DataAccess {
     private static DataAccess dataAccess;
 
     private RequestQueue requestQueue;
-    private ImageLoader imageLoader;
 
     public static DataAccess getDataAccess() {
         if(dataAccess == null) {
@@ -71,6 +82,56 @@ public class DataAccess {
                 });
 
         queueRequest(context, request);
+    }
+
+    public void getFacebookLoginData(final Context context, final Callback<User> callback, final Callback<Void> errorCallback) {
+        final User loggedUser = new User();
+
+        final Bundle parametersPicture = new Bundle();
+        parametersPicture.putString("fields", "picture.width(150).height(150),name,email");
+
+        new AsyncTask<Void, Void, GraphResponse>() {
+            @Override
+            protected GraphResponse doInBackground(Void... voids) {
+                return new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/",
+                        parametersPicture, null).executeAndWait();
+            }
+
+            @Override
+            protected void onPostExecute(GraphResponse graphResponse) {
+                super.onPostExecute(graphResponse);
+
+                if (graphResponse != null && graphResponse.getError() == null &&
+                        graphResponse.getJSONObject() != null) {
+                    try {
+                        String url = graphResponse.getJSONObject().getJSONObject("picture")
+                                .getJSONObject("data").getString("url");
+                        loggedUser.setName(graphResponse.getJSONObject().getString("name"));
+                        //loggedUser.setEmail(graphResponse.getJSONObject().getString("email"));
+
+                        ImageRequest request = buildImageRequest(context, url, new Callback<Bitmap>() {
+                            @Override
+                            public void execute(Bitmap bitmap) {
+                                loggedUser.setProfilePicture(bitmap);
+                                callback.execute(loggedUser);
+                            }
+                        }, new Callback<Bitmap>() {
+                            @Override
+                            public void execute(Bitmap bitmap) {
+                                loggedUser.setProfilePicture(bitmap);
+                                callback.execute(loggedUser);
+                            }
+                        });
+
+                        queueRequest(context, request);
+                    } catch (JSONException e) {
+                        log("[getFacebookLoginData] ERROR " + e.getMessage());
+
+                        errorCallback.execute(null);
+                    }
+                }
+            }
+        }.execute();
     }
 
     public void getOrders(Context context, final Callback<List<Order>> callback) {
@@ -128,6 +189,22 @@ public class DataAccess {
         });
     }
 
+    private ImageRequest buildImageRequest(final Context context, String url, final Callback<Bitmap> callback, final Callback<Bitmap> errorCallback) {
+        return new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        callback.execute(bitmap);
+                    }
+                }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        errorCallback.execute(BitmapFactory.decodeResource(context.getResources(),
+                                R.drawable.ic_example_profile));
+                    }
+                });
+    }
+
     private void logErrorResponse(Context context, String url, VolleyError error) {
         Long millis = new GregorianCalendar().getTimeInMillis() - getApplication().getLoginDateDebug(context);
 
@@ -139,7 +216,7 @@ public class DataAccess {
                 error.getMessage()));
     }
 
-    private void queueRequest(Context context, GsonRequest jsonRequest) {
+    private void queueRequest(Context context, Request jsonRequest) {
         jsonRequest.setRetryPolicy(new DefaultRetryPolicy(8000, 1,
                 DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
 
@@ -148,7 +225,7 @@ public class DataAccess {
         getRequestQueue(context).add(jsonRequest);
     }
 
-    private void queueRequestNonIdempontent(Context context, GsonRequest jsonRequest) {
+    private void queueRequestNonIdempontent(Context context, Request jsonRequest) {
         jsonRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1,
                 DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
 
@@ -157,7 +234,7 @@ public class DataAccess {
         getRequestQueue(context).add(jsonRequest);
     }
 
-    private String logQueue(Context context, GsonRequest request, Boolean idempotent) {
+    private String logQueue(Context context, Request request, Boolean idempotent) {
         Integer qtdRequests = getApplication().getQtdRequestsDebug(context);
 
         if(getApplication().isLogged()) {
