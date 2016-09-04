@@ -106,8 +106,6 @@ public class LoginActivity extends W4MActivity {
         btnVisitor.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
-
                 startActivity(new Intent(LoginActivity.this, ProductsActivity.class));
             }
         });
@@ -135,7 +133,7 @@ public class LoginActivity extends W4MActivity {
                 }, new Callback<Void>() {
                     @Override
                     public void execute(Void aVoid) {
-                        log("[setupViews.registerCallback] ERROR at get data from Facebook");
+                        log("[setupViews.registerCallback] ERROR at getting data from Facebook");
                     }
                 });
 

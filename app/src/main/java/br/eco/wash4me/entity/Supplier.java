@@ -28,4 +28,9 @@ public class Supplier {
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
+
+    @Override
+    public String toString() {
+        return "Fornecedor #" + getId();
+    }
 }

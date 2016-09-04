@@ -116,7 +116,7 @@ public class MyOrdersActivity extends W4MActivity {
                     ((ColorAdapter) recyclerView.getAdapter()).getOrders().get(itemPosition);
 
                     Intent intent = new Intent(context, OrderDetailActivity.class);
-
+                    intent.putExtra("id", itemPosition + 1);
                     startActivity(intent);
                 }
             });

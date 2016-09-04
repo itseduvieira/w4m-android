@@ -36,16 +36,20 @@
             android:label="@string/title_activity_settings" />
 
         <activity
-            android:name=".activity.OrderDetailActivity" />
+            android:name=".activity.OrderDetailActivity"
+            android:label=""/>
 
         <activity
-            android:name=".activity.ProductsActivity" />
+            android:name=".activity.ProductsActivity"
+            android:label="Serviços"/>
 
         <activity
-            android:name=".activity.ProductDetailActivity" />
+            android:name=".activity.ProductDetailActivity"
+            android:label=""/>
 
         <activity
-            android:name=".activity.SuppliersActivity" />
+            android:name=".activity.SuppliersActivity"
+            android:label="Fornecedores"/>
 
         <activity
             android:name="com.facebook.FacebookActivity"

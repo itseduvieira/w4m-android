@@ -1,6 +1,7 @@
 package br.eco.wash4me.activity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import java.util.List;
 
@@ -17,7 +18,10 @@ public class SuppliersActivity extends W4MActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_suppliers);
+
+        setupToolbarBack();
 
         getDataAccess().getSuppliers(context, new Callback<List<Supplier>>() {
             @Override
@@ -27,5 +31,19 @@ public class SuppliersActivity extends W4MActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                finish();
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
