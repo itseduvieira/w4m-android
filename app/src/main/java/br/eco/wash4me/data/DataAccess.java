@@ -3,10 +3,8 @@ package br.eco.wash4me.data;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -16,23 +14,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.ImageRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +60,7 @@ public class DataAccess {
         parameters.put("username", account.getUsername());
         parameters.put("password", account.getPassword());
 
-        GsonRequest<User> request = buildRequest(context, buildURL(AUTHENTICATE), Request.Method.POST,
+        GsonRequest<User> request = buildRequest(context, buildBaseURL(AUTHENTICATE), Request.Method.POST,
                 User.class, parameters, new Response.Listener<User>() {
                     @Override
                     public void onResponse(User user) {
@@ -135,7 +127,7 @@ public class DataAccess {
     }
 
     public void getOrders(Context context, final Callback<List<Order>> callback) {
-        GsonRequest<Order[]> request = buildRequest(context, buildURL(ORDERS), Request.Method.GET,
+        GsonRequest<Order[]> request = buildRequest(context, buildAPIURL(ORDERS), Request.Method.GET,
                 Order[].class, new Response.Listener<Order[]>() {
                     @Override
                     public void onResponse(Order[] orders) {
@@ -152,7 +144,7 @@ public class DataAccess {
     }
 
     public void getSuppliers(Context context, final Callback<List<Supplier>> callback) {
-        GsonRequest<Supplier[]> request = buildRequest(context, buildURL(SUPPLIERS), Request.Method.GET,
+        GsonRequest<Supplier[]> request = buildRequest(context, buildAPIURL(SUPPLIERS), Request.Method.GET,
                 Supplier[].class, new Response.Listener<Supplier[]>() {
                     @Override
                     public void onResponse(Supplier[] suppliers) {
@@ -168,8 +160,12 @@ public class DataAccess {
         queueRequest(context, request);
     }
 
-    private String buildURL(String service) {
+    private String buildAPIURL(String service) {
         return String.format("%s/%s", W4MApplication.getInstance().getWsUrl(), service);
+    }
+
+    private String buildBaseURL(String service) {
+        return String.format("%s/%s", W4MApplication.getInstance().getBaseUrl(), service);
     }
 
     private <T> GsonRequest<T> buildRequest(final Context context, final String url, int method, Class<T> clazz,
@@ -217,7 +213,7 @@ public class DataAccess {
     }
 
     private void queueRequest(Context context, Request jsonRequest) {
-        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(8000, 1,
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(8000, 0,
                 DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
 
         logQueue(context, jsonRequest, false);

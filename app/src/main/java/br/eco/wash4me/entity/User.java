@@ -7,6 +7,7 @@ public class User {
     private String name;
     private String email;
     private Bitmap profilePicture;
+    private String token;
     private Type type = Type.VISITOR;
 
     public Integer getId() {
@@ -47,6 +48,14 @@ public class User {
 
     public void setProfilePicture(Bitmap profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public enum Type {

@@ -5,5 +5,5 @@ public class Constants {
 
     public static final String SUPPLIERS = "suppliers";
     public static final String ORDERS = "orders";
-    public static final String AUTHENTICATE = "authenticate";
+    public static final String AUTHENTICATE = "signin";
 }

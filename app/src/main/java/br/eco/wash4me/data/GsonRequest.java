@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import br.eco.wash4me.activity.base.W4MApplication;
+
 public class GsonRequest<T> extends Request<T> {
     private final Gson gson = new Gson();
     private final Class<T> clazz;
@@ -31,6 +33,24 @@ public class GsonRequest<T> extends Request<T> {
         this.clazz = clazz;
         this.listener = listener;
         this.mRequestBody = parameters;
+    }
+
+    @Override
+    public String getBodyContentType() {
+        return "application/x-www-form-urlencoded";
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+        W4MApplication application = W4MApplication.getInstance();
+
+        Map<String, String> auth = new HashMap<>();
+
+        if(application.isLogged()) {
+            auth.put("Authorization", application.getLoggedUser().getToken());
+        }
+
+        return auth;
     }
 
     @Override
