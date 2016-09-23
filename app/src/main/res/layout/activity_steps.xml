@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        style="@style/W4MTheme.Toolbar">
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/breadcrumb_steps"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/w4mAccent"
+        android:layout_below="@+id/toolbar">
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/breadcrumb_steps"
+        android:layout_above="@+id/btn_next">
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@id/btn_next"
+        style="@style/W4MTheme.Button.Bottom.Accent"
+        android:text="PRÓXIMO"/>
+
+</RelativeLayout>

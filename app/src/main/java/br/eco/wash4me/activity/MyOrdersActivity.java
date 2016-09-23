@@ -57,12 +57,14 @@ public class MyOrdersActivity extends W4MActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void bindViews() {
-        recyclerView = (RecyclerView) findViewById(R.id.products_list);
+    @Override
+    protected void bindViews() {
+        recyclerView = (RecyclerView) findViewById(R.id.my_orders_list);
         btnNewOrder = (FloatingActionButton) findViewById(R.id.fab_new_order);
     }
 
-    private void setupViews() {
+    @Override
+    protected void setupViews() {
         //recyclerLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerLayoutManager = new LinearLayoutManager(MyOrdersActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(recyclerLayoutManager);

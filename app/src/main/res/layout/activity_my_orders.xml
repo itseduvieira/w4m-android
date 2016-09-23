@@ -28,7 +28,7 @@
             android:src="@drawable/ic_add_white_24dp" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/products_list"
+            android:id="@+id/my_orders_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar"

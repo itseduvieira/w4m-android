@@ -100,6 +100,10 @@ public class W4MActivity extends AppCompatActivity {
         Log.i("w4m.app.lifecycle", "[" + getClass().getSimpleName() + ".onDestroy] onDestroy called");
     }
 
+    protected void bindViews() { };
+
+    protected void setupViews() { };
+
     protected void setupToolbarMenu() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -152,6 +156,9 @@ public class W4MActivity extends AppCompatActivity {
                         startActivity(new Intent(context, MyOrdersActivity.class));
                         break;
                     case R.id.navigation_item_suppliers:
+                        startActivity(new Intent(context, SuppliersActivity.class));
+                        break;
+                    case R.id.navigation_item_chat:
                         startActivity(new Intent(context, SuppliersActivity.class));
                         break;
                     case R.id.navigation_item_exit:

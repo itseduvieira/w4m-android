@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Wash4Me</string>
     <string name="facebook_app_id">1166468846743300</string>
     <string name="fb_login_protocol_scheme">fb1166468846743300</string>
     <string name="title_activity_login">Fazer Login</string>
@@ -84,7 +83,4 @@
     <string name="nav_item_settings">Preferências</string>
     <string name="nav_item_chat">Chat</string>
     <string name="action_settings">Preferências</string>
-
-    <string name="example_name" translatable="false">Theodore E. Mosby</string>
-    <string name="example_car" translatable="false">Toyota Camry 2.5 Hybrid</string>
 </resources>

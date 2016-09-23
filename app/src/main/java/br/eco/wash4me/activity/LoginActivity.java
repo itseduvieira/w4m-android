@@ -3,10 +3,8 @@ package br.eco.wash4me.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -66,7 +64,8 @@ public class LoginActivity extends W4MActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void bindViews() {
+    @Override
+    protected void bindViews() {
         mLoginFormView = findViewById(R.id.login_form);
         loginUserType = findViewById(R.id.login_user_type);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -79,7 +78,8 @@ public class LoginActivity extends W4MActivity {
         mainView = (LinearLayout) findViewById(R.id.login_main_view);
     }
 
-    private void setupViews() {
+    @Override
+    protected void setupViews() {
         mEmailView.requestFocus();
 
         mEmailView.setError(null);
@@ -106,7 +106,7 @@ public class LoginActivity extends W4MActivity {
         btnVisitor.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, ProductsActivity.class));
+                startActivity(new Intent(LoginActivity.this, StepsActivity.class));
             }
         });
 
@@ -128,7 +128,7 @@ public class LoginActivity extends W4MActivity {
 
                         finish();
 
-                        startActivity(new Intent(LoginActivity.this, MyOrdersActivity.class));
+                        startActivity(new Intent(LoginActivity.this, StepsActivity.class));
                     }
                 }, new Callback<Void>() {
                     @Override
@@ -209,7 +209,7 @@ public class LoginActivity extends W4MActivity {
 
                 finish();
 
-                startActivity(new Intent(LoginActivity.this, MyOrdersActivity.class));
+                startActivity(new Intent(LoginActivity.this, StepsActivity.class));
             }
         }, new Callback<Void>() {
             @Override
