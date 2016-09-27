@@ -32,6 +32,7 @@ import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MApplication;
 import br.eco.wash4me.entity.Account;
 import br.eco.wash4me.entity.Order;
+import br.eco.wash4me.entity.Product;
 import br.eco.wash4me.entity.Supplier;
 import br.eco.wash4me.entity.User;
 import br.eco.wash4me.utils.Callback;
@@ -143,6 +144,23 @@ public class DataAccess {
         queueRequest(context, request);
     }
 
+    public void getProducts(Context context, final Callback<List<Product>> callback) {
+        GsonRequest<Product[]> request = buildRequest(context, buildAPIURL(PRODUCTS), Request.Method.GET,
+                Product[].class, new Response.Listener<Product[]>() {
+                    @Override
+                    public void onResponse(Product[] products) {
+                        callback.execute(Arrays.asList(products));
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.execute(null);
+                    }
+                });
+
+        queueRequest(context, request);
+    }
+
     public void getSuppliers(Context context, final Callback<List<Supplier>> callback) {
         GsonRequest<Supplier[]> request = buildRequest(context, buildAPIURL(SUPPLIERS), Request.Method.GET,
                 Supplier[].class, new Response.Listener<Supplier[]>() {
@@ -185,7 +203,8 @@ public class DataAccess {
         });
     }
 
-    private ImageRequest buildImageRequest(final Context context, String url, final Callback<Bitmap> callback, final Callback<Bitmap> errorCallback) {
+    private ImageRequest buildImageRequest(final Context context, String url, final Callback<Bitmap> callback,
+                                           final Callback<Bitmap> errorCallback) {
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
@@ -222,7 +241,7 @@ public class DataAccess {
     }
 
     private void queueRequestNonIdempontent(Context context, Request jsonRequest) {
-        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 1,
+        jsonRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 0,
                 DefaultRetryPolicy.DEFAULT_TIMEOUT_MS));
 
         logQueue(context, jsonRequest, true);
@@ -233,7 +252,7 @@ public class DataAccess {
     private String logQueue(Context context, Request request, Boolean idempotent) {
         Integer qtdRequests = getApplication().getQtdRequestsDebug(context);
 
-        if(getApplication().isLogged()) {
+        if(getApplication().isLogged(context)) {
             qtdRequests += 1;
             getApplication().setDebugInformation(context, qtdRequests, null);
             Long millis = new GregorianCalendar().getTimeInMillis() - getApplication().getLoginDateDebug(context);

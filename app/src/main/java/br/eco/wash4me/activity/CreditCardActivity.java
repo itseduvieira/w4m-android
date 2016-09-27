@@ -1,15 +1,17 @@
 package br.eco.wash4me.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import br.eco.wash4me.R;
+import br.eco.wash4me.activity.base.W4MActivity;
 
-public class CreditCardActivity extends AppCompatActivity {
+public class CreditCardActivity extends W4MActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_card);
+
+        setupToolbarBack();
     }
 }

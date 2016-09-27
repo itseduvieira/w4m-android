@@ -124,7 +124,7 @@ public class LoginActivity extends W4MActivity {
                 getDataAccess().getFacebookLoginData(context, new Callback<User>() {
                     @Override
                     public void execute(User user) {
-                        getW4MApplication().setLoggedUser(user);
+                        getW4MApplication().setLoggedUser(context, user);
 
                         finish();
 
@@ -205,7 +205,7 @@ public class LoginActivity extends W4MActivity {
             public void execute(User user) {
                 hideProgress();
 
-                getW4MApplication().setLoggedUser(user);
+                getW4MApplication().setLoggedUser(context, user);
 
                 finish();
 

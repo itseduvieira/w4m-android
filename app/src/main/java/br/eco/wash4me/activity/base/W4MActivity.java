@@ -100,6 +100,19 @@ public class W4MActivity extends AppCompatActivity {
         Log.i("w4m.app.lifecycle", "[" + getClass().getSimpleName() + ".onDestroy] onDestroy called");
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     protected void bindViews() { };
 
     protected void setupViews() { };
@@ -129,14 +142,14 @@ public class W4MActivity extends AppCompatActivity {
         profileImage = (CircleImageView) hView.findViewById(R.id.profile_image);
         userName = (TextView) hView.findViewById(R.id.name_user);
 
-        Bitmap bitmap = getW4MApplication().getLoggedUser().getProfilePicture();
+        Bitmap bitmap = getW4MApplication().getLoggedUser(context).getProfilePicture();
 
         if(bitmap == null) {
             bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_example_profile);
         }
 
         profileImage.setImageBitmap(bitmap);
-        userName.setText(getW4MApplication().getLoggedUser().getName());
+        userName.setText(getW4MApplication().getLoggedUser(context).getName());
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -185,7 +198,7 @@ public class W4MActivity extends AppCompatActivity {
     }
 
     protected void logout() {
-        getW4MApplication().setLoggedUser(null);
+        getW4MApplication().setLoggedUser(context, null);
         getW4MApplication().clearDebugInformation(context);
 
         if (AccessToken.getCurrentAccessToken() != null) {

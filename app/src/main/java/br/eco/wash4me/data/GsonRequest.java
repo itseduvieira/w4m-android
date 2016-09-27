@@ -46,8 +46,8 @@ public class GsonRequest<T> extends Request<T> {
 
         Map<String, String> auth = new HashMap<>();
 
-        if(application.isLogged()) {
-            auth.put("Authorization", application.getLoggedUser().getToken());
+        if(application.isLogged(application.getApplicationContext())) {
+            auth.put("Authorization", application.getLoggedUser(application.getApplicationContext()).getToken());
         }
 
         return auth;

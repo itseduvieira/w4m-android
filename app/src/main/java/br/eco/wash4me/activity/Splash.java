@@ -17,12 +17,19 @@ public class Splash extends W4MActivity {
 
         setContentView(R.layout.activity_splash);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(Splash.this, LoginActivity.class));
-                finish();
-            }
-        }, 3000);
+        if (getW4MApplication().isLogged(context)) {
+            startActivity(new Intent(Splash.this, StepsActivity.class));
+
+            Splash.this.finish();
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(Splash.this, LoginActivity.class));
+
+                    Splash.this.finish();
+                }
+            }, 3000);
+        }
     }
 }

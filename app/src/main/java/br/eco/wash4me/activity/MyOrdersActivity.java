@@ -4,11 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,7 +24,6 @@ import static br.eco.wash4me.data.DataAccess.getDataAccess;
 public class MyOrdersActivity extends W4MActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
-    private RecyclerView.LayoutManager recyclerLayoutManager;
     private FloatingActionButton btnNewOrder;
 
     @Override
@@ -45,19 +42,6 @@ public class MyOrdersActivity extends W4MActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void bindViews() {
         recyclerView = (RecyclerView) findViewById(R.id.my_orders_list);
         btnNewOrder = (FloatingActionButton) findViewById(R.id.fab_new_order);
@@ -65,15 +49,14 @@ public class MyOrdersActivity extends W4MActivity {
 
     @Override
     protected void setupViews() {
-        //recyclerLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerLayoutManager = new LinearLayoutManager(MyOrdersActivity.this, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.LayoutManager recyclerLayoutManager = new LinearLayoutManager(MyOrdersActivity.this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(recyclerLayoutManager);
 
         DataAccess dataAccess = getDataAccess();
         dataAccess.getOrders(context, new Callback<List<Order>>() {
             @Override
             public void execute(List<Order> orders) {
-                recyclerAdapter = new ColorAdapter(MyOrdersActivity.this, orders);
+                recyclerAdapter = new OrdersAdapter(MyOrdersActivity.this, orders);
                 recyclerView.setAdapter(recyclerAdapter);
             }
         });
@@ -86,11 +69,11 @@ public class MyOrdersActivity extends W4MActivity {
         });
     }
 
-    class ColorAdapter extends RecyclerView.Adapter<ColorAdapter.ViewHolder> {
+    class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder> {
         private List<Order> mDataSet;
         private Context mContext;
 
-        public ColorAdapter(Context context, List<Order> DataSet) {
+        public OrdersAdapter(Context context, List<Order> DataSet) {
             mDataSet = DataSet;
             mContext = context;
         }
@@ -106,7 +89,7 @@ public class MyOrdersActivity extends W4MActivity {
         }
 
         @Override
-        public ColorAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public OrdersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(mContext).inflate(R.layout.order_view, parent, false);
             ViewHolder vh = new ViewHolder(v);
 
@@ -115,7 +98,7 @@ public class MyOrdersActivity extends W4MActivity {
                 public void onClick(View view) {
                     int itemPosition = recyclerView.indexOfChild(view);
 
-                    ((ColorAdapter) recyclerView.getAdapter()).getOrders().get(itemPosition);
+                    ((OrdersAdapter) recyclerView.getAdapter()).getOrders().get(itemPosition);
 
                     Intent intent = new Intent(context, OrderDetailActivity.class);
                     intent.putExtra("id", itemPosition + 1);

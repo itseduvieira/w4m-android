@@ -1,37 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        style="@style/W4MTheme.Toolbar">
-
-    </android.support.v7.widget.Toolbar>
+    android:fitsSystemWindows="true"
+    tools:context=".activity.StepsActivity">
 
     <RelativeLayout
-        android:id="@+id/breadcrumb_steps"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/w4mAccent"
-        android:layout_below="@+id/toolbar">
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            style="@style/W4MTheme.Toolbar"
+            app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+        </android.support.v7.widget.Toolbar>
+
+        <RelativeLayout
+            android:id="@+id/breadcrumb_steps"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_below="@+id/toolbar"
+            android:background="@color/w4mAccent">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btn_next"
+            android:layout_below="@+id/breadcrumb_steps">
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@id/btn_next"
+            style="@style/W4MTheme.Button.Bottom.Accent"
+            android:text="PEDIR SERVIÇO" />
 
     </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@+id/breadcrumb_steps"
-        android:layout_above="@+id/btn_next">
-
-    </RelativeLayout>
-
-    <Button
-        android:id="@id/btn_next"
-        style="@style/W4MTheme.Button.Bottom.Accent"
-        android:text="PRÓXIMO"/>
-
-</RelativeLayout>
+        android:layout_gravity="start"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer"/>
+</android.support.v4.widget.DrawerLayout>
