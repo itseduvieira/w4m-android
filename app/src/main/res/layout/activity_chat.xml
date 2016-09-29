@@ -2,12 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:elevation="4dp"
         style="@style/W4MTheme.Toolbar">
     </android.support.v7.widget.Toolbar>
 
@@ -56,5 +55,5 @@
         android:listSelector="@android:color/transparent"
         android:transcriptMode="alwaysScroll"
         android:divider="@null"
-        android:padding="20dp" />
+        android:padding="16dp" />
 </RelativeLayout>
