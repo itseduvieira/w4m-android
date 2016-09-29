@@ -2,6 +2,7 @@ package br.eco.wash4me.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,13 +29,14 @@ public class ChatActivity extends W4MActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_chat);
+
         setupToolbarBack();
 
         bindViews();
 
         setupViews();
-
     }
 
     @Override
@@ -42,14 +44,11 @@ public class ChatActivity extends W4MActivity {
         messagesContainer = (ListView) findViewById(R.id.messagesContainer);
         messageET = (EditText) findViewById(R.id.messageEdit);
         sendBtn = (ImageButton) findViewById(R.id.chatSendButton);
-        TextView meLabel = (TextView) findViewById(R.id.meLbl);
         RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
     }
 
     @Override
     protected void setupViews() {
-        TextView companionLabel = (TextView) findViewById(R.id.friendLabel);
-        companionLabel.setText("");// Hard Coded
         loadDummyHistory();
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +72,19 @@ public class ChatActivity extends W4MActivity {
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                finish();
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void displayMessage(ChatMessage message) {
         adapter.add(message);

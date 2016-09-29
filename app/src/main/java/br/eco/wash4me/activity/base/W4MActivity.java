@@ -24,6 +24,7 @@ import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 
 import br.eco.wash4me.R;
+import br.eco.wash4me.activity.ChatActivity;
 import br.eco.wash4me.activity.LoginActivity;
 import br.eco.wash4me.activity.MyOrdersActivity;
 import br.eco.wash4me.activity.OrderDetailActivity;
@@ -172,7 +173,7 @@ public class W4MActivity extends AppCompatActivity {
                         startActivity(new Intent(context, SuppliersActivity.class));
                         break;
                     case R.id.navigation_item_chat:
-                        startActivity(new Intent(context, SuppliersActivity.class));
+                        startActivity(new Intent(context, ChatActivity.class));
                         break;
                     case R.id.navigation_item_exit:
                         logout();

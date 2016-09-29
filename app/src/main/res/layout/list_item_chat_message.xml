@@ -14,7 +14,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="105dp"
-
             android:layout_gravity="right"
             android:background="@drawable/border_me"
             android:padding="20dp"
@@ -34,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30sp"
             android:layout_gravity="right"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textColor="@android:color/darker_gray" />
 
     </LinearLayout>
