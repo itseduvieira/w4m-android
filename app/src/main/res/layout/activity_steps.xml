@@ -22,20 +22,50 @@
         <RelativeLayout
             android:id="@+id/breadcrumb_steps"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_below="@+id/toolbar"
-            android:background="@color/w4mAccent">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="PASSO 1"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:padding="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="PASSO 2"/>
+            </RelativeLayout>
 
         </RelativeLayout>
+        <View
+            android:id="@+id/separator"
+            android:layout_below="@id/breadcrumb_steps"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/w4mAccent"/>
 
-        <RelativeLayout
-            android:id="@+id/content"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/btn_next"
-            android:layout_below="@+id/breadcrumb_steps">
-
-        </RelativeLayout>
+            android:layout_below="@id/separator">
+            <RelativeLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </RelativeLayout>
+        </ScrollView>
 
         <Button
             android:id="@id/btn_next"

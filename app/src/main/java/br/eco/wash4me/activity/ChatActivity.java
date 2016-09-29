@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -19,6 +20,7 @@ import br.eco.wash4me.activity.base.W4MActivity;
 import br.eco.wash4me.entity.ChatMessage;
 
 public class ChatActivity extends W4MActivity {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy 'às' HH:mm");
 
     private EditText messageET;
     private ListView messagesContainer;
@@ -62,7 +64,7 @@ public class ChatActivity extends W4MActivity {
                 ChatMessage chatMessage = new ChatMessage();
                 chatMessage.setId(122);//dummy
                 chatMessage.setMessage(messageText);
-                chatMessage.setDate(DateFormat.getDateTimeInstance().format(new Date()));
+                chatMessage.setDate(sdf.format(new Date()));
                 chatMessage.setMe(true);
 
                 messageET.setText("");
@@ -98,19 +100,20 @@ public class ChatActivity extends W4MActivity {
 
     private void loadDummyHistory(){
 
+
         chatHistory = new ArrayList<ChatMessage>();
 
         ChatMessage msg = new ChatMessage();
         msg.setId(1);
         msg.setMe(false);
         msg.setMessage("Olá!");
-        msg.setDate(DateFormat.getDateTimeInstance().format(new Date()));
+        msg.setDate(sdf.format(new Date()));
         chatHistory.add(msg);
         ChatMessage msg1 = new ChatMessage();
         msg1.setId(2);
         msg1.setMe(false);
         msg1.setMessage("Tudo bem??");
-        msg1.setDate(DateFormat.getDateTimeInstance().format(new Date()));
+        msg1.setDate(sdf.format(new Date()));
         chatHistory.add(msg1);
 
         adapter = new ChatAdapter(ChatActivity.this, new ArrayList<ChatMessage>());
