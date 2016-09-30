@@ -6,7 +6,6 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:elevation="4dp"
         style="@style/W4MTheme.Toolbar">
     </android.support.v7.widget.Toolbar>
 
@@ -44,7 +43,7 @@
         android:layout_above="@id/container"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/w4mDarkAlpha"/>
+        android:background="@color/w4mAccent"/>
 
     <ListView
         android:layout_below="@id/toolbar"

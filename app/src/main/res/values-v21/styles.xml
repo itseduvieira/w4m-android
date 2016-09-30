@@ -1,0 +1,18 @@
+<resources>
+    <style name="W4MTheme.Toolbar" parent="W4MTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/w4mPrimary</item>
+        <item name="android:elevation">4dp</item>
+        <item name="titleTextColor">@color/w4mTextColorInverse</item>
+    </style>
+
+    <style name="W4MTheme.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/w4mTextColorInverse</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:elevation">2dp</item>
+    </style>
+</resources>

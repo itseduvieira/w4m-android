@@ -29,6 +29,7 @@ import br.eco.wash4me.activity.LoginActivity;
 import br.eco.wash4me.activity.MyOrdersActivity;
 import br.eco.wash4me.activity.OrderDetailActivity;
 import br.eco.wash4me.activity.SettingsActivity;
+import br.eco.wash4me.activity.StepsActivity;
 import br.eco.wash4me.activity.SuppliersActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -164,7 +165,7 @@ public class W4MActivity extends AppCompatActivity {
                         startActivity(new Intent(context, SettingsActivity.class));
                         break;
                     case R.id.navigation_item_new_order:
-                        startActivity(new Intent(context, OrderDetailActivity.class));
+                        startActivity(new Intent(context, StepsActivity.class));
                         break;
                     case R.id.navigation_item_my_orders:
                         startActivity(new Intent(context, MyOrdersActivity.class));

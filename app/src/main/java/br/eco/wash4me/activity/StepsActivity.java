@@ -71,7 +71,6 @@ public class StepsActivity extends W4MActivity {
 
     @Override
     protected void bindViews() {
-        recyclerView = (RecyclerView) findViewById(R.id.products_list);
         content = (RelativeLayout) findViewById(R.id.content);
         btnNext = (Button) findViewById(R.id.btn_next);
     }
@@ -100,7 +99,7 @@ public class StepsActivity extends W4MActivity {
         step1.setTag(TAG_STEP_1_VIEW);
         content.addView(step1);
 
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.products_list);
+        recyclerView = (RecyclerView) content.findViewById(R.id.products_list);
         RecyclerView.LayoutManager recyclerLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(recyclerLayoutManager);
 
@@ -150,8 +149,6 @@ public class StepsActivity extends W4MActivity {
         public ProductsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(mContext).inflate(R.layout.product_view, parent, false);
             ViewHolder vh = new ViewHolder(v);
-
-
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override

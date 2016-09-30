@@ -23,6 +23,7 @@
             android:id="@+id/breadcrumb_steps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:layout_below="@+id/toolbar">
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -71,6 +72,12 @@
             android:id="@id/btn_next"
             style="@style/W4MTheme.Button.Bottom.Accent"
             android:text="PEDIR SERVIÇO" />
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            style="?android:attr/android:progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
 
     </RelativeLayout>
 

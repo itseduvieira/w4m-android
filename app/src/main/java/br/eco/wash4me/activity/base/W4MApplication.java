@@ -10,7 +10,11 @@ import com.google.gson.GsonBuilder;
 
 import java.util.GregorianCalendar;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 import br.eco.wash4me.entity.User;
+import br.eco.wash4me.utils.FontOverride;
 
 import static br.eco.wash4me.utils.Constants.*;
 
@@ -22,6 +26,12 @@ public class W4MApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
+        AppEventsLogger.activateApp(this);
+
+        FontOverride.setDefaultFont(this, "MONOSPACE", "supergroteska-rg.ttf");
 
         w4mApplication = this;
     }
