@@ -39,7 +39,7 @@
             android:label="" />
         <activity
             android:name=".activity.StepsActivity"
-            android:label="Serviços" />
+            android:label="Faça Seu Pedido" />
         <activity
             android:name=".activity.ProductDetailActivity"
             android:label="" />

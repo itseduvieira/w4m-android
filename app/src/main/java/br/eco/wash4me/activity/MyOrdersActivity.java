@@ -25,6 +25,7 @@ public class MyOrdersActivity extends W4MActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
     private FloatingActionButton btnNewOrder;
+    private View progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,7 @@ public class MyOrdersActivity extends W4MActivity {
     protected void bindViews() {
         recyclerView = (RecyclerView) findViewById(R.id.my_orders_list);
         btnNewOrder = (FloatingActionButton) findViewById(R.id.fab_new_order);
+        progress = findViewById(R.id.progress_circle);
     }
 
     @Override
@@ -56,6 +58,8 @@ public class MyOrdersActivity extends W4MActivity {
         dataAccess.getOrders(context, new Callback<List<Order>>() {
             @Override
             public void execute(List<Order> orders) {
+                progress.setVisibility(View.GONE);
+
                 recyclerAdapter = new OrdersAdapter(MyOrdersActivity.this, orders);
                 recyclerView.setAdapter(recyclerAdapter);
             }
@@ -84,7 +88,7 @@ public class MyOrdersActivity extends W4MActivity {
             public ViewHolder(View v) {
                 super(v);
 
-                mTextView = (TextView) v.findViewById(R.id.tv);
+                mTextView = (TextView) v.findViewById(R.id.product_title);
             }
         }
 
@@ -113,8 +117,8 @@ public class MyOrdersActivity extends W4MActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             Order item = mDataSet.get(position);
             holder.mTextView.setText(item.toString());
-            //holder.mTextView.getLayoutParams().height = getRandomIntInRange(250,75);
-            //holder.mTextView.setBackgroundColor(getRandomHSVColor());
+            //holder.productTitle.getLayoutParams().height = getRandomIntInRange(250,75);
+            //holder.productTitle.setBackgroundColor(getRandomHSVColor());
         }
 
         @Override

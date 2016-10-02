@@ -10,4 +10,5 @@ public class Constants {
 
     public static final String TAG_STEP_1_VIEW = "step1";
     public static final String TAG_STEP_2_VIEW = "step2";
+    public static final String TAG_STEP_3_VIEW = "step3";
 }

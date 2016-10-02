@@ -37,6 +37,13 @@
             android:clipToPadding="false">
         </android.support.v7.widget.RecyclerView>
 
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_circle"
+            style="?android:attr/android:progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"/>
+
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

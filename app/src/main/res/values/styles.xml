@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/w4mPrimary</item>
@@ -7,7 +7,7 @@
     </style>
 
     <style name="W4MTheme" parent="AppTheme">
-        <item name="android:typeface">monospace</item>
+        <item name="android:typeface">sans</item>
         <item name="android:windowBackground">@color/w4mActivityBase</item>
     </style>
 
@@ -18,18 +18,32 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="W4MTheme.Toolbar" parent="W4MTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:background">@color/w4mPrimary</item>
+        <item name="titleTextColor">@color/w4mTextColorInverse</item>
+        <item name="titleTextStyle">@style/W4MTheme.Toolbar.Title</item>
+        <item name="subtitleTextColor">@color/w4mTextColorInverse</item>
+        <item tools:ignore="NewApi" name="android:elevation">4dp</item>
+    </style>
+
     <style name="W4MTheme.Toolbar.Large" parent="W4MTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">200dp</item>
         <item name="android:background">@color/w4mPrimary</item>
-        <item name="elevation">4dp</item>
         <item name="titleTextColor">@color/w4mTextColorInverse</item>
+        <item tools:ignore="NewApi" name="android:elevation">4dp</item>
+    </style>
+
+    <style name="W4MTheme.Toolbar.Title" parent="W4MTheme">
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="W4MTheme.FAB" parent="W4MTheme">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="elevation">6dp</item>
+        <item tools:ignore="NewApi" name="android:elevation">6dp</item>
         <item name="android:scaleType">center</item>
         <item name="android:layout_marginEnd">@dimen/activity_horizontal_margin</item>
         <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
@@ -41,6 +55,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/w4mTextColorInverse</item>
         <item name="android:textAllCaps">true</item>
+        <item tools:ignore="NewApi" name="android:elevation">2dp</item>
     </style>
 
     <style name="W4MTheme.Button.Primary" parent="W4MTheme.Button">
@@ -53,6 +68,7 @@
 
     <style name="W4MTheme.Button.Bottom" parent="W4MTheme.Button">
         <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_height">45dp</item>
     </style>
 
     <style name="W4MTheme.Button.Bottom.Primary" parent="W4MTheme.Button.Bottom">

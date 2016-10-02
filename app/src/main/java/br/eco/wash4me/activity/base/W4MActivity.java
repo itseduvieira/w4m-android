@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
@@ -23,11 +24,12 @@ import android.widget.TextView;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 
+import java.lang.reflect.Field;
+
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.ChatActivity;
 import br.eco.wash4me.activity.LoginActivity;
 import br.eco.wash4me.activity.MyOrdersActivity;
-import br.eco.wash4me.activity.OrderDetailActivity;
 import br.eco.wash4me.activity.SettingsActivity;
 import br.eco.wash4me.activity.StepsActivity;
 import br.eco.wash4me.activity.SuppliersActivity;
@@ -126,6 +128,8 @@ public class W4MActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        changeToolbarTypeface(toolbar);
     }
 
     protected void setupToolbarBack() {
@@ -135,6 +139,33 @@ public class W4MActivity extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        changeToolbarTypeface(toolbar);
+    }
+
+    protected void setupToolbarBack(String title) {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(title);
+
+        changeToolbarTypeface(toolbar);
+    }
+
+    protected void changeToolbarTypeface(Toolbar toolbar) {
+        try {
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            ((TextView) f.get(toolbar)).setTypeface(Typeface.createFromAsset(context.getAssets(),
+                    "brandon_med.otf"));
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void setupNavigationDrawer() {

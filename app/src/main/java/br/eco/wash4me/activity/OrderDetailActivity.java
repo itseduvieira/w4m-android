@@ -15,17 +15,14 @@ public class OrderDetailActivity extends W4MActivity {
 
         Integer id = getIntent().getIntExtra("id", 0);
 
-        setupToolbarBack();
+        setupToolbarBack(id == 0 ? "Novo Pedido" : ("Pedido #" + id));
 
-        setupViews(id);
+        setupViews();
     }
 
-    private void setupViews(Integer id) {
-        if(id == 0) {
-            getSupportActionBar().setTitle("Novo Pedido");
-        } else {
-            getSupportActionBar().setTitle("Pedido #" + id);
-        }
+    @Override
+    protected void setupViews() {
+
     }
 
     @Override

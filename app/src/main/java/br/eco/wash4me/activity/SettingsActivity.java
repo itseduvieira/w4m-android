@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -22,9 +23,11 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import br.eco.wash4me.R;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
@@ -39,6 +42,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         setupActionBar();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                finish();
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void bindViews() {
         getLayoutInflater().inflate(R.layout.preferences_toolbar, (ViewGroup)findViewById(android.R.id.content));
         toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -49,6 +66,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+            changeToolbarTypeface(toolbar);
         }
 
         int horizontalMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
@@ -234,6 +255,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void changeToolbarTypeface(Toolbar toolbar) {
+        try {
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            ((TextView) f.get(toolbar)).setTypeface(Typeface.createFromAsset(SettingsActivity.this.getAssets(),
+                    "brandon_med.otf"));
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }

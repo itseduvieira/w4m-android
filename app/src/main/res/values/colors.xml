@@ -5,5 +5,8 @@
     <color name="w4mAccent">#FF4081</color>
     <color name="w4mTextColorInverse">#FFFFFF</color>
     <color name="w4mActivityBase">#FAFAFA</color>
-    <color name="w4mDarkAlpha">#28000000</color>
+    <color name="w4mLightAlpha">#28000000</color>
+    <color name="w4mDarkAlpha">#99000000</color>
+    <color name="w4mTextColorInactive">#40000000</color>
+    <color name="w4mGray">#8C8C8C</color>
 </resources>

@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
+import br.eco.wash4me.entity.OrderRequest;
 import br.eco.wash4me.entity.User;
 import br.eco.wash4me.utils.FontOverride;
 
@@ -22,6 +23,7 @@ public class W4MApplication extends Application {
     private static W4MApplication w4mApplication;
 
     private User loggedUser;
+    private OrderRequest orderRequest;
 
     @Override
     public void onCreate() {
@@ -31,7 +33,8 @@ public class W4MApplication extends Application {
 
         AppEventsLogger.activateApp(this);
 
-        FontOverride.setDefaultFont(this, "MONOSPACE", "supergroteska-rg.ttf");
+        //FontOverride.setDefaultFont(this, "MONOSPACE", "supergroteska-rg.ttf");
+        FontOverride.setDefaultFont(this, "SANS_SERIF", "brandon_med.otf");
 
         w4mApplication = this;
     }
@@ -109,6 +112,18 @@ public class W4MApplication extends Application {
         this.loggedUser = loggedUser;
 
         saveLoggedUser(context, loggedUser);
+    }
+
+    public OrderRequest getOrderRequest() {
+        if(orderRequest == null) {
+            orderRequest = new OrderRequest();
+        }
+
+        return orderRequest;
+    }
+
+    public void setOrderRequest(OrderRequest orderRequest) {
+        this.orderRequest = orderRequest;
     }
 
     public Boolean isLogged(Context context) {
