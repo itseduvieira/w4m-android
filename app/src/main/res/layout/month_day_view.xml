@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="70dp"
+    android:layout_height="75dp"
+    android:layout_margin="2dp"
+    app:cardCornerRadius="2dp">
+
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/day_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:textSize="10sp"
+            android:text="DOMINGO"/>
+        <TextView
+            android:id="@+id/day_number"
+            android:layout_below="@id/day_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="2"
+            android:textStyle="bold"
+            android:textSize="32sp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/checked_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/w4mDarkAlpha"
+        android:visibility="gone">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@color/w4mAccent"
+            android:layout_alignParentTop="true"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_check_white_48dp"
+            android:tint="@color/w4mAccent" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
