@@ -48,9 +48,6 @@ public class StepsActivity extends W4MActivity {
     private TextView txtTitleStep2;
     private TextView txtTitleStep3;
     private RecyclerView gridMonth;
-    private View tab1;
-    private View tab2;
-    private View tab3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +72,17 @@ public class StepsActivity extends W4MActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(getW4MApplication().isLogged(context)) {
-            return super.onOptionsItemSelected(item);
+            if(isStep2Showing()) {
+                setupStep1Views();
+
+                return true;
+            } else if(isStep3Showing()) {
+                setupStep2Views();
+
+                return true;
+            } else {
+                return super.onOptionsItemSelected(item);
+            }
         } else {
             int id = item.getItemId();
 
@@ -102,37 +109,12 @@ public class StepsActivity extends W4MActivity {
         txtTitleStep2 = (TextView) findViewById(R.id.title_step_2);
         txtTitleStep3 = (TextView) findViewById(R.id.title_step_3);
 
-        tab1 = findViewById(R.id.container_title_step_1);
-        tab2 = findViewById(R.id.container_title_step_2);
-        tab3 = findViewById(R.id.container_title_step_3);
-
         request = getW4MApplication().getOrderRequest();
     }
 
     @Override
     protected void setupViews() {
         setupStep1Views();
-
-        tab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupStep1Views();
-            }
-        });
-
-        tab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupStep2Views();
-            }
-        });
-
-        tab3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupStep3Views();
-            }
-        });
 
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,8 +124,6 @@ public class StepsActivity extends W4MActivity {
                 } else if(isStep2Showing()) {
                     setupStep3Views();
                 } else {
-                    StepsActivity.this.finish();
-
                     startActivity(new Intent(StepsActivity.this, OrderDetailActivity.class));
                 }
             }
@@ -151,6 +131,8 @@ public class StepsActivity extends W4MActivity {
     }
 
     private void setupStep1Views() {
+        progress.setVisibility(View.VISIBLE);
+
         LayoutInflater inflater = getLayoutInflater();
 
         content.removeAllViews();
@@ -162,6 +144,10 @@ public class StepsActivity extends W4MActivity {
         checkTitleStep1();
 
         btnNext.setText("DEFINIR LOCAL");
+
+        setupToolbarMenu();
+
+        progress.setVisibility(View.GONE);
     }
 
     private void checkTitleStep1() {
@@ -170,6 +156,8 @@ public class StepsActivity extends W4MActivity {
     }
 
     private void setupStep2Views() {
+        progress.setVisibility(View.VISIBLE);
+
         LayoutInflater inflater = getLayoutInflater();
 
         content.removeAllViews();
@@ -195,6 +183,8 @@ public class StepsActivity extends W4MActivity {
         });
 
         btnNext.setText("PEDIR SERVIÇOS");
+
+        setupToolbarBack();
     }
 
     private void toggleTitleStep2(Boolean check) {
@@ -212,6 +202,8 @@ public class StepsActivity extends W4MActivity {
     }
 
     private void setupStep3Views() {
+        progress.setVisibility(View.VISIBLE);
+
         LayoutInflater inflater = getLayoutInflater();
 
         content.removeAllViews();
@@ -238,6 +230,8 @@ public class StepsActivity extends W4MActivity {
         gridMonth.setAdapter(monthAdapter);
 
         btnNext.setText("AGENDAR DATA");
+
+        progress.setVisibility(View.GONE);
     }
 
     private void toggleTitleStep3(Boolean check) {
@@ -256,6 +250,10 @@ public class StepsActivity extends W4MActivity {
 
     private Boolean isStep2Showing() {
         return content.getChildAt(0).getTag().equals(TAG_STEP_2_VIEW);
+    }
+
+    private Boolean isStep3Showing() {
+        return content.getChildAt(0).getTag().equals(TAG_STEP_3_VIEW);
     }
 
     private void showTotal() {
