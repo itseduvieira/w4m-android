@@ -294,6 +294,8 @@ public class StepsActivity extends W4MActivity {
                 checkedDayView.findViewById(R.id.checked_icon).setVisibility(View.GONE);
             }
         }
+
+        gridMonth.scrollToPosition(0);
     }
 
     private void toggleTitleStep3(Boolean check) {
@@ -458,12 +460,14 @@ public class StepsActivity extends W4MActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
             TextView day;
+            View checkedIcon;
 
             ViewHolder(View v) {
                 super(v);
 
                 title = (TextView) v.findViewById(R.id.day_title);
                 day = (TextView) v.findViewById(R.id.day_number);
+                checkedIcon = v.findViewById(R.id.checked_icon);
             }
         }
 
@@ -503,14 +507,30 @@ public class StepsActivity extends W4MActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             GregorianCalendar item = getDays().get(position);
 
-            holder.day.setText(Integer.valueOf(item.get(Calendar.DAY_OF_MONTH)).toString());
-            holder.title.setText(item.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG,
-                    new Locale("pt", "BR")).split("-")[0]);
+            String day = Integer.valueOf(item.get(Calendar.DAY_OF_MONTH)).toString();
+            String title = item.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG,
+                    new Locale("pt", "BR")).split("-")[0];
+
+            holder.day.setText(day);
+            holder.title.setText(title);
+
+            if(position == 0) {
+                holder.checkedIcon.setVisibility(View.VISIBLE);
+                ((TextView) findViewById(R.id.when_day)).setText(day);
+                ((TextView) findViewById(R.id.week_day)).setText(title);
+            } else {
+                holder.checkedIcon.setVisibility(View.GONE);
+            }
         }
 
         @Override
         public int getItemCount() {
             return mDataSet.size();
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return mDataSet.get(position).get(Calendar.DAY_OF_MONTH);
         }
 
         List<GregorianCalendar> getDays() {
