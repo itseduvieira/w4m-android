@@ -17,6 +17,49 @@
             style="@style/W4MTheme.Toolbar"
             app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Faça seu Pedido"
+                    android:textColor="@color/w4mTextColorInverse"
+                    android:textSize="20sp"
+                    android:layout_centerVertical="true"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:id="@+id/total_price"
+                        android:layout_below="@+id/title_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="R$0"
+                        android:textColor="@color/w4mTextColorInverse"
+                        android:textSize="20sp"
+                        android:layout_marginTop="-5dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@id/title_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/w4mTextColorInverse"
+                        android:textStyle="bold"
+                        android:layout_centerHorizontal="true"
+                        android:textSize="9sp"
+                        android:text="TOTAL" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+
         </android.support.v7.widget.Toolbar>
 
         <LinearLayout
@@ -54,6 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
                 <ImageView
                     android:id="@+id/arrow_1"
                     android:layout_width="35dp"
@@ -78,6 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
                 <ImageView
                     android:id="@+id/arrow_2"
                     android:layout_width="35dp"

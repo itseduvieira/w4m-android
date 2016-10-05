@@ -8,98 +8,119 @@
         android:id="@+id/when_summary_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-18dp"
+        android:layout_marginTop="-12dp"
         android:paddingBottom="6dp">
+
         <TextView
             android:id="@+id/when_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="2"
-            android:textStyle="bold"
             android:textColor="@color/w4mAccent"
             android:textSize="64sp"
-            android:layout_centerInParent="true" />
+            android:textStyle="bold" />
+
         <TextView
-            android:layout_below="@id/when_day"
+            android:id="@+id/week_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/when_day"
             android:layout_centerHorizontal="true"
-            android:textSize="12sp"
-            android:textStyle="bold"
+            android:text="SEGUNDA-FEIRA"
+            android:textAllCaps="true"
             android:textColor="@color/w4mAccent"
-            android:text="SEGUNDA-FEIRA"/>
+            android:textSize="12sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/month_container"
-        android:layout_below="@id/when_summary_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageButton
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:tint="@color/w4mAccent"
-            android:padding="8dp"
-            android:src="@drawable/ic_navigate_before_white_24dp"/>
-
-        <TextView
-            android:id="@+id/month_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="OUTUBRO"
-            android:textSize="18sp"
-            android:textColor="@color/w4mAccent"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:background="@android:color/transparent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:tint="@color/w4mAccent"
-            android:padding="12dp"
-            android:src="@drawable/ic_navigate_next_white_24dp"/>
-    </RelativeLayout>
-
-    <View
-        android:id="@+id/day_separator"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_below="@id/month_container"
-        android:background="@color/w4mAccent" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/month_days"
-        android:layout_below="@id/day_separator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:layout_margin="12dp"
-        android:clipToPadding="false">
+        android:layout_below="@id/when_summary_container">
 
-    </android.support.v7.widget.RecyclerView>
+        <RelativeLayout
+            android:id="@+id/title_month_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/nav_previous_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_navigate_before_white_24dp"
+                android:tint="@color/w4mAccent" />
+
+            <TextView
+                android:id="@+id/month_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="OUTUBRO"
+                android:textAllCaps="true"
+                android:textColor="@color/w4mAccent"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/nav_next_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="12dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_navigate_next_white_24dp"
+                android:tint="@color/w4mAccent" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/day_separator"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@id/title_month_container"
+            android:background="@color/w4mAccent" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/month_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/day_separator"
+            android:layout_margin="12dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical">
+
+        </android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/hour_container"
-        android:layout_below="@id/month_days"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/month_container">
 
         <TextView
             android:id="@+id/hour_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_centerHorizontal="true"
             android:text="12h00"
-            android:textSize="32sp"
             android:textColor="@color/w4mAccent"
+            android:textSize="32sp"
             android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@id/hour_title"
+            android:background="@color/w4mLightAlpha">
+
+        </RelativeLayout>
     </RelativeLayout>
 
     <!--<View
@@ -108,5 +129,6 @@
         android:layout_height="0.5dp"
         android:layout_below="@id/hour_container"
         android:background="@color/w4mAccent" />-->
+
 
 </RelativeLayout>

@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,7 +25,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
@@ -39,15 +44,16 @@ import static br.eco.wash4me.utils.Constants.TAG_STEP_3_VIEW;
 
 public class StepsActivity extends W4MActivity {
     private RecyclerView gridProducts;
-    private RecyclerView.Adapter recyclerAdapter;
+    private RecyclerView.Adapter productsAdapter;
+    private RecyclerView gridMonth;
+    private MonthAdapter monthAdapter;
     private RelativeLayout content;
     private Button btnNext;
     private View progress;
     private OrderRequest request;
-    private TextView txtTitleStep1;
-    private TextView txtTitleStep2;
-    private TextView txtTitleStep3;
-    private RecyclerView gridMonth;
+    private ImageButton btnNextMonth;
+    private ImageButton btnPreviousMonth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +64,7 @@ public class StepsActivity extends W4MActivity {
 
         setupViews();
 
-        if(getW4MApplication().isLogged(context)) {
+        if (getW4MApplication().isLogged(context)) {
             setupToolbarMenu();
 
             setupNavigationDrawer();
@@ -71,12 +77,12 @@ public class StepsActivity extends W4MActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(getW4MApplication().isLogged(context)) {
-            if(isStep2Showing()) {
+        if (getW4MApplication().isLogged(context)) {
+            if (isStep2Showing()) {
                 setupStep1Views();
 
                 return true;
-            } else if(isStep3Showing()) {
+            } else if (isStep3Showing()) {
                 setupStep2Views();
 
                 return true;
@@ -105,10 +111,6 @@ public class StepsActivity extends W4MActivity {
         btnNext = (Button) findViewById(R.id.btn_next);
         progress = findViewById(R.id.progress_circle);
 
-        txtTitleStep1 = (TextView) findViewById(R.id.title_step_1);
-        txtTitleStep2 = (TextView) findViewById(R.id.title_step_2);
-        txtTitleStep3 = (TextView) findViewById(R.id.title_step_3);
-
         request = getW4MApplication().getOrderRequest();
     }
 
@@ -119,9 +121,9 @@ public class StepsActivity extends W4MActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isStep1Showing()) {
+                if (isStep1Showing()) {
                     setupStep2Views();
-                } else if(isStep2Showing()) {
+                } else if (isStep2Showing()) {
                     setupStep3Views();
                 } else {
                     startActivity(new Intent(StepsActivity.this, OrderDetailActivity.class));
@@ -177,8 +179,8 @@ public class StepsActivity extends W4MActivity {
             public void execute(List<Product> products) {
                 progress.setVisibility(View.GONE);
 
-                recyclerAdapter = new ProductsAdapter(context, products);
-                gridProducts.setAdapter(recyclerAdapter);
+                productsAdapter = new ProductsAdapter(context, products);
+                gridProducts.setAdapter(productsAdapter);
             }
         });
 
@@ -190,14 +192,14 @@ public class StepsActivity extends W4MActivity {
     private void toggleTitleStep2(Boolean check) {
         toggleTitleStep3(false);
 
-        if(check) {
+        if (check) {
             ((TextView) findViewById(R.id.title_step_2)).setTextColor(ContextCompat.getColor(context, R.color.w4mTextColorInverse));
             findViewById(R.id.title_step_2).setBackgroundColor(ContextCompat.getColor(context, R.color.w4mPrimary));
-            ((ImageView)findViewById(R.id.arrow_2)).setColorFilter(ContextCompat.getColor(context, R.color.w4mPrimary));
+            ((ImageView) findViewById(R.id.arrow_2)).setColorFilter(ContextCompat.getColor(context, R.color.w4mPrimary));
         } else {
             ((TextView) findViewById(R.id.title_step_2)).setTextColor(ContextCompat.getColor(context, R.color.w4mTextColorInactive));
             findViewById(R.id.title_step_2).setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
-            ((ImageView)findViewById(R.id.arrow_2)).setColorFilter(ContextCompat.getColor(context, android.R.color.white));
+            ((ImageView) findViewById(R.id.arrow_2)).setColorFilter(ContextCompat.getColor(context, android.R.color.white));
         }
     }
 
@@ -214,28 +216,69 @@ public class StepsActivity extends W4MActivity {
 
         toggleTitleStep3(true);
 
-        List<ScheduleDay> days = new ArrayList<>();
+        setupGridMonth();
 
-        for(int i = 1; i < 20; i++) {
-            ScheduleDay day = new ScheduleDay();
-            day.setDay(i);
-            days.add(day);
-        }
+        btnNextMonth = (ImageButton) findViewById(R.id.nav_next_month);
+        btnNextMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GregorianCalendar date = getW4MApplication().getOrderRequest().getDate();
+                Integer newMonth = date.get(Calendar.MONTH) + 1;
+                date.set(Calendar.MONTH, newMonth);
+                ((TextView) findViewById(R.id.month_title)).setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("pt", "BR")));
 
-        MonthAdapter monthAdapter = new MonthAdapter(context, days);
+                setupGridMonth();
+            }
+        });
 
-        gridMonth = (RecyclerView) findViewById(R.id.month_days);
-        RecyclerView.LayoutManager recyclerLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
-        gridMonth.setLayoutManager(recyclerLayoutManager);
-        gridMonth.setAdapter(monthAdapter);
+        btnPreviousMonth = (ImageButton) findViewById(R.id.nav_previous_month);
+        btnPreviousMonth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GregorianCalendar date = getW4MApplication().getOrderRequest().getDate();
+                Integer newMonth = date.get(Calendar.MONTH) - 1;
+                date.set(Calendar.MONTH, newMonth);
+                ((TextView) findViewById(R.id.month_title)).setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("pt", "BR")));
+
+                setupGridMonth();
+            }
+        });
 
         btnNext.setText("AGENDAR DATA");
 
         progress.setVisibility(View.GONE);
     }
 
+    private void setupGridMonth() {
+        List<ScheduleDay> days = new ArrayList<>();
+
+        GregorianCalendar date = getW4MApplication().getOrderRequest().getDate();
+
+        for (int i = 1; i <= date.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+            ScheduleDay day = new ScheduleDay();
+            day.setDay(i);
+            days.add(day);
+        }
+
+        if (monthAdapter == null) {
+            monthAdapter = new MonthAdapter(context, days);
+
+            gridMonth = (RecyclerView) findViewById(R.id.month_days);
+            RecyclerView.LayoutManager recyclerLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
+            gridMonth.setLayoutManager(recyclerLayoutManager);
+            gridMonth.setAdapter(monthAdapter);
+        } else {
+            monthAdapter.setDays(days);
+
+            for (int itemPos = 0; itemPos < gridMonth.getChildCount(); itemPos++) {
+                View checkedDayView = gridMonth.getChildAt(itemPos);
+                checkedDayView.findViewById(R.id.checked_icon).setVisibility(View.GONE);
+            }
+        }
+    }
+
     private void toggleTitleStep3(Boolean check) {
-        if(check) {
+        if (check) {
             ((TextView) findViewById(R.id.title_step_3)).setTextColor(ContextCompat.getColor(context, R.color.w4mTextColorInverse));
             findViewById(R.id.title_step_3).setBackgroundColor(ContextCompat.getColor(context, R.color.w4mPrimary));
         } else {
@@ -259,10 +302,10 @@ public class StepsActivity extends W4MActivity {
     private void showTotal() {
         Double total = request.calculatePrice();
 
-        if(total > 0.0) {
-            txtTitleStep2.setText(String.format("TOTAL R$%d", total.intValue()));
+        if (total > 0.0) {
+            ((TextView) findViewById(R.id.total_price)).setText(String.format("R$%d", total.intValue()));
         } else {
-            txtTitleStep2.setText("SERVIÇOS");
+            ((TextView) findViewById(R.id.total_price)).setText("R$0");
         }
     }
 
@@ -281,8 +324,8 @@ public class StepsActivity extends W4MActivity {
             TextView productDescription;
             TextView productPrice;
             ImageView productPicture;
-            View checkedIcon;
             ImageView downloadIcon;
+            View checkedIcon;
 
             ViewHolder(View v) {
                 super(v);
@@ -294,8 +337,8 @@ public class StepsActivity extends W4MActivity {
                 productDescription = (TextView) v.findViewById(R.id.product_description);
                 productPrice = (TextView) v.findViewById(R.id.product_price);
                 productPicture = (ImageView) v.findViewById(R.id.product_picture);
-                checkedIcon = v.findViewById(R.id.checked_icon);
                 downloadIcon = (ImageView) v.findViewById(R.id.download_icon);
+                checkedIcon = v.findViewById(R.id.checked_icon);
             }
         }
 
@@ -313,14 +356,17 @@ public class StepsActivity extends W4MActivity {
 
                     Boolean check = !isThisProductSelected(product);
 
-                    if(check) {
+                    if (check) {
                         request.getProducts().add(product);
+
+                        view.findViewById(R.id.checked_icon).setVisibility(View.VISIBLE);
                     } else {
                         request.getProducts().remove(product);
+
+                        view.findViewById(R.id.checked_icon).setVisibility(View.GONE);
                     }
 
-                    toggleProductSelection(check, vh, product);
-
+                    showTotal();
                 }
             });
 
@@ -329,7 +375,7 @@ public class StepsActivity extends W4MActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            Product item = mDataSet.get(position);
+            Product item = getProducts().get(position);
             holder.productTitle.setText(item.getName());
             holder.productDescription.setText(item.getDescription());
             holder.productPrice.setText(String.format("R$%d", item.getPrice().intValue()));
@@ -353,14 +399,10 @@ public class StepsActivity extends W4MActivity {
                 }
             });
 
-            toggleProductSelection(isThisProductSelected(item), holder, item);
-        }
-
-        private void toggleProductSelection(Boolean select, ProductsAdapter.ViewHolder vh, Product product) {
-            if(select) {
-                vh.checkedIcon.setVisibility(View.VISIBLE);
+            if (isThisProductSelected(item)) {
+                holder.checkedIcon.setVisibility(View.VISIBLE);
             } else {
-                vh.checkedIcon.setVisibility(View.GONE);
+                holder.checkedIcon.setVisibility(View.GONE);
             }
 
             showTotal();
@@ -392,14 +434,12 @@ public class StepsActivity extends W4MActivity {
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView title;
             TextView day;
-            View checkedIcon;
 
             ViewHolder(View v) {
                 super(v);
 
                 title = (TextView) v.findViewById(R.id.day_title);
                 day = (TextView) v.findViewById(R.id.day_number);
-                checkedIcon = findViewById(R.id.checked_icon);
             }
         }
 
@@ -415,8 +455,18 @@ public class StepsActivity extends W4MActivity {
 
                     ScheduleDay day = ((MonthAdapter) gridMonth.getAdapter()).getDays().get(itemPosition);
 
-                    vh.checkedIcon.setVisibility(View.VISIBLE);
+                    ViewGroup parent = (ViewGroup) view.getParent();
+                    for (int itemPos = 0; itemPos < parent.getChildCount(); itemPos++) {
+                        View checkedDayView = parent.getChildAt(itemPos);
+                        checkedDayView.findViewById(R.id.checked_icon).setVisibility(View.GONE);
+                    }
 
+                    GregorianCalendar date = getW4MApplication().getOrderRequest().getDate();
+                    date.set(Calendar.DAY_OF_MONTH, day.getDay());
+
+                    view.findViewById(R.id.checked_icon).setVisibility(View.VISIBLE);
+                    ((TextView) findViewById(R.id.when_day)).setText(day.getDay().toString());
+                    ((TextView) findViewById(R.id.week_day)).setText(date.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("pt", "BR")));
                 }
             });
 
@@ -426,6 +476,7 @@ public class StepsActivity extends W4MActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             ScheduleDay item = getDays().get(position);
+
             holder.day.setText(item.getDay().toString());
             holder.title.setText(item.getWeekDay());
         }
@@ -437,6 +488,12 @@ public class StepsActivity extends W4MActivity {
 
         List<ScheduleDay> getDays() {
             return mDataSet;
+        }
+
+        void setDays(List<ScheduleDay> DataSet) {
+            this.mDataSet = DataSet;
+
+            notifyDataSetChanged();
         }
     }
 }

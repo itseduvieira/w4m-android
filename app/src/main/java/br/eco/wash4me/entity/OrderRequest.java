@@ -1,13 +1,17 @@
 package br.eco.wash4me.entity;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderRequest {
     private List<Product> products;
+    private GregorianCalendar date;
 
     public OrderRequest() {
         products = new ArrayList<>();
+        date = new GregorianCalendar(new Locale("pt", "BR"));
     }
 
     public List<Product> getProducts() {
@@ -16,6 +20,10 @@ public class OrderRequest {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public GregorianCalendar getDate() {
+        return date;
     }
 
     public Double calculatePrice() {
