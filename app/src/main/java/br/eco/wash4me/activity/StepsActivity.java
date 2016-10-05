@@ -170,7 +170,8 @@ public class StepsActivity extends W4MActivity {
         toggleTitleStep2(true);
 
         gridProducts = (RecyclerView) content.findViewById(R.id.products_list);
-        RecyclerView.LayoutManager recyclerLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.LayoutManager recyclerLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         gridProducts.setLayoutManager(recyclerLayoutManager);
 
         getDataAccess().getProducts(context, new Callback<List<Product>>() {
@@ -192,13 +193,19 @@ public class StepsActivity extends W4MActivity {
         toggleTitleStep3(false);
 
         if (check) {
-            ((TextView) findViewById(R.id.title_step_2)).setTextColor(ContextCompat.getColor(context, R.color.w4mTextColorInverse));
-            findViewById(R.id.title_step_2).setBackgroundColor(ContextCompat.getColor(context, R.color.w4mPrimary));
-            ((ImageView) findViewById(R.id.arrow_2)).setColorFilter(ContextCompat.getColor(context, R.color.w4mPrimary));
+            ((TextView) findViewById(R.id.title_step_2)).setTextColor(
+                    ContextCompat.getColor(context, R.color.w4mTextColorInverse));
+            findViewById(R.id.title_step_2).setBackgroundColor(
+                    ContextCompat.getColor(context, R.color.w4mPrimary));
+            ((ImageView) findViewById(R.id.arrow_2)).setColorFilter(
+                    ContextCompat.getColor(context, R.color.w4mPrimary));
         } else {
-            ((TextView) findViewById(R.id.title_step_2)).setTextColor(ContextCompat.getColor(context, R.color.w4mTextColorInactive));
-            findViewById(R.id.title_step_2).setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
-            ((ImageView) findViewById(R.id.arrow_2)).setColorFilter(ContextCompat.getColor(context, android.R.color.white));
+            ((TextView) findViewById(R.id.title_step_2)).setTextColor(
+                    ContextCompat.getColor(context, R.color.w4mTextColorInactive));
+            findViewById(R.id.title_step_2).setBackgroundColor(
+                    ContextCompat.getColor(context, android.R.color.transparent));
+            ((ImageView) findViewById(R.id.arrow_2)).setColorFilter(
+                    ContextCompat.getColor(context, android.R.color.white));
         }
     }
 
@@ -224,7 +231,8 @@ public class StepsActivity extends W4MActivity {
                 GregorianCalendar date = getW4MApplication().getOrderRequest().getDate();
                 Integer newMonth = date.get(Calendar.MONTH) + 1;
                 date.set(Calendar.MONTH, newMonth);
-                ((TextView) findViewById(R.id.month_title)).setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("pt", "BR")));
+                ((TextView) findViewById(R.id.month_title)).setText(date.getDisplayName(Calendar.MONTH,
+                        Calendar.LONG, new Locale("pt", "BR")));
 
                 setupGridMonth();
             }
@@ -237,7 +245,8 @@ public class StepsActivity extends W4MActivity {
                 GregorianCalendar date = getW4MApplication().getOrderRequest().getDate();
                 Integer newMonth = date.get(Calendar.MONTH) - 1;
                 date.set(Calendar.MONTH, newMonth);
-                ((TextView) findViewById(R.id.month_title)).setText(date.getDisplayName(Calendar.MONTH, Calendar.LONG, new Locale("pt", "BR")));
+                ((TextView) findViewById(R.id.month_title)).setText(date.getDisplayName(Calendar.MONTH,
+                        Calendar.LONG, new Locale("pt", "BR")));
 
                 setupGridMonth();
             }
@@ -264,7 +273,7 @@ public class StepsActivity extends W4MActivity {
         for (int i = startDay; i <= date.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             GregorianCalendar day = new GregorianCalendar(new Locale("pt", "BR"));
 
-            day.set(Calendar.MONTH, currentMonth);
+            day.set(Calendar.MONTH, choosedMonth);
             day.set(Calendar.DAY_OF_MONTH, i);
             days.add(day);
         }
@@ -273,7 +282,8 @@ public class StepsActivity extends W4MActivity {
             monthAdapter = new MonthAdapter(context, days);
 
             gridMonth = (RecyclerView) findViewById(R.id.month_days);
-            RecyclerView.LayoutManager recyclerLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL);
+            RecyclerView.LayoutManager recyclerLayoutManager = new StaggeredGridLayoutManager(1,
+                    StaggeredGridLayoutManager.HORIZONTAL);
             gridMonth.setLayoutManager(recyclerLayoutManager);
             gridMonth.setAdapter(monthAdapter);
         } else {
@@ -288,11 +298,15 @@ public class StepsActivity extends W4MActivity {
 
     private void toggleTitleStep3(Boolean check) {
         if (check) {
-            ((TextView) findViewById(R.id.title_step_3)).setTextColor(ContextCompat.getColor(context, R.color.w4mTextColorInverse));
-            findViewById(R.id.title_step_3).setBackgroundColor(ContextCompat.getColor(context, R.color.w4mPrimary));
+            ((TextView) findViewById(R.id.title_step_3)).setTextColor(
+                    ContextCompat.getColor(context, R.color.w4mTextColorInverse));
+            findViewById(R.id.title_step_3).setBackgroundColor(
+                    ContextCompat.getColor(context, R.color.w4mPrimary));
         } else {
-            ((TextView) findViewById(R.id.title_step_3)).setTextColor(ContextCompat.getColor(context, R.color.w4mTextColorInactive));
-            findViewById(R.id.title_step_3).setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
+            ((TextView) findViewById(R.id.title_step_3)).setTextColor(
+                    ContextCompat.getColor(context, R.color.w4mTextColorInactive));
+            findViewById(R.id.title_step_3).setBackgroundColor(
+                    ContextCompat.getColor(context, android.R.color.transparent));
         }
     }
 
@@ -389,7 +403,8 @@ public class StepsActivity extends W4MActivity {
             holder.productDescription.setText(item.getDescription());
             holder.productPrice.setText(String.format("R$%d", item.getPrice().intValue()));
 
-            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
+            StaggeredGridLayoutManager.LayoutParams layoutParams =
+                    (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();
             layoutParams.setFullSpan(item.getFeatured());
 
             StorageReference pictureReference = storageReference.child(item.getId() + ".jpg");
@@ -474,8 +489,10 @@ public class StepsActivity extends W4MActivity {
                     date.set(Calendar.DAY_OF_MONTH, day.get(Calendar.DAY_OF_MONTH));
 
                     view.findViewById(R.id.checked_icon).setVisibility(View.VISIBLE);
-                    ((TextView) findViewById(R.id.when_day)).setText(Integer.valueOf(day.get(Calendar.DAY_OF_MONTH)).toString());
-                    ((TextView) findViewById(R.id.week_day)).setText(date.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("pt", "BR")));
+                    ((TextView) findViewById(R.id.when_day)).setText(
+                            Integer.valueOf(day.get(Calendar.DAY_OF_MONTH)).toString());
+                    ((TextView) findViewById(R.id.week_day)).setText(date.getDisplayName(
+                            Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("pt", "BR")));
                 }
             });
 
@@ -487,7 +504,8 @@ public class StepsActivity extends W4MActivity {
             GregorianCalendar item = getDays().get(position);
 
             holder.day.setText(Integer.valueOf(item.get(Calendar.DAY_OF_MONTH)).toString());
-            holder.title.setText(item.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("pt", "BR")).split("-")[0]);
+            holder.title.setText(item.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG,
+                    new Locale("pt", "BR")).split("-")[0]);
         }
 
         @Override
