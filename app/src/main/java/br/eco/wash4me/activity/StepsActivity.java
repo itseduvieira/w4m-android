@@ -32,7 +32,6 @@ import java.util.Locale;
 
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
-import br.eco.wash4me.entity.ScheduleDay;
 import br.eco.wash4me.entity.OrderRequest;
 import br.eco.wash4me.entity.Product;
 import br.eco.wash4me.utils.Callback;
@@ -250,13 +249,23 @@ public class StepsActivity extends W4MActivity {
     }
 
     private void setupGridMonth() {
-        List<ScheduleDay> days = new ArrayList<>();
+        List<GregorianCalendar> days = new ArrayList<>();
 
         GregorianCalendar date = getW4MApplication().getOrderRequest().getDate();
 
-        for (int i = 1; i <= date.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
-            ScheduleDay day = new ScheduleDay();
-            day.setDay(i);
+        Integer currentMonth = new GregorianCalendar(new Locale("pt", "BR")).get(Calendar.MONTH);
+        Integer choosedMonth = date.get(Calendar.MONTH);
+        Integer startDay = date.getActualMinimum(Calendar.DAY_OF_MONTH);
+
+        if(choosedMonth.equals(currentMonth)) {
+            startDay = new GregorianCalendar(new Locale("pt", "BR")).get(Calendar.DAY_OF_MONTH);
+        }
+
+        for (int i = startDay; i <= date.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+            GregorianCalendar day = new GregorianCalendar(new Locale("pt", "BR"));
+
+            day.set(Calendar.MONTH, currentMonth);
+            day.set(Calendar.DAY_OF_MONTH, i);
             days.add(day);
         }
 
@@ -423,10 +432,10 @@ public class StepsActivity extends W4MActivity {
     }
 
     class MonthAdapter extends RecyclerView.Adapter<MonthAdapter.ViewHolder> {
-        private List<ScheduleDay> mDataSet;
+        private List<GregorianCalendar> mDataSet;
         private Context mContext;
 
-        MonthAdapter(Context context, List<ScheduleDay> DataSet) {
+        MonthAdapter(Context context, List<GregorianCalendar> DataSet) {
             mDataSet = DataSet;
             mContext = context;
         }
@@ -453,7 +462,7 @@ public class StepsActivity extends W4MActivity {
                 public void onClick(View view) {
                     int itemPosition = gridMonth.indexOfChild(view);
 
-                    ScheduleDay day = ((MonthAdapter) gridMonth.getAdapter()).getDays().get(itemPosition);
+                    GregorianCalendar day = ((MonthAdapter) gridMonth.getAdapter()).getDays().get(itemPosition);
 
                     ViewGroup parent = (ViewGroup) view.getParent();
                     for (int itemPos = 0; itemPos < parent.getChildCount(); itemPos++) {
@@ -462,10 +471,10 @@ public class StepsActivity extends W4MActivity {
                     }
 
                     GregorianCalendar date = getW4MApplication().getOrderRequest().getDate();
-                    date.set(Calendar.DAY_OF_MONTH, day.getDay());
+                    date.set(Calendar.DAY_OF_MONTH, day.get(Calendar.DAY_OF_MONTH));
 
                     view.findViewById(R.id.checked_icon).setVisibility(View.VISIBLE);
-                    ((TextView) findViewById(R.id.when_day)).setText(day.getDay().toString());
+                    ((TextView) findViewById(R.id.when_day)).setText(Integer.valueOf(day.get(Calendar.DAY_OF_MONTH)).toString());
                     ((TextView) findViewById(R.id.week_day)).setText(date.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("pt", "BR")));
                 }
             });
@@ -475,10 +484,10 @@ public class StepsActivity extends W4MActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            ScheduleDay item = getDays().get(position);
+            GregorianCalendar item = getDays().get(position);
 
-            holder.day.setText(item.getDay().toString());
-            holder.title.setText(item.getWeekDay());
+            holder.day.setText(Integer.valueOf(item.get(Calendar.DAY_OF_MONTH)).toString());
+            holder.title.setText(item.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, new Locale("pt", "BR")).split("-")[0]);
         }
 
         @Override
@@ -486,11 +495,11 @@ public class StepsActivity extends W4MActivity {
             return mDataSet.size();
         }
 
-        List<ScheduleDay> getDays() {
+        List<GregorianCalendar> getDays() {
             return mDataSet;
         }
 
-        void setDays(List<ScheduleDay> DataSet) {
+        void setDays(List<GregorianCalendar> DataSet) {
             this.mDataSet = DataSet;
 
             notifyDataSetChanged();
