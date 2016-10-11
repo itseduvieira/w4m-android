@@ -146,6 +146,13 @@ public class StepsActivity extends W4MActivity {
 
         btnNext.setText("DEFINIR LOCAL");
 
+        findViewById(R.id.btn_add_car).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(context, CarActivity.class));
+            }
+        });
+
         setupToolbarMenu();
 
         progress.setVisibility(View.GONE);

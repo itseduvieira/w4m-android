@@ -74,20 +74,6 @@ public class ChatActivity extends W4MActivity {
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case android.R.id.home:
-                finish();
-
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void displayMessage(ChatMessage message) {
         adapter.add(message);
         adapter.notifyDataSetChanged();

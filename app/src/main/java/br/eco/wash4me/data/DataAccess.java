@@ -215,7 +215,7 @@ public class DataAccess {
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
                         errorCallback.execute(BitmapFactory.decodeResource(context.getResources(),
-                                R.drawable.ic_example_profile));
+                                R.drawable.example_profile));
                     }
                 });
     }

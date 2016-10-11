@@ -46,6 +46,7 @@ public class W4MActivity extends AppCompatActivity {
     protected NavigationView navigationView;
     protected CircleImageView profileImage;
     protected TextView userName;
+    protected Boolean closeHome = false;
 
     public W4MApplication getW4MApplication() {
         return (W4MApplication) getApplication();
@@ -110,7 +111,11 @@ public class W4MActivity extends AppCompatActivity {
 
         switch (id) {
             case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
+                if(closeHome) {
+                    finish();
+                } else {
+                    drawerLayout.openDrawer(GravityCompat.START);
+                }
                 return true;
         }
 
@@ -140,6 +145,8 @@ public class W4MActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        closeHome = true;
+
         changeToolbarTypeface(toolbar);
     }
 
@@ -151,6 +158,21 @@ public class W4MActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(title);
+
+        closeHome = true;
+
+        changeToolbarTypeface(toolbar);
+    }
+
+    protected void setupToolbarClose() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        closeHome = true;
 
         changeToolbarTypeface(toolbar);
     }
@@ -178,7 +200,7 @@ public class W4MActivity extends AppCompatActivity {
         Bitmap bitmap = getW4MApplication().getLoggedUser(context).getProfilePicture();
 
         if(bitmap == null) {
-            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_example_profile);
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.example_profile);
         }
 
         profileImage.setImageBitmap(bitmap);

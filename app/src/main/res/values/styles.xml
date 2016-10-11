@@ -79,4 +79,13 @@
         <item name="android:background">@drawable/btn_accent</item>
     </style>
 
+    <style name="W4MTheme.EditText" parent="W4MTheme">
+
+    </style>
+
+    <style name="W4MTheme.EditText.Inverse" parent="W4MTheme.EditText">
+        <item name="backgroundTint">@color/w4mTextColorInverse</item>
+        <item name="android:textColor">@color/w4mTextColorInverse</item>
+    </style>
+
 </resources>
