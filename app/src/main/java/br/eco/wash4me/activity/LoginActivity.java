@@ -3,14 +3,14 @@ package br.eco.wash4me.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -29,15 +29,15 @@ import static br.eco.wash4me.activity.base.W4MApplication.log;
 import static br.eco.wash4me.data.DataAccess.getDataAccess;
 
 public class LoginActivity extends W4MActivity {
-    private EditText mEmailView;
-    private EditText mPasswordView;
+    private TextInputEditText mEmailView;
+    private TextInputEditText mPasswordView;
     private View mLoginFormView;
     private View loginUserType;
     private Button mEmailSignInButton;
     private Button btnVisitor;
     private Button btnMember;
     private LoginButton loginButton;
-    private LinearLayout mainView;
+    private RelativeLayout mainView;
 
     private CallbackManager callbackManager;
 
@@ -62,14 +62,14 @@ public class LoginActivity extends W4MActivity {
     protected void bindViews() {
         mLoginFormView = findViewById(R.id.login_form);
         loginUserType = findViewById(R.id.login_user_type);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mEmailView = (EditText) findViewById(R.id.email);
+        mPasswordView = (TextInputEditText) findViewById(R.id.password);
+        mEmailView = (TextInputEditText) findViewById(R.id.email);
         mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         btnVisitor = (Button) findViewById(R.id.btn_visitor);
         btnMember = (Button) findViewById(R.id.btn_member);
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
-        mainView = (LinearLayout) findViewById(R.id.login_main_view);
+        mainView = (RelativeLayout) findViewById(R.id.login_main_view);
     }
 
     @Override

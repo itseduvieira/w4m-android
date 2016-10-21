@@ -1,20 +1,19 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/login_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/w4mPrimary"
-    android:gravity="center"
-    android:orientation="vertical"
-    android:paddingEnd="16dp"
-    android:paddingStart="16dp"
     tools:context="br.eco.wash4me.activity.LoginActivity">
 
     <android.support.v7.widget.CardView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         app:cardCornerRadius="4dp"
         android:visibility="gone">
 
@@ -25,14 +24,14 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:paddingTop="24dp"
-            android:paddingBottom="10dp"
+            android:paddingBottom="8dp"
             android:orientation="vertical">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -47,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -56,6 +55,7 @@
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
+                    android:typeface="sans"
                     android:maxLines="1"
                     android:text="admin" />
 
@@ -84,7 +84,7 @@
                 android:textColor="@color/w4mAccent"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:padding="12dp"
                 android:text="ESQUECI A SENHA" />
 
@@ -95,6 +95,9 @@
         android:id="@+id/login_user_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
         app:cardCornerRadius="4dp">
 
         <LinearLayout
@@ -140,4 +143,10 @@
                 android:text="FAÇA SEU LOGIN" />
         </LinearLayout>
     </android.support.v7.widget.CardView>
-</LinearLayout>
+
+    <Button
+        android:id="@+id/btn_signup"
+        android:visibility="gone"
+        style="@style/W4MTheme.Button.Bottom.Transparent"
+        android:text="NÃO POSSUI UMA CONTA? CLIQUE AQUI!"/>
+</RelativeLayout>

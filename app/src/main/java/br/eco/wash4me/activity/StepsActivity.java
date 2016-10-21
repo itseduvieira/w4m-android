@@ -277,11 +277,11 @@ public class StepsActivity extends W4MActivity {
             startDay = new GregorianCalendar(new Locale("pt", "BR")).get(Calendar.DAY_OF_MONTH);
         }
 
-        for (int i = startDay; i <= date.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+        for (int i = startDay + 1; i <= date.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             GregorianCalendar day = new GregorianCalendar(new Locale("pt", "BR"));
 
             day.set(Calendar.MONTH, choosedMonth);
-            day.set(Calendar.DAY_OF_MONTH, i);
+            day.set(Calendar.DAY_OF_MONTH, (i - 1));
             days.add(day);
         }
 
@@ -516,10 +516,10 @@ public class StepsActivity extends W4MActivity {
 
             String day = Integer.valueOf(item.get(Calendar.DAY_OF_MONTH)).toString();
             String title = item.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG,
-                    new Locale("pt", "BR")).split("-")[0];
+                    new Locale("pt", "BR"));
 
             holder.day.setText(day);
-            holder.title.setText(title);
+            holder.title.setText(title.split("-")[0]);
 
             if(position == 0) {
                 holder.checkedIcon.setVisibility(View.VISIBLE);

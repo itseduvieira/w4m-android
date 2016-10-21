@@ -79,6 +79,11 @@
         <item name="android:background">@drawable/btn_accent</item>
     </style>
 
+    <style name="W4MTheme.Button.Bottom.Transparent" parent="W4MTheme.Button.Bottom">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@color/w4mAccent</item>
+    </style>
+
     <style name="W4MTheme.EditText" parent="W4MTheme">
 
     </style>
