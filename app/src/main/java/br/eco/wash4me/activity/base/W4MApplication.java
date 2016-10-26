@@ -123,7 +123,7 @@ public class W4MApplication extends Application {
         SharedPreferences.Editor editor = settings.edit();
 
         editor.remove("account");
-        editor.putString("credentials", new GsonBuilder().create().toJson(credentials));
+        editor.putString("account", new GsonBuilder().create().toJson(credentials));
 
         editor.apply();
     }
