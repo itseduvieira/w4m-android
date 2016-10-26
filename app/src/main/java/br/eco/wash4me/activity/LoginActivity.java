@@ -38,6 +38,7 @@ public class LoginActivity extends W4MActivity {
     private Button btnMember;
     private LoginButton loginButton;
     private RelativeLayout mainView;
+    private Account credendials;
 
     private CallbackManager callbackManager;
 
@@ -70,14 +71,22 @@ public class LoginActivity extends W4MActivity {
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
         mainView = (RelativeLayout) findViewById(R.id.login_main_view);
+        credendials = getW4MApplication().getAccount(context);
     }
 
     @Override
     protected void setupViews() {
         mEmailView.requestFocus();
 
+        getW4MApplication().clearCurrentRequest();
+
         mEmailView.setError(null);
         mPasswordView.setError(null);
+
+        if(credendials != null) {
+            mEmailView.setText(credendials.getUsername());
+            mPasswordView.setText(credendials.getPassword());
+        }
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -180,6 +189,8 @@ public class LoginActivity extends W4MActivity {
             Account account = new Account();
             account.setUsername(email);
             account.setPassword(password);
+
+            getW4MApplication().saveAccount(context, account);
 
             doLogin(account);
         }

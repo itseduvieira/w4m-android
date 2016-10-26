@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import br.eco.wash4me.activity.base.W4MApplication;
+import br.eco.wash4me.entity.User;
 
 public class GsonRequest<T> extends Request<T> {
     private final Gson gson = new Gson();
@@ -46,9 +47,13 @@ public class GsonRequest<T> extends Request<T> {
 
         Map<String, String> auth = new HashMap<>();
 
+        String token = User.VISITOR.getToken();
+
         if(application.isLogged(application.getApplicationContext())) {
-            auth.put("Authorization", application.getLoggedUser(application.getApplicationContext()).getToken());
+            token = application.getLoggedUser(application.getApplicationContext()).getToken();
         }
+
+        auth.put("Authorization", token);
 
         return auth;
     }

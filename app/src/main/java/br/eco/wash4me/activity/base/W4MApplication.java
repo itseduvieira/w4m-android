@@ -13,6 +13,7 @@ import java.util.GregorianCalendar;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
+import br.eco.wash4me.entity.Account;
 import br.eco.wash4me.entity.OrderRequest;
 import br.eco.wash4me.entity.User;
 import br.eco.wash4me.utils.FontOverride;
@@ -33,7 +34,6 @@ public class W4MApplication extends Application {
 
         AppEventsLogger.activateApp(this);
 
-        //FontOverride.setDefaultFont(this, "MONOSPACE", "supergroteska-rg.ttf");
         FontOverride.setDefaultFont(this, "SANS_SERIF", "brandon_med.otf");
 
         w4mApplication = this;
@@ -55,20 +55,6 @@ public class W4MApplication extends Application {
         return settings.getLong("loginDate", 0);
     }
 
-    private User getSavedUser(Context context) {
-        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-
-        String userJSON = settings.getString("user", null);
-        User user = null;
-
-        if(userJSON != null) {
-            Gson json = new GsonBuilder().create();
-            user = json.fromJson(userJSON, User.class);
-        }
-
-        return user;
-    }
-
     public void setDebugInformation(Context context, Integer qtdRequests, GregorianCalendar loginDate) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
@@ -82,6 +68,20 @@ public class W4MApplication extends Application {
         }
 
         editor.apply();
+    }
+
+    private User getSavedUser(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        String userJSON = settings.getString("user", null);
+        User user = null;
+
+        if(userJSON != null) {
+            Gson json = new GsonBuilder().create();
+            user = json.fromJson(userJSON, User.class);
+        }
+
+        return user;
     }
 
     private void saveLoggedUser(Context context, User user) {
@@ -100,6 +100,30 @@ public class W4MApplication extends Application {
 
         editor.remove("qtdRequests");
         editor.remove("loginDate");
+
+        editor.apply();
+    }
+
+    public Account getAccount(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+
+        String credentialsJSON = settings.getString("account", null);
+        Account credentials = null;
+
+        if(credentialsJSON != null) {
+            Gson json = new GsonBuilder().create();
+            credentials = json.fromJson(credentialsJSON, Account.class);
+        }
+
+        return credentials;
+    }
+
+    public void saveAccount(Context context, Account credentials) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.remove("account");
+        editor.putString("credentials", new GsonBuilder().create().toJson(credentials));
 
         editor.apply();
     }
@@ -140,5 +164,9 @@ public class W4MApplication extends Application {
 
     public static void log(String msg) {
         Log.i("w4m.app.general", msg);
+    }
+
+    public void clearCurrentRequest() {
+        orderRequest = null;
     }
 }

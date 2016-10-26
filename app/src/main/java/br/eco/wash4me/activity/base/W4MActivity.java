@@ -134,6 +134,8 @@ public class W4MActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        closeHome = false;
+
         changeToolbarTypeface(toolbar);
     }
 
@@ -181,8 +183,11 @@ public class W4MActivity extends AppCompatActivity {
         try {
             Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
             f.setAccessible(true);
-            ((TextView) f.get(toolbar)).setTypeface(Typeface.createFromAsset(context.getAssets(),
-                    "brandon_med.otf"));
+            TextView title = ((TextView) f.get(toolbar));
+            if(title != null) {
+                title.setTypeface(Typeface.createFromAsset(context.getAssets(),
+                        "brandon_med.otf"));
+            }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

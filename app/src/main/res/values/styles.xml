@@ -68,7 +68,7 @@
 
     <style name="W4MTheme.Button.Bottom" parent="W4MTheme.Button">
         <item name="android:layout_alignParentBottom">true</item>
-        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_height">48dp</item>
     </style>
 
     <style name="W4MTheme.Button.Bottom.Primary" parent="W4MTheme.Button.Bottom">
@@ -91,6 +91,15 @@
     <style name="W4MTheme.EditText.Inverse" parent="W4MTheme.EditText">
         <item name="backgroundTint">@color/w4mTextColorInverse</item>
         <item name="android:textColor">@color/w4mTextColorInverse</item>
+    </style>
+
+    <style name="W4MTheme.Button.Hour" parent="W4MTheme.Button">
+        <item name="android:background">@drawable/rounded</item>
+        <item tools:ignore="NewApi" name="android:elevation">2dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textColor">@color/w4mDarkAlpha</item>
     </style>
 
 </resources>
