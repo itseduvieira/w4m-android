@@ -1,6 +1,4 @@
 <resources>
-    <string name="facebook_app_id">1166468846743300</string>
-    <string name="fb_login_protocol_scheme">fb1166468846743300</string>
     <string name="title_activity_login">Fazer Login</string>
     <string name="title_activity_my_orders">Meus Pedidos</string>
 

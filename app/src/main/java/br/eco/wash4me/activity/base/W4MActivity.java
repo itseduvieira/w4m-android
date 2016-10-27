@@ -46,6 +46,7 @@ public class W4MActivity extends AppCompatActivity {
     protected NavigationView navigationView;
     protected CircleImageView profileImage;
     protected TextView userName;
+    protected TextView userEmail;
     protected Boolean closeHome = false;
 
     public W4MApplication getW4MApplication() {
@@ -201,6 +202,7 @@ public class W4MActivity extends AppCompatActivity {
         View hView =  navigationView.getHeaderView(0);
         profileImage = (CircleImageView) hView.findViewById(R.id.profile_image);
         userName = (TextView) hView.findViewById(R.id.name_user);
+        userEmail = (TextView) hView.findViewById(R.id.email_user);
 
         Bitmap bitmap = getW4MApplication().getLoggedUser(context).getProfilePicture();
 
@@ -210,6 +212,7 @@ public class W4MActivity extends AppCompatActivity {
 
         profileImage.setImageBitmap(bitmap);
         userName.setText(getW4MApplication().getLoggedUser(context).getName());
+        userEmail.setText(getW4MApplication().getLoggedUser(context).getEmail());
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:paddingTop="8dp">
 
         <TextView
             android:id="@+id/day_title"
@@ -29,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="-4dp"
             android:text="2"
             android:textStyle="bold"
             android:textSize="32sp" />

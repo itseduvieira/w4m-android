@@ -33,10 +33,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/car_user"
+            android:id="@+id/email_user"
             android:layout_below="@id/name_user"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:text="@string/example_car" />
+            android:text="@string/example_email" />
     </RelativeLayout>
 
 </RelativeLayout>
