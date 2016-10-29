@@ -45,11 +45,12 @@
                     android:paddingEnd="10dp"
                     android:paddingStart="80dp">
 
-                    <EditText
-                        android:id="@+id/car_brand"
+                    <android.support.v7.widget.AppCompatAutoCompleteTextView
+                        android:id="@+id/txt_car_brand"
                         style="@style/W4MTheme.EditText.Inverse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="textNoSuggestions"
                         android:hint="Marca"
                         android:maxLines="1"
                         android:textColorHint="@color/w4mWhiteAlpha"
@@ -60,7 +61,7 @@
                         style="@style/W4MTheme.EditText.Inverse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/car_brand"
+                        android:layout_below="@id/txt_car_brand"
                         android:hint="Modelo"
                         android:maxLines="1"
                         android:textColorHint="@color/w4mWhiteAlpha"
@@ -113,8 +114,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
-                                android:text="1,90m x 3,70m"
-                                android:textAllCaps="true"
+                                android:text="190cm x 370cm"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
 
@@ -169,8 +169,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
-                                android:text="2,10m x 4,50m"
-                                android:textAllCaps="true"
+                                android:text="210cm x 450cm"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
 
@@ -225,8 +224,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
-                                android:text="2,40m x 5,00m"
-                                android:textAllCaps="true"
+                                android:text="240cm x 500cm"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
 
@@ -284,7 +282,7 @@
     <Button
         android:id="@id/btn_save_car"
         style="@style/W4MTheme.Button.Bottom.Accent"
-        android:text="SALVAR INFORMAÇÕES" />
+        android:text="ADICIONAR CARRO" />
 
 
 </RelativeLayout>

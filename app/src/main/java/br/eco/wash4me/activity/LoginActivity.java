@@ -39,6 +39,7 @@ public class LoginActivity extends W4MActivity {
     private LoginButton loginButton;
     private RelativeLayout mainView;
     private Account credendials;
+    private View btnShowForgotPass;
 
     private CallbackManager callbackManager;
 
@@ -72,6 +73,7 @@ public class LoginActivity extends W4MActivity {
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
         mainView = (RelativeLayout) findViewById(R.id.login_main_view);
         credendials = getW4MApplication().getAccount(context);
+        btnShowForgotPass = findViewById(R.id.btn_show_forgot_pass);
     }
 
     @Override
@@ -150,6 +152,14 @@ public class LoginActivity extends W4MActivity {
             @Override
             public void onError(FacebookException error) {
 
+            }
+        });
+
+        btnShowForgotPass.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findViewById(R.id.login_form).setVisibility(View.GONE);
+                findViewById(R.id.email_pass).setVisibility(View.VISIBLE);
             }
         });
     }

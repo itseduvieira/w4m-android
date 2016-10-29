@@ -8,6 +8,7 @@ import java.util.Locale;
 public class OrderRequest {
     private List<Product> products;
     private GregorianCalendar date;
+    private Car car;
 
     public OrderRequest() {
         products = new ArrayList<>();
@@ -24,6 +25,18 @@ public class OrderRequest {
 
     public GregorianCalendar getDate() {
         return date;
+    }
+
+    public void setDate(GregorianCalendar date) {
+        this.date = date;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
     }
 
     public Double calculatePrice() {

@@ -17,7 +17,6 @@
             android:layout_centerHorizontal="true"
             android:text="SEGUNDA-FEIRA"
             android:textAllCaps="true"
-            android:textColor="@color/w4mAccent"
             android:textSize="12sp" />
 
         <TextView
@@ -29,7 +28,6 @@
             android:layout_centerInParent="true"
             android:layout_below="@id/week_day"
             android:text="2"
-            android:textColor="@color/w4mAccent"
             android:textSize="64sp" />
     </RelativeLayout>
 
@@ -62,7 +60,6 @@
                 android:layout_centerInParent="true"
                 android:text="OUTUBRO"
                 android:textAllCaps="true"
-                android:textColor="@color/w4mAccent"
                 android:textSize="18sp" />
 
             <ImageButton
@@ -108,7 +105,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="12h00"
-            android:textColor="@color/w4mAccent"
             android:textSize="18sp" />
 
         <View

@@ -24,6 +24,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +35,7 @@ import java.util.Locale;
 
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
+import br.eco.wash4me.entity.Car;
 import br.eco.wash4me.entity.OrderRequest;
 import br.eco.wash4me.entity.Product;
 import br.eco.wash4me.utils.Callback;
@@ -43,6 +46,7 @@ import static br.eco.wash4me.utils.Constants.TAG_STEP_2_VIEW;
 import static br.eco.wash4me.utils.Constants.TAG_STEP_3_VIEW;
 
 public class StepsActivity extends W4MActivity {
+    public static final int REQUEST_CODE_CAR = 0;
     private TextView title;
     private RecyclerView gridProducts;
     private RecyclerView.Adapter productsAdapter;
@@ -127,7 +131,7 @@ public class StepsActivity extends W4MActivity {
                                 .show();
                     }
                 } else {
-                    if(request.getDate().after(new GregorianCalendar(new Locale("pt", "BR")))) {
+                    if (request.getDate().after(new GregorianCalendar(new Locale("pt", "BR")))) {
                         startActivity(new Intent(StepsActivity.this, OrderDetailActivity.class));
                     } else {
                         Snackbar.make(findViewById(R.id.drawer_layout), "Escolha uma data posterior a hoje.", Snackbar.LENGTH_LONG)
@@ -141,6 +145,18 @@ public class StepsActivity extends W4MActivity {
                 }
             }
         });
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_CAR) {
+            if (resultCode == RESULT_OK) {
+                String carJSON = data.getStringExtra("car");
+
+                Gson json = new GsonBuilder().create();
+                Car car = json.fromJson(carJSON, Car.class);
+
+            }
+        }
     }
 
     private void setupStep1Views() {
@@ -159,7 +175,7 @@ public class StepsActivity extends W4MActivity {
         findViewById(R.id.btn_add_car).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, CarActivity.class));
+                startActivityForResult(new Intent(context, CarActivity.class), REQUEST_CODE_CAR);
             }
         });
 
@@ -167,13 +183,32 @@ public class StepsActivity extends W4MActivity {
 
         progress.setVisibility(View.GONE);
 
-        if(getW4MApplication().isLogged(context)) {
+        if (getW4MApplication().isLogged(context)) {
             setupToolbarMenu();
         } else {
             setupToolbarClose();
         }
 
         title.setText("Escolha o Local");
+
+        View carContainer = findViewById(R.id.car_container);
+        View carEmptyContainer = findViewById(R.id.car_empty_container);
+
+        carContainer.setVisibility(View.GONE);
+        carEmptyContainer.setVisibility(View.VISIBLE);
+
+        if (getW4MApplication().isLogged(context)) {
+            if (getW4MApplication().getLoggedUser(context).getMyCars().isEmpty()) {
+                carContainer.setVisibility(View.GONE);
+                carEmptyContainer.setVisibility(View.VISIBLE);
+            }
+        }
+
+        if (getW4MApplication().getOrderRequest().getCar() == null) {
+            hideBtnNext();
+        } else {
+            showBtnNext();
+        }
     }
 
     private void checkTitleStep1() {
@@ -214,6 +249,12 @@ public class StepsActivity extends W4MActivity {
         setupToolbarBack();
 
         title.setText("Escolha o Serviço");
+
+        if (request.calculatePrice() > 0.0) {
+            showBtnNext();
+        } else {
+            hideBtnNext();
+        }
     }
 
     private void toggleTitleStep2(Boolean check) {
@@ -289,11 +330,11 @@ public class StepsActivity extends W4MActivity {
 
         final GridLayout hours = (GridLayout) findViewById(R.id.grid_hours);
 
-        for(int i = 0; i < hours.getChildCount(); i++) {
+        for (int i = 0; i < hours.getChildCount(); i++) {
             hours.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    for(int i = 0; i < hours.getChildCount(); i++) {
+                    for (int i = 0; i < hours.getChildCount(); i++) {
                         ((RelativeLayout) hours.getChildAt(i)).getChildAt(1).setVisibility(View.GONE);
                     }
 
@@ -380,6 +421,14 @@ public class StepsActivity extends W4MActivity {
         }
     }
 
+    private void showBtnNext() {
+        btnNext.setVisibility(View.VISIBLE);
+    }
+
+    private void hideBtnNext() {
+        btnNext.setVisibility(View.GONE);
+    }
+
     static List<Observable> monthObservers = new ArrayList<>();
 
     interface Observable {
@@ -441,6 +490,12 @@ public class StepsActivity extends W4MActivity {
                         request.getProducts().remove(product);
 
                         view.findViewById(R.id.checked_icon).setVisibility(View.GONE);
+                    }
+
+                    if (request.calculatePrice() > 0.0) {
+                        showBtnNext();
+                    } else {
+                        hideBtnNext();
                     }
 
                     showTotal();
@@ -542,7 +597,7 @@ public class StepsActivity extends W4MActivity {
 
                     GregorianCalendar day = vh.date;
 
-                    for(Observable o : monthObservers) {
+                    for (Observable o : monthObservers) {
                         o.execute();
                     }
 
@@ -557,7 +612,7 @@ public class StepsActivity extends W4MActivity {
 
                     Log.i("w4m.app", "[MonthAdapter.onCreateViewHolder] Setting pos " + itemPosition + ", day " +
                             day.get(Calendar.DAY_OF_MONTH) + " - " + date.getDisplayName(Calendar.DAY_OF_WEEK,
-                                Calendar.LONG, new Locale("pt", "BR")).toUpperCase());
+                            Calendar.LONG, new Locale("pt", "BR")).toUpperCase());
                 }
             });
 

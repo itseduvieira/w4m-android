@@ -15,12 +15,31 @@
             android:src="@drawable/example_map" />
 
         <ImageView
+            android:id="@+id/place_pin"
             android:layout_width="36dp"
             android:layout_height="52dp"
             android:layout_centerInParent="true"
             android:scaleType="fitStart"
             android:src="@drawable/ic_place_white_48dp"
             android:tint="@color/w4mAccent" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/place_pin"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:text="MEU LOCAL"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </android.support.v7.widget.CardView>
     </RelativeLayout>
 
     <android.support.v7.widget.CardView
@@ -49,16 +68,16 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_below="@id/place_title"
                 android:layout_marginBottom="6dp"
-                android:layout_below="@id/place_title">
+                android:layout_marginTop="4dp">
 
                 <ImageView
                     android:id="@+id/place_icon"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
                     android:src="@drawable/ic_place_white_48dp"
                     android:tint="@color/w4mAccent" />
 
@@ -72,8 +91,8 @@
                         android:id="@+id/place_main"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAllCaps="true"
                         android:text="Av Paulista, 1000"
+                        android:textAllCaps="true"
                         android:textSize="18sp" />
 
                     <TextView
@@ -82,8 +101,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/place_main"
                         android:layout_marginTop="-4dp"
-                        android:textAllCaps="true"
                         android:text="Bela Vista - São Paulo - SP"
+                        android:textAllCaps="true"
                         android:textSize="10sp" />
                 </RelativeLayout>
 
@@ -93,8 +112,8 @@
                     android:layout_height="18dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="8dp"
                     android:layout_marginEnd="4dp"
+                    android:layout_marginStart="8dp"
                     android:src="@drawable/ic_edit_white_36dp"
                     android:tint="@color/w4mGray" />
             </RelativeLayout>
@@ -124,23 +143,84 @@
                 android:textSize="10sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/car_empty_message"
+            <RelativeLayout
+                android:id="@+id/car_empty_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/car_title"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:padding="25dp"
-                android:text="VOCÊ NÃO POSSUI NENHUM CARRO CADASTRADO" />
+                android:visibility="gone"
+                android:layout_below="@id/car_title">
 
-            <Button
-                android:id="@+id/btn_add_car"
-                style="@style/W4MTheme.Button.Primary"
-                android:layout_below="@id/car_empty_message"
-                android:src="@drawable/ic_add_white_24dp"
-                android:text="ADICIONAR UM CARRO" />
+                <TextView
+                    android:id="@+id/car_empty_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:padding="25dp"
+                    android:text="VOCÊ NÃO POSSUI NENHUM CARRO CADASTRADO"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/btn_add_car"
+                    style="@style/W4MTheme.Button.Primary"
+                    android:layout_below="@id/car_empty_message"
+                    android:src="@drawable/ic_add_white_24dp"
+                    android:text="ADICIONE UM CARRO" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/car_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/car_title"
+                android:layout_marginBottom="6dp"
+                android:layout_marginTop="4dp">
+
+                <ImageView
+                    android:id="@+id/car_icon"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/ic_local_car_wash_white_48dp"
+                    android:tint="@color/w4mAccent" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/car_icon">
+
+                    <TextView
+                        android:id="@+id/car_main"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="HYUNDAI ELANTRA"
+                        android:textAllCaps="true"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/car_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/car_main"
+                        android:layout_marginTop="-4dp"
+                        android:text="1.8 GLS GASOLINA"
+                        android:textAllCaps="true"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/car_change"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_edit_white_36dp"
+                    android:tint="@color/w4mGray" />
+            </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

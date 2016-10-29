@@ -2,13 +2,21 @@ package br.eco.wash4me.entity;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private Integer id;
     private String name;
     private String email;
     private Bitmap profilePicture;
+    private List<Car> myCars;
     private String token;
     private Type type = Type.VISITOR;
+
+    public User() {
+        myCars = new ArrayList<>();
+    }
 
     public static final User VISITOR = buildVisitor();
 
@@ -69,6 +77,18 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public List<Car> getMyCars() {
+        return myCars;
+    }
+
+    public void setMyCars(List<Car> myCars) {
+        this.myCars = myCars;
+    }
+
+    public void addCar(Car car) {
+        getMyCars().add(car);
     }
 
     public enum Type {
