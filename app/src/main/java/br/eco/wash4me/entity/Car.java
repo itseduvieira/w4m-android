@@ -37,4 +37,20 @@ public class Car {
     public void setPlate(String plate) {
         this.plate = plate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Car car = (Car) o;
+
+        return plate != null ? plate.equals(car.plate) : car.plate == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return plate != null ? plate.hashCode() : 0;
+    }
 }

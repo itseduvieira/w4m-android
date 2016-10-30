@@ -210,7 +210,7 @@ public class StepsActivity extends W4MActivity {
     private void checkCarViews() {
         View carContainer = findViewById(R.id.car_container);
         View carEmptyContainer = findViewById(R.id.car_empty_container);
-        View detailInfo = findViewById(R.id.detail_info);
+        View detailInfo = findViewById(R.id.park_info);
 
         carContainer.setVisibility(View.GONE);
         carEmptyContainer.setVisibility(View.VISIBLE);

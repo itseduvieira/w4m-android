@@ -211,16 +211,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/car_main"
                         android:layout_marginTop="-4dp"
-                        android:text="AAA-7654"
-                        android:textAllCaps="true"
-                        android:textSize="10sp" />
-
-                    <TextView
-                        android:id="@+id/car_color"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/car_description"
-                        android:text="COR BRANCA"
+                        android:text="BRANCO • AAA-7654"
                         android:textAllCaps="true"
                         android:textSize="10sp" />
                 </RelativeLayout>
@@ -240,7 +231,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/detail_info"
+        android:id="@+id/park_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/car_info"
@@ -267,8 +258,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/detail_title"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp">
+                android:layout_marginBottom="6dp"
+                android:layout_marginTop="4dp">
 
                 <ImageView
                     android:id="@+id/park_change"
@@ -281,35 +272,57 @@
                     android:src="@drawable/ic_edit_white_36dp"
                     android:tint="@color/w4mGray" />
 
+                <TextView
+                    android:id="@+id/park_icon"
+                    android:layout_width="28dp"
+                    android:layout_height="32dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="E"
+                    android:layout_marginTop="-2dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="30sp"
+                    android:textColor="@color/w4mAccent" />
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/park_icon">
 
                     <TextView
                         android:id="@+id/detail_park"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="LOCALIZAÇÃO DO CARRO"
-                        android:textSize="12sp" />
+                        android:textSize="10sp" />
 
                     <TextView
                         android:id="@+id/detail_park_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/detail_park"
+                        android:textSize="18sp"
+                        android:layout_marginTop="-4dp"
                         android:text="ESTACIONAMENTO COBERTO"
-                        android:textColor="@color/w4mAccent"
-                        android:textAllCaps="true"
-                        android:textStyle="bold" />
+                        android:textAllCaps="true"/>
                 </RelativeLayout>
             </RelativeLayout>
-
+            </RelativeLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:id="@+id/more_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/park_info"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp">
             <RelativeLayout
-                android:id="@+id/key_container"
+                android:id="@+id/more_info_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/park_container">
+                android:padding="8dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -328,14 +341,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/detail_more_info"
-                        android:layout_marginTop="-4dp"
                         android:textSize="12sp"
-                        android:textColorHint="#AAAAAA"
+                        android:textColorHint="#BBBBBB"
                         android:inputType="textCapCharacters"
                         android:hint="ALGUMA INFORMAÇÃO QUE PODERIA NOS AJUDAR?\nNOME DE RESPONSÁVEL, BLOCO, REFERÊNCIA?"/>
                 </RelativeLayout>
             </RelativeLayout>
-        </RelativeLayout>
     </android.support.v7.widget.CardView>
 
 </RelativeLayout>

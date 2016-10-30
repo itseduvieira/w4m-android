@@ -71,6 +71,16 @@ public class W4MApplication extends Application {
         editor.apply();
     }
 
+    public User getLoggedUser(Context context) {
+        return loggedUser == null ? getSavedUser(context) : loggedUser;
+    }
+
+    public void setLoggedUser(Context context, User loggedUser) {
+        this.loggedUser = loggedUser;
+
+        saveLoggedUser(context, loggedUser);
+    }
+
     private User getSavedUser(Context context) {
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
@@ -127,16 +137,6 @@ public class W4MApplication extends Application {
         editor.putString("account", new GsonBuilder().create().toJson(credentials));
 
         editor.apply();
-    }
-
-    public User getLoggedUser(Context context) {
-        return loggedUser == null ? getSavedUser(context) : loggedUser;
-    }
-
-    public void setLoggedUser(Context context, User loggedUser) {
-        this.loggedUser = loggedUser;
-
-        saveLoggedUser(context, loggedUser);
     }
 
     public OrderRequest getOrderRequest() {
