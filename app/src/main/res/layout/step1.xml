@@ -2,7 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px">
+        <requestFocus />
+    </LinearLayout>
     <RelativeLayout
         android:id="@+id/map_place"
         android:layout_width="match_parent"
@@ -147,8 +153,8 @@
                 android:id="@+id/car_empty_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:layout_below="@id/car_title">
+                android:layout_below="@id/car_title"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/car_empty_message"
@@ -205,7 +211,16 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/car_main"
                         android:layout_marginTop="-4dp"
-                        android:text="1.8 GLS GASOLINA"
+                        android:text="AAA-7654"
+                        android:textAllCaps="true"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/car_color"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/car_description"
+                        android:text="COR BRANCA"
                         android:textAllCaps="true"
                         android:textSize="10sp" />
                 </RelativeLayout>
@@ -224,5 +239,103 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        android:id="@+id/detail_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/car_info"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACESSO AO LOCAL"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+
+            <RelativeLayout
+                android:id="@+id/park_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/detail_title"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <ImageView
+                    android:id="@+id/park_change"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_edit_white_36dp"
+                    android:tint="@color/w4mGray" />
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/detail_park"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="LOCALIZAÇÃO DO CARRO"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/detail_park_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/detail_park"
+                        android:text="ESTACIONAMENTO COBERTO"
+                        android:textColor="@color/w4mAccent"
+                        android:textAllCaps="true"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/key_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/park_container">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/detail_more_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MAIS INFORMAÇÕES"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/txt_more_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/detail_more_info"
+                        android:layout_marginTop="-4dp"
+                        android:textSize="12sp"
+                        android:textColorHint="#AAAAAA"
+                        android:inputType="textCapCharacters"
+                        android:hint="ALGUMA INFORMAÇÃO QUE PODERIA NOS AJUDAR?\nNOME DE RESPONSÁVEL, BLOCO, REFERÊNCIA?"/>
+                </RelativeLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
 </RelativeLayout>

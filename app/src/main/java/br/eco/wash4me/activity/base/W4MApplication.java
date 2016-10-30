@@ -14,6 +14,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import br.eco.wash4me.entity.Account;
+import br.eco.wash4me.entity.Car;
 import br.eco.wash4me.entity.OrderRequest;
 import br.eco.wash4me.entity.User;
 import br.eco.wash4me.utils.FontOverride;
@@ -146,6 +147,12 @@ public class W4MApplication extends Application {
         return orderRequest;
     }
 
+    public void addCar(Context context, Car car) {
+        User user = getLoggedUser(context);
+        user.getMyCars().add(car);
+        setLoggedUser(context, user);
+    }
+
     public void setOrderRequest(OrderRequest orderRequest) {
         this.orderRequest = orderRequest;
     }
@@ -167,6 +174,6 @@ public class W4MApplication extends Application {
     }
 
     public void clearCurrentRequest() {
-        orderRequest = null;
+        setOrderRequest(null);
     }
 }

@@ -27,6 +27,7 @@ import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
 import br.eco.wash4me.entity.Brand;
 import br.eco.wash4me.entity.Car;
+import br.eco.wash4me.entity.User;
 
 public class CarActivity extends W4MActivity {
     private List<Brand> brands = new ArrayList<>();
@@ -72,6 +73,9 @@ public class CarActivity extends W4MActivity {
                 Car car = new Car();
                 car.setBrand("Hyundai");
                 car.setModel("Elantra");
+
+                getW4MApplication().addCar(context, car);
+
                 Intent intent = new Intent();
                 intent.putExtra("car", new GsonBuilder().create().toJson(car));
                 setResult(RESULT_OK, intent);

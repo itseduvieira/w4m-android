@@ -87,10 +87,6 @@ public class User {
         this.myCars = myCars;
     }
 
-    public void addCar(Car car) {
-        getMyCars().add(car);
-    }
-
     public enum Type {
         VISITOR, MEMBER
     }

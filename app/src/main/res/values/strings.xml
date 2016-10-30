@@ -87,4 +87,12 @@
 
     <string name="example_name" translatable="false">Theodore E. Mosby</string>
     <string name="example_email" translatable="false">theodore@himym.co</string>
+
+    <string-array name="park_array">
+        <item>VAGA NA RUA</item>
+        <item>ESTACIONAMENTO COBERTO</item>
+        <item>ESTACIONAMENTO DESCOBERTO</item>
+        <item>MINHA GARAGEM</item>
+        <item>GARAGEM DE OUTRA PESSOA</item>
+    </string-array>
 </resources>

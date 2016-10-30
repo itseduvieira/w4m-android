@@ -154,6 +154,7 @@
             android:background="@color/w4mPrimary" />
 
         <ScrollView
+            android:id="@+id/scroll_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/btn_next"

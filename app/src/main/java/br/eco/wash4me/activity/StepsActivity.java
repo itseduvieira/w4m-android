@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -155,6 +156,9 @@ public class StepsActivity extends W4MActivity {
                 Gson json = new GsonBuilder().create();
                 Car car = json.fromJson(carJSON, Car.class);
 
+                getW4MApplication().getOrderRequest().setCar(car);
+
+                checkCarViews();
             }
         }
     }
@@ -179,6 +183,15 @@ public class StepsActivity extends W4MActivity {
             }
         });
 
+        findViewById(R.id.txt_more_info).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(b) {
+                    ((ScrollView) findViewById(R.id.scroll_main)).fullScroll(ScrollView.FOCUS_DOWN);
+                }
+            }
+        });
+
         checkTitleStep1();
 
         progress.setVisibility(View.GONE);
@@ -191,22 +204,32 @@ public class StepsActivity extends W4MActivity {
 
         title.setText("Escolha o Local");
 
+        checkCarViews();
+    }
+
+    private void checkCarViews() {
         View carContainer = findViewById(R.id.car_container);
         View carEmptyContainer = findViewById(R.id.car_empty_container);
+        View detailInfo = findViewById(R.id.detail_info);
 
         carContainer.setVisibility(View.GONE);
         carEmptyContainer.setVisibility(View.VISIBLE);
 
-        if (getW4MApplication().isLogged(context)) {
-            if (getW4MApplication().getLoggedUser(context).getMyCars().isEmpty()) {
-                carContainer.setVisibility(View.GONE);
-                carEmptyContainer.setVisibility(View.VISIBLE);
-            }
+        if (getW4MApplication().isLogged(context) &&
+                !getW4MApplication().getLoggedUser(context).getMyCars().isEmpty()) {
+            carContainer.setVisibility(View.VISIBLE);
+            carEmptyContainer.setVisibility(View.GONE);
+
+            Car first = getW4MApplication().getLoggedUser(context).getMyCars().get(0);
+
+            getW4MApplication().getOrderRequest().setCar(first);
         }
 
         if (getW4MApplication().getOrderRequest().getCar() == null) {
+            detailInfo.setVisibility(View.GONE);
             hideBtnNext();
         } else {
+            detailInfo.setVisibility(View.VISIBLE);
             showBtnNext();
         }
     }
