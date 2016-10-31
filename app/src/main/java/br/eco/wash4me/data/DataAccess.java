@@ -20,8 +20,12 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -31,6 +35,8 @@ import java.util.Map;
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MApplication;
 import br.eco.wash4me.entity.Account;
+import br.eco.wash4me.entity.Car;
+import br.eco.wash4me.entity.Model;
 import br.eco.wash4me.entity.Order;
 import br.eco.wash4me.entity.Product;
 import br.eco.wash4me.entity.Supplier;
@@ -100,7 +106,7 @@ public class DataAccess {
                         String url = graphResponse.getJSONObject().getJSONObject("picture")
                                 .getJSONObject("data").getString("url");
                         loggedUser.setName(graphResponse.getJSONObject().getString("name"));
-                        //loggedUser.setEmail(graphResponse.getJSONObject().getString("email"));
+                        loggedUser.setEmail(graphResponse.getJSONObject().getString("email"));
 
                         ImageRequest request = buildImageRequest(context, url, new Callback<Bitmap>() {
                             @Override
@@ -155,6 +161,26 @@ public class DataAccess {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         callback.execute(null);
+                    }
+                });
+
+        queueRequest(context, request);
+    }
+
+    public void getCarModels(Context context, final String brand, final Callback<List<Model>> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("marca", brand);
+
+        GsonRequest<Model[]> request = buildRequest(context, "http://www.webmotors.com.br/carro/modelosativos" + buildParameters(parameters), Request.Method.GET,
+                Model[].class, new Response.Listener<Model[]>() {
+                    @Override
+                    public void onResponse(Model[] cars) {
+                        callback.execute(Arrays.asList(cars));
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.execute(new ArrayList<Model>());
                     }
                 });
 
@@ -302,5 +328,17 @@ public class DataAccess {
 
     public static void log(String msg) {
         Log.d("w4m.app.volley", msg);
+    }
+
+    private String buildParameters(Map<String, String> parameters) {
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+
+        for(String param : parameters.keySet()) {
+            nameValuePairs.add(new BasicNameValuePair(param, parameters.get(param)));
+        }
+
+        String paramString = URLEncodedUtils.format(nameValuePairs, "utf-8");
+
+        return "?" + paramString;
     }
 }

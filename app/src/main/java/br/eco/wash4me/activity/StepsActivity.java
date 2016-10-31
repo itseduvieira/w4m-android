@@ -210,7 +210,6 @@ public class StepsActivity extends W4MActivity {
     private void checkCarViews() {
         View carContainer = findViewById(R.id.car_container);
         View carEmptyContainer = findViewById(R.id.car_empty_container);
-        View detailInfo = findViewById(R.id.park_info);
 
         carContainer.setVisibility(View.GONE);
         carEmptyContainer.setVisibility(View.VISIBLE);
@@ -225,11 +224,13 @@ public class StepsActivity extends W4MActivity {
             getW4MApplication().getOrderRequest().setCar(first);
         }
 
-        if (getW4MApplication().getOrderRequest().getCar() == null) {
-            detailInfo.setVisibility(View.GONE);
+        Car car = getW4MApplication().getOrderRequest().getCar();
+        if (car == null) {
             hideBtnNext();
         } else {
-            detailInfo.setVisibility(View.VISIBLE);
+            String carTitle = car.getBrand() + " " + car.getModel();
+            ((TextView) findViewById(R.id.txt_car_main)).setText(carTitle);
+
             showBtnNext();
         }
     }

@@ -50,18 +50,19 @@
                         style="@style/W4MTheme.EditText.Inverse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textNoSuggestions"
+                        android:inputType="textNoSuggestions|textCapCharacters"
                         android:hint="Marca"
                         android:maxLines="1"
                         android:textColorHint="@color/w4mWhiteAlpha"
                         android:textSize="42sp" />
 
-                    <EditText
+                    <android.support.v7.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/txt_car_model"
                         style="@style/W4MTheme.EditText.Inverse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txt_car_brand"
+                        android:inputType="textNoSuggestions|textCapCharacters"
                         android:hint="Modelo"
                         android:maxLines="1"
                         android:textColorHint="@color/w4mWhiteAlpha"
@@ -84,8 +85,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
                     android:text="PORTE"
-                    android:textColor="@color/w4mAccent"
-                    android:textStyle="bold" />
+                    android:textColor="@color/w4mAccent" />
 
                 <LinearLayout
                     android:id="@+id/container_size"
@@ -124,8 +124,7 @@
                                 android:layout_below="@id/small_title"
                                 android:layout_centerHorizontal="true"
                                 android:text="PEQUENO"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textSize="16sp" />
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -179,8 +178,7 @@
                                 android:layout_below="@id/medium_title"
                                 android:layout_centerHorizontal="true"
                                 android:text="MÉDIO"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textSize="16sp" />
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -235,8 +233,7 @@
                                 android:layout_below="@id/large_title"
                                 android:layout_centerHorizontal="true"
                                 android:text="GRANDE"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textSize="16sp" />
                         </RelativeLayout>
 
                         <RelativeLayout
@@ -272,8 +269,7 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="16dp"
                     android:text="INFORMAÇÕES"
-                    android:textColor="@color/w4mAccent"
-                    android:textStyle="bold" />
+                    android:textColor="@color/w4mAccent" />
 
             </RelativeLayout>
         </RelativeLayout>

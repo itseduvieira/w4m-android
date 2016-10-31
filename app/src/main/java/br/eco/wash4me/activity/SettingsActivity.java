@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -263,7 +262,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
             f.setAccessible(true);
             ((TextView) f.get(toolbar)).setTypeface(Typeface.createFromAsset(SettingsActivity.this.getAssets(),
-                    "brandon_med.otf"));
+                    "fonts/brandon_med.otf"));
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

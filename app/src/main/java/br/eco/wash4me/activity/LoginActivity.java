@@ -19,6 +19,8 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import java.util.Arrays;
+
 import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
 import br.eco.wash4me.entity.Account;
@@ -123,6 +125,8 @@ public class LoginActivity extends W4MActivity {
             }
         });
 
+        loginButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email"));
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {

@@ -35,7 +35,7 @@ public class W4MApplication extends Application {
 
         AppEventsLogger.activateApp(this);
 
-        FontOverride.setDefaultFont(this, "SANS_SERIF", "brandon_med.otf");
+        FontOverride.setDefaultFont(this, "SANS_SERIF", "fonts/brandon_med.otf");
 
         w4mApplication = this;
     }

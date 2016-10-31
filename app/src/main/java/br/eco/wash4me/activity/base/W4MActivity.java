@@ -115,6 +115,8 @@ public class W4MActivity extends AppCompatActivity {
                 if(closeHome) {
                     finish();
                 } else {
+                    hideKeyboard(toolbar.getApplicationWindowToken());
+
                     drawerLayout.openDrawer(GravityCompat.START);
                 }
                 return true;
@@ -187,7 +189,7 @@ public class W4MActivity extends AppCompatActivity {
             TextView title = ((TextView) f.get(toolbar));
             if(title != null) {
                 title.setTypeface(Typeface.createFromAsset(context.getAssets(),
-                        "brandon_med.otf"));
+                        "fonts/brandon_med.otf"));
             }
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
