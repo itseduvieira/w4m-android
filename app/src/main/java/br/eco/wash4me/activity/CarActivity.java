@@ -8,12 +8,18 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
+import android.support.v7.widget.AppCompatSpinner;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -42,6 +48,9 @@ public class CarActivity extends W4MActivity {
     private List<Brand> brands = new ArrayList<>();
     private AppCompatAutoCompleteTextView txtBrands;
     private AppCompatAutoCompleteTextView txtModels;
+    private EditText txtPlateChar;
+    private EditText txtPlateNumber;
+    private AppCompatSpinner txtColor;
     private Button btnAdd;
     private ImageView brandImage;
 
@@ -66,6 +75,9 @@ public class CarActivity extends W4MActivity {
         txtModels = (AppCompatAutoCompleteTextView) findViewById(R.id.txt_car_model);
         btnAdd = (Button) findViewById(R.id.btn_save_car);
         brandImage = (ImageView) findViewById(R.id.brand_image);
+        txtPlateChar = (EditText) findViewById(R.id.txt_plate_char);
+        txtPlateNumber = (EditText) findViewById(R.id.txt_plate_number);
+        txtColor = (AppCompatSpinner) findViewById(R.id.txt_color);
     }
 
     @Override
@@ -102,8 +114,36 @@ public class CarActivity extends W4MActivity {
                     public void execute(List<Model> models) {
                         ModelAdapter modelsAdapter = new ModelAdapter(context, models);
                         txtModels.setAdapter(modelsAdapter);
+                        txtModels.setText("");
+                        txtModels.requestFocus();
                     }
                 });
+            }
+        });
+
+        txtModels.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                hideKeyboard(txtModels.getWindowToken());
+            }
+        });
+
+        txtPlateChar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(editable.length() > 2) {
+                    txtPlateNumber.requestFocus();
+                }
             }
         });
 
@@ -113,6 +153,9 @@ public class CarActivity extends W4MActivity {
                 Car car = new Car();
                 car.setBrand(txtBrands.getText().toString());
                 car.setModel(txtModels.getText().toString());
+                car.setPlate(txtPlateChar.getText().toString() + "-" +
+                        txtPlateNumber.getText().toString());
+                car.setColor(txtColor.getSelectedItem().toString());
 
                 getW4MApplication().addCar(context, car);
 
@@ -121,6 +164,21 @@ public class CarActivity extends W4MActivity {
                 setResult(RESULT_OK, intent);
 
                 finish();
+            }
+        });
+
+        txtColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView spinnerText = (TextView) view;
+                if(spinnerText == null) return;
+                spinnerText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 26);
+                spinnerText.setTextColor(ContextCompat.getColor(context, R.color.w4mDarkAlpha));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }

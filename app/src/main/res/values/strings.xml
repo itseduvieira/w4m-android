@@ -95,4 +95,17 @@
         <item>MINHA GARAGEM</item>
         <item>GARAGEM DE OUTRA PESSOA</item>
     </string-array>
+
+    <string-array name="color_array">
+        <item>BRANCO</item>
+        <item>PRETO</item>
+        <item>AZUL</item>
+        <item>AMARELO</item>
+        <item>VERMELHO</item>
+        <item>PRATA</item>
+        <item>VERDE</item>
+        <item>ROSA</item>
+        <item>LARANJA</item>
+        <item>ROXO</item>
+    </string-array>
 </resources>

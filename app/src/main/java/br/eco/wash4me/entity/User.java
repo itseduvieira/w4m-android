@@ -9,7 +9,6 @@ public class User {
     private Integer id;
     private String name;
     private String email;
-    private Bitmap profilePicture;
     private List<Car> myCars;
     private String token;
     private Type type = Type.VISITOR;
@@ -61,14 +60,6 @@ public class User {
 
     public void setType(Type type) {
         this.type = type;
-    }
-
-    public Bitmap getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(Bitmap profilePicture) {
-        this.profilePicture = profilePicture;
     }
 
     public String getToken() {

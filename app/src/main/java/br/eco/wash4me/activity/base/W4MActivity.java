@@ -30,9 +30,9 @@ import br.eco.wash4me.R;
 import br.eco.wash4me.activity.ChatActivity;
 import br.eco.wash4me.activity.LoginActivity;
 import br.eco.wash4me.activity.MyOrdersActivity;
-import br.eco.wash4me.activity.SettingsActivity;
 import br.eco.wash4me.activity.StepsActivity;
 import br.eco.wash4me.activity.SuppliersActivity;
+import br.eco.wash4me.utils.Callback;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static br.eco.wash4me.activity.base.W4MApplication.log;
@@ -206,13 +206,7 @@ public class W4MActivity extends AppCompatActivity {
         userName = (TextView) hView.findViewById(R.id.name_user);
         userEmail = (TextView) hView.findViewById(R.id.email_user);
 
-        Bitmap bitmap = getW4MApplication().getLoggedUser(context).getProfilePicture();
 
-        if(bitmap == null) {
-            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.example_profile);
-        }
-
-        profileImage.setImageBitmap(bitmap);
         userName.setText(getW4MApplication().getLoggedUser(context).getName());
         userEmail.setText(getW4MApplication().getLoggedUser(context).getEmail());
 
@@ -224,9 +218,6 @@ public class W4MActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
 
                 switch(id) {
-                    case R.id.navigation_item_settings:
-                        startActivity(new Intent(context, SettingsActivity.class));
-                        break;
                     case R.id.navigation_item_new_order:
                         startActivity(new Intent(context, StepsActivity.class));
                         break;
@@ -239,6 +230,12 @@ public class W4MActivity extends AppCompatActivity {
                     case R.id.navigation_item_chat:
                         startActivity(new Intent(context, ChatActivity.class));
                         break;
+                    case R.id.navigation_item_profile:
+                        startActivity(new Intent(context, ChatActivity.class));
+                        break;
+                    case R.id.navigation_item_finance:
+                        startActivity(new Intent(context, ChatActivity.class));
+                        break;
                     case R.id.navigation_item_exit:
                         logout();
                         break;
@@ -247,6 +244,13 @@ public class W4MActivity extends AppCompatActivity {
                 }
 
                 return true;
+            }
+        });
+
+        getW4MApplication().getProfilePicture(context, new Callback<Bitmap>() {
+            @Override
+            public void execute(Bitmap bitmap) {
+                profileImage.setImageBitmap(bitmap);
             }
         });
     }
@@ -264,6 +268,8 @@ public class W4MActivity extends AppCompatActivity {
 
     protected void logout() {
         getW4MApplication().setLoggedUser(context, null);
+        getW4MApplication().clearCurrentRequest();
+        getW4MApplication().clearProfilePicture();
         getW4MApplication().clearDebugInformation(context);
 
         if (AccessToken.getCurrentAccessToken() != null) {

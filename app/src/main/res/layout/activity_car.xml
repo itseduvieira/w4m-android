@@ -50,8 +50,8 @@
                         style="@style/W4MTheme.EditText.Inverse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textNoSuggestions|textCapCharacters"
                         android:hint="Marca"
+                        android:inputType="textNoSuggestions|textCapCharacters"
                         android:maxLines="1"
                         android:textColorHint="@color/w4mWhiteAlpha"
                         android:textSize="42sp" />
@@ -62,8 +62,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txt_car_brand"
-                        android:inputType="textNoSuggestions|textCapCharacters"
                         android:hint="Modelo"
+                        android:inputType="textNoSuggestions|textCapCharacters"
                         android:maxLines="1"
                         android:textColorHint="@color/w4mWhiteAlpha"
                         android:textSize="22sp" />
@@ -259,17 +259,92 @@
                     </android.support.v7.widget.CardView>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/title_info"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/container_size"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="16dp"
-                    android:text="INFORMAÇÕES"
-                    android:textColor="@color/w4mAccent" />
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5.5">
+
+                        <TextView
+                            android:id="@+id/title_plate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="16dp"
+                            android:text="PLACA"
+                            android:textColor="@color/w4mAccent" />
+
+                        <EditText
+                            android:id="@+id/txt_plate_char"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/title_plate"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="-16dp"
+                            android:hint="ABC"
+                            android:inputType="textNoSuggestions|textCapCharacters|text"
+                            android:textColorHint="#BBBBBB"
+                            android:maxLength="3"
+                            android:textSize="26sp" />
+                        <TextView
+                            android:id="@+id/plate_separator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-"
+                            android:layout_marginTop="-6dp"
+                            android:textSize="26sp"
+                            android:layout_below="@id/title_plate"
+                            android:layout_toEndOf="@id/txt_plate_char"/>
+                        <EditText
+                            android:id="@+id/txt_plate_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/title_plate"
+                            android:maxLength="4"
+                            android:layout_toEndOf="@id/plate_separator"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginTop="-16dp"
+                            android:hint="1234"
+                            android:inputType="textNoSuggestions|number"
+                            android:textColorHint="#BBBBBB"
+                            android:textSize="26sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="4.5">
+
+                        <TextView
+                            android:id="@+id/title_color"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginTop="16dp"
+                            android:text="COR"
+                            android:textColor="@color/w4mAccent" />
+
+                        <android.support.v7.widget.AppCompatSpinner
+                            android:id="@+id/txt_color"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@id/title_color"
+                            android:layout_marginEnd="4dp"
+                            android:layout_marginStart="4dp"
+                            android:entries="@array/color_array" />
+                    </RelativeLayout>
+
+                </LinearLayout>
 
             </RelativeLayout>
         </RelativeLayout>

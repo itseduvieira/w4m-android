@@ -2,7 +2,6 @@ package br.eco.wash4me.data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -32,10 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MApplication;
 import br.eco.wash4me.entity.Account;
-import br.eco.wash4me.entity.Car;
 import br.eco.wash4me.entity.Model;
 import br.eco.wash4me.entity.Order;
 import br.eco.wash4me.entity.Product;
@@ -111,13 +108,7 @@ public class DataAccess {
                         ImageRequest request = buildImageRequest(context, url, new Callback<Bitmap>() {
                             @Override
                             public void execute(Bitmap bitmap) {
-                                loggedUser.setProfilePicture(bitmap);
-                                callback.execute(loggedUser);
-                            }
-                        }, new Callback<Bitmap>() {
-                            @Override
-                            public void execute(Bitmap bitmap) {
-                                loggedUser.setProfilePicture(bitmap);
+                                W4MApplication.getInstance().setProfilePicture(bitmap);
                                 callback.execute(loggedUser);
                             }
                         });
@@ -229,8 +220,7 @@ public class DataAccess {
         });
     }
 
-    private ImageRequest buildImageRequest(final Context context, String url, final Callback<Bitmap> callback,
-                                           final Callback<Bitmap> errorCallback) {
+    private ImageRequest buildImageRequest(final Context context, String url, final Callback<Bitmap> callback) {
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
@@ -240,8 +230,7 @@ public class DataAccess {
                 }, 0, 0, ImageView.ScaleType.CENTER_INSIDE, null,
                 new Response.ErrorListener() {
                     public void onErrorResponse(VolleyError error) {
-                        errorCallback.execute(BitmapFactory.decodeResource(context.getResources(),
-                                R.drawable.example_profile));
+                        callback.execute(null);
                     }
                 });
     }

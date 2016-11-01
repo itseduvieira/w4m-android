@@ -231,6 +231,9 @@ public class StepsActivity extends W4MActivity {
             String carTitle = car.getBrand() + " " + car.getModel();
             ((TextView) findViewById(R.id.txt_car_main)).setText(carTitle);
 
+            String carDescription = car.getColor() + " • " + car.getPlate();
+            ((TextView) findViewById(R.id.car_description)).setText(carDescription);
+
             showBtnNext();
         }
     }

@@ -2,9 +2,17 @@ package br.eco.wash4me.activity.base;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -13,10 +21,14 @@ import java.util.GregorianCalendar;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
+import br.eco.wash4me.R;
+import br.eco.wash4me.activity.LoginActivity;
+import br.eco.wash4me.activity.StepsActivity;
 import br.eco.wash4me.entity.Account;
 import br.eco.wash4me.entity.Car;
 import br.eco.wash4me.entity.OrderRequest;
 import br.eco.wash4me.entity.User;
+import br.eco.wash4me.utils.Callback;
 import br.eco.wash4me.utils.FontOverride;
 
 import static br.eco.wash4me.utils.Constants.*;
@@ -26,6 +38,7 @@ public class W4MApplication extends Application {
 
     private User loggedUser;
     private OrderRequest orderRequest;
+    private Bitmap profilePicture;
 
     @Override
     public void onCreate() {
@@ -175,5 +188,44 @@ public class W4MApplication extends Application {
 
     public void clearCurrentRequest() {
         setOrderRequest(null);
+    }
+
+    public void getProfilePicture(final Context context, final Callback<Bitmap> callback) {
+        final Bitmap examplePicture = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.example_profile);
+
+        if(profilePicture == null || profilePicture.sameAs(examplePicture)) {
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageReference = storage.getReferenceFromUrl("gs://wash4me-caafc.appspot.com/users");
+            StorageReference pictureReference = storageReference.child(getLoggedUser(context).getId() + ".jpg");
+
+            final long ONE_MEGABYTE = 1024 * 1024;
+            pictureReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                    setProfilePicture(image);
+                    callback.execute(image);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    setProfilePicture(examplePicture);
+                    callback.execute(examplePicture);
+                }
+            });
+        } else {
+            setProfilePicture(profilePicture);
+            callback.execute(profilePicture);
+        }
+    }
+
+    public void setProfilePicture(Bitmap profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public void clearProfilePicture() {
+        this.profilePicture = null;
     }
 }

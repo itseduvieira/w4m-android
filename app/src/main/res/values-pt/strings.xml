@@ -81,4 +81,25 @@
     <string name="nav_item_settings">PREFERÊNCIAS</string>
     <string name="nav_item_chat">CHAT</string>
     <string name="action_settings">Preferências</string>
+
+    <string-array name="park_array">
+        <item>VAGA NA RUA</item>
+        <item>ESTACIONAMENTO COBERTO</item>
+        <item>ESTACIONAMENTO DESCOBERTO</item>
+        <item>MINHA GARAGEM</item>
+        <item>GARAGEM DE OUTRA PESSOA</item>
+    </string-array>
+
+    <string-array name="color_array">
+        <item>BRANCO</item>
+        <item>PRETO</item>
+        <item>AZUL</item>
+        <item>AMARELO</item>
+        <item>VERMELHO</item>
+        <item>PRATA</item>
+        <item>VERDE</item>
+        <item>ROSA</item>
+        <item>LARANJA</item>
+        <item>ROXO</item>
+    </string-array>
 </resources>
