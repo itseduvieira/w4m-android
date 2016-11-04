@@ -15,8 +15,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -183,15 +185,6 @@ public class StepsActivity extends W4MActivity {
             }
         });
 
-        findViewById(R.id.txt_more_info).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(b) {
-                    ((ScrollView) findViewById(R.id.scroll_main)).fullScroll(ScrollView.FOCUS_DOWN);
-                }
-            }
-        });
-
         checkTitleStep1();
 
         progress.setVisibility(View.GONE);
@@ -233,6 +226,21 @@ public class StepsActivity extends W4MActivity {
 
             String carDescription = car.getColor() + " • " + car.getPlate();
             ((TextView) findViewById(R.id.car_description)).setText(carDescription);
+
+            final ArrayAdapter parkAdapter = new ArrayAdapter<>(context,
+                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.park_array));
+
+            findViewById(R.id.park).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ListView list = new ListView(context);
+                    list.setAdapter(parkAdapter);
+                    StepsActivity.this.registerForContextMenu(list);
+                    findViewById(R.id.park).showContextMenu();
+
+                    Snackbar.make(findViewById(R.id.car_container), "ETSSA", Snackbar.LENGTH_LONG).show();
+                }
+            });
 
             showBtnNext();
         }

@@ -53,6 +53,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/place_info"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/map_place"
@@ -62,6 +63,7 @@
         android:layout_marginTop="-35dp">
 
         <RelativeLayout
+            android:background="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="8dp">
@@ -132,6 +134,7 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:clickable="true"
         android:id="@+id/car_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -180,6 +183,7 @@
 
             <RelativeLayout
                 android:id="@+id/car"
+                android:background="?android:attr/selectableItemBackground"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp">
@@ -255,6 +259,7 @@
                 android:background="@color/w4mLightAlpha"/>
 
             <RelativeLayout
+                android:background="?android:attr/selectableItemBackground"
                 android:id="@+id/park"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -327,39 +332,6 @@
                         android:layout_marginStart="8dp"
                         android:src="@drawable/ic_edit_white_36dp"
                         android:tint="@color/w4mGray" />
-                </RelativeLayout>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/more_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/park"
-                android:visibility="gone"
-                android:padding="8dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/detail_more_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="MAIS INFORMAÇÕES"
-                        android:textSize="10sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/txt_more_info"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/detail_more_info"
-                        android:hint="ALGUMA INFORMAÇÃO QUE PODERIA NOS AJUDAR?\nNOME DE RESPONSÁVEL, BLOCO, REFERÊNCIA?"
-                        android:inputType="textCapCharacters"
-                        android:textColorHint="#BBBBBB"
-                        android:layout_marginTop="-6dp"
-                        android:textSize="12sp" />
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>

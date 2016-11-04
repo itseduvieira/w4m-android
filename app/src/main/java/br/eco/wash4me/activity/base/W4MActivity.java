@@ -30,6 +30,8 @@ import br.eco.wash4me.R;
 import br.eco.wash4me.activity.ChatActivity;
 import br.eco.wash4me.activity.LoginActivity;
 import br.eco.wash4me.activity.MyOrdersActivity;
+import br.eco.wash4me.activity.PaymentActivity;
+import br.eco.wash4me.activity.ProfileActivity;
 import br.eco.wash4me.activity.StepsActivity;
 import br.eco.wash4me.activity.SuppliersActivity;
 import br.eco.wash4me.utils.Callback;
@@ -231,10 +233,10 @@ public class W4MActivity extends AppCompatActivity {
                         startActivity(new Intent(context, ChatActivity.class));
                         break;
                     case R.id.navigation_item_profile:
-                        startActivity(new Intent(context, ChatActivity.class));
+                        startActivity(new Intent(context, ProfileActivity.class));
                         break;
                     case R.id.navigation_item_finance:
-                        startActivity(new Intent(context, ChatActivity.class));
+                        startActivity(new Intent(context, PaymentActivity.class));
                         break;
                     case R.id.navigation_item_exit:
                         logout();

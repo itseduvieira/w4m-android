@@ -1,11 +1,14 @@
 package br.eco.wash4me.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -33,6 +36,8 @@ import static br.eco.wash4me.data.DataAccess.getDataAccess;
 public class LoginActivity extends W4MActivity {
     private TextInputEditText mEmailView;
     private TextInputEditText mPasswordView;
+    private TextInputEditText mPasswordSignupView;
+    private TextInputEditText mPasswordConfirmSignupView;
     private View mLoginFormView;
     private View loginUserType;
     private Button mEmailSignInButton;
@@ -41,7 +46,9 @@ public class LoginActivity extends W4MActivity {
     private LoginButton loginButton;
     private RelativeLayout mainView;
     private Account credendials;
+    private View forgotPassForm;
     private View btnShowForgotPass;
+    private Button btnSignup;
 
     private CallbackManager callbackManager;
 
@@ -53,6 +60,8 @@ public class LoginActivity extends W4MActivity {
 
         bindViews();
 
+        setupToolbarBack();
+
         setupViews();
     }
 
@@ -63,10 +72,47 @@ public class LoginActivity extends W4MActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case android.R.id.home:
+                if(mLoginFormView.getVisibility() == View.VISIBLE) {
+                    mLoginFormView.setVisibility(View.GONE);
+                    loginUserType.setVisibility(View.VISIBLE);
+
+                    btnSignup.setVisibility(View.VISIBLE);
+
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                } else if(forgotPassForm.getVisibility() == View.VISIBLE) {
+                    forgotPassForm.setVisibility(View.GONE);
+                    mLoginFormView.setVisibility(View.VISIBLE);
+
+                    btnSignup.setVisibility(View.VISIBLE);
+
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                } else if(findViewById(R.id.signup_form).getVisibility() == View.VISIBLE) {
+                    findViewById(R.id.signup_form).setVisibility(View.GONE);
+                    loginUserType.setVisibility(View.VISIBLE);
+
+                    btnSignup.setVisibility(View.VISIBLE);
+
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                }
+
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void bindViews() {
         mLoginFormView = findViewById(R.id.login_form);
-        loginUserType = findViewById(R.id.login_user_type);
+        loginUserType = findViewById(R.id.user_type_form);
         mPasswordView = (TextInputEditText) findViewById(R.id.password);
+        mPasswordSignupView = (TextInputEditText) findViewById(R.id.password_signup);
+        mPasswordConfirmSignupView = (TextInputEditText) findViewById(R.id.password_confirm_signup);
         mEmailView = (TextInputEditText) findViewById(R.id.email);
         mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         btnVisitor = (Button) findViewById(R.id.btn_visitor);
@@ -76,6 +122,8 @@ public class LoginActivity extends W4MActivity {
         mainView = (RelativeLayout) findViewById(R.id.login_main_view);
         credendials = getW4MApplication().getAccount(context);
         btnShowForgotPass = findViewById(R.id.btn_show_forgot_pass);
+        forgotPassForm = findViewById(R.id.email_pass_form);
+        btnSignup = (Button) findViewById(R.id.btn_signup);
     }
 
     @Override
@@ -92,16 +140,14 @@ public class LoginActivity extends W4MActivity {
             mPasswordView.setText(credendials.getPassword());
         }
 
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
+        mPasswordView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/brandon_med.otf"));
+        mPasswordView.setTransformationMethod(new PasswordTransformationMethod());
+
+        mPasswordSignupView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/brandon_med.otf"));
+        mPasswordSignupView.setTransformationMethod(new PasswordTransformationMethod());
+
+        mPasswordConfirmSignupView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/brandon_med.otf"));
+        mPasswordConfirmSignupView.setTransformationMethod(new PasswordTransformationMethod());
 
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -122,6 +168,8 @@ public class LoginActivity extends W4MActivity {
             public void onClick(View view) {
                 mLoginFormView.setVisibility(View.VISIBLE);
                 loginUserType.setVisibility(View.GONE);
+
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         });
 
@@ -163,9 +211,26 @@ public class LoginActivity extends W4MActivity {
             @Override
             public void onClick(View view) {
                 findViewById(R.id.login_form).setVisibility(View.GONE);
-                findViewById(R.id.email_pass).setVisibility(View.VISIBLE);
+                findViewById(R.id.email_pass_form).setVisibility(View.VISIBLE);
+
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
         });
+
+        btnSignup.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findViewById(R.id.login_form).setVisibility(View.GONE);
+                findViewById(R.id.email_pass_form).setVisibility(View.GONE);
+                findViewById(R.id.user_type_form).setVisibility(View.GONE);
+                findViewById(R.id.signup_form).setVisibility(View.VISIBLE);
+                btnSignup.setVisibility(View.GONE);
+
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
     }
 
     private void attemptLogin() {

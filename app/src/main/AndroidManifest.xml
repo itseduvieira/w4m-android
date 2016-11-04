@@ -30,13 +30,14 @@
             android:label="@string/title_activity_my_orders" />
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:theme="@style/W4MTheme.Splash.Fullscreen" />
         <activity
             android:name=".activity.OrderDetailActivity"
             android:label="" />
         <activity
             android:name=".activity.StepsActivity"
-            android:label=""/>
+            android:label="" />
         <activity
             android:name=".activity.ProductDetailActivity"
             android:label="" />
@@ -72,8 +73,11 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".activity.CarActivity"
-            android:label="Meu Carro"/>
+        <activity
+            android:name=".activity.CarActivity"
+            android:label="Meu Carro" />
+        <activity android:name=".activity.PaymentActivity" />
+        <activity android:name=".activity.ProfileActivity"></activity>
     </application>
 
 </manifest>

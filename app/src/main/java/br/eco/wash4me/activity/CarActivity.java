@@ -6,13 +6,14 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatAutoCompleteTextView;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,9 @@ public class CarActivity extends W4MActivity {
     private AppCompatSpinner txtColor;
     private Button btnAdd;
     private ImageView brandImage;
+    private CardView small;
+    private CardView medium;
+    private CardView large;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,9 @@ public class CarActivity extends W4MActivity {
         txtPlateChar = (EditText) findViewById(R.id.txt_plate_char);
         txtPlateNumber = (EditText) findViewById(R.id.txt_plate_number);
         txtColor = (AppCompatSpinner) findViewById(R.id.txt_color);
+        small = (CardView) findViewById(R.id.size_small);
+        medium = (CardView) findViewById(R.id.size_medium);
+        large = (CardView) findViewById(R.id.size_large);
     }
 
     @Override
@@ -157,13 +164,30 @@ public class CarActivity extends W4MActivity {
                         txtPlateNumber.getText().toString());
                 car.setColor(txtColor.getSelectedItem().toString());
 
-                getW4MApplication().addCar(context, car);
+                if(findViewById(R.id.selected_size_small).getVisibility() == View.VISIBLE) {
+                    car.setSize("S");
+                } else if(findViewById(R.id.selected_size_medium).getVisibility() == View.VISIBLE) {
+                    car.setSize("M");
+                } else if(findViewById(R.id.selected_size_large).getVisibility() == View.VISIBLE) {
+                    car.setSize("L");
+                }
 
-                Intent intent = new Intent();
-                intent.putExtra("car", new GsonBuilder().create().toJson(car));
-                setResult(RESULT_OK, intent);
+                if(car.getBrand().isEmpty() || car.getModel().isEmpty() ||
+                        txtPlateChar.getText().toString().isEmpty() || txtPlateNumber.getText().toString().isEmpty()) {
+                    Snackbar.make((View) btnAdd.getParent(), "Preencha todos os campos corretamente.",
+                            Snackbar.LENGTH_LONG).setAction("ENTENDI", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) { }
+                    }).show();
+                } else {
+                    getW4MApplication().addCar(context, car);
 
-                finish();
+                    Intent intent = new Intent();
+                    intent.putExtra("car", new GsonBuilder().create().toJson(car));
+                    setResult(RESULT_OK, intent);
+
+                    finish();
+                }
             }
         });
 
@@ -179,6 +203,33 @@ public class CarActivity extends W4MActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+            }
+        });
+
+        small.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findViewById(R.id.selected_size_small).setVisibility(View.VISIBLE);
+                findViewById(R.id.selected_size_medium).setVisibility(View.GONE);
+                findViewById(R.id.selected_size_large).setVisibility(View.GONE);
+            }
+        });
+
+        medium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findViewById(R.id.selected_size_small).setVisibility(View.GONE);
+                findViewById(R.id.selected_size_medium).setVisibility(View.VISIBLE);
+                findViewById(R.id.selected_size_large).setVisibility(View.GONE);
+            }
+        });
+
+        large.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findViewById(R.id.selected_size_small).setVisibility(View.GONE);
+                findViewById(R.id.selected_size_medium).setVisibility(View.GONE);
+                findViewById(R.id.selected_size_large).setVisibility(View.VISIBLE);
             }
         });
     }

@@ -5,6 +5,7 @@ public class Car {
     private String model;
     private String color;
     private String plate;
+    private String size;
 
     public String getBrand() {
         return brand;
@@ -36,6 +37,14 @@ public class Car {
 
     public void setPlate(String plate) {
         this.plate = plate;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 
     @Override

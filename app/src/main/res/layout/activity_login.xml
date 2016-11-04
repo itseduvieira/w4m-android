@@ -4,11 +4,24 @@
     android:id="@+id/login_main_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/w4mPrimary"
     tools:context="br.eco.wash4me.activity.LoginActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/login_background"/>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/W4MTheme.Toolbar"
+        android:background="@color/w4mDarkAlpha"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+    </android.support.v7.widget.Toolbar>
+
     <android.support.v7.widget.CardView
-        android:id="@+id/email_pass"
+        android:id="@+id/email_pass_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="4dp"
@@ -57,6 +70,88 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
+        android:id="@+id/signup_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        app:cardCornerRadius="4dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/email_signup_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="8dp"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/email_signup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/password_signup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/prompt_password"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/password_confirm_signup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Confirme a Senha"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/email_signup_button"
+                style="@style/W4MTheme.Button.Accent"
+                android:layout_marginTop="12dp"
+                android:text="FAZER CADASTRO" />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/facebook_signup_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="16dp"
+                android:textAllCaps="true"
+                android:text="CONECTAR COM FACEBOOK"
+                android:elevation="2dp"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -99,11 +194,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
-                    android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
-                    android:typeface="sans"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -140,13 +232,14 @@
     </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/login_user_type"
+        android:id="@+id/user_type_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:visibility="visible"
+        app:cardBackgroundColor="#EEFFFFFF"
         app:cardCornerRadius="4dp">
 
         <LinearLayout
@@ -175,15 +268,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/or"
                     android:background="#CCCCCC" />
                 <TextView
+                    android:id="@id/or"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:background="#FFFFFF"
                     android:textAlignment="center"
                     android:padding="5dp"
                     android:text="OU"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/or"
+                    android:background="#CCCCCC" />
             </RelativeLayout>
 
             <Button
@@ -195,7 +295,8 @@
 
     <Button
         android:id="@+id/btn_signup"
-        android:visibility="gone"
         style="@style/W4MTheme.Button.Bottom.Transparent"
-        android:text="NÃO POSSUI UMA CONTA? CLIQUE AQUI!"/>
+        android:textColor="@color/w4mTextColorInverse"
+        android:background="@color/w4mDarkAlpha"
+        android:text="NÃO É CADASTRADO? CLIQUE AQUI"/>
 </RelativeLayout>
