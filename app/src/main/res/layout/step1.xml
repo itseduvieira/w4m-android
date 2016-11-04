@@ -216,9 +216,10 @@
                         android:tint="@color/w4mAccent" />
 
                     <RelativeLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/car_change"
                         android:layout_toEndOf="@id/car_icon">
 
                         <TextView
@@ -226,6 +227,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="HYUNDAI ELANTRA"
+                            android:ellipsize="marquee"
                             android:textAllCaps="true"
                             android:textSize="14sp" />
 
@@ -242,7 +244,7 @@
                     </RelativeLayout>
 
                     <ImageView
-                        android:id="@+id/car_change"
+                        android:id="@id/car_change"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_alignParentEnd="true"
@@ -300,9 +302,10 @@
                         android:textStyle="bold" />
 
                     <RelativeLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_toStartOf="@+id/park_change"
                         android:layout_toEndOf="@id/park_icon">
 
                         <TextView
@@ -310,6 +313,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="ESTACIONAMENTO COBERTO"
+                            android:ellipsize="marquee"
                             android:textAllCaps="true"
                             android:textSize="14sp" />
 
@@ -326,7 +330,7 @@
                     </RelativeLayout>
 
                     <ImageView
-                        android:id="@+id/park_change"
+                        android:id="@id/park_change"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_alignParentEnd="true"

@@ -1,6 +1,7 @@
 package br.eco.wash4me.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,9 +21,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -258,10 +262,11 @@ public class StepsActivity extends W4MActivity implements
                 if (myPlace == null) {
                     log("[StepsActivity.onLocationChanged] First location set [" + place.getLatitude() + "," + place.getLongitude() + "]");
 
+                    getW4MApplication().getOrderRequest().setPlace(place);
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            getW4MApplication().getOrderRequest().setPlace(place);
                             setMyPlace(place);
                         }
                     });
@@ -405,23 +410,149 @@ public class StepsActivity extends W4MActivity implements
             String carDescription = car.getColor() + " • " + car.getPlate();
             ((TextView) findViewById(R.id.car_description)).setText(carDescription);
 
-            final ArrayAdapter parkAdapter = new ArrayAdapter<>(context,
-                    android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.park_array));
+            findViewById(R.id.car).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDialogCarListView();
+                }
+            });
 
             findViewById(R.id.park).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ListView list = new ListView(context);
-                    list.setAdapter(parkAdapter);
-                    StepsActivity.this.registerForContextMenu(list);
-                    findViewById(R.id.park).showContextMenu();
-
-                    Snackbar.make(findViewById(R.id.car_container), "ETSSA", Snackbar.LENGTH_LONG).show();
+                    showDialogParkListView();
                 }
             });
 
             showBtnNext();
         }
+    }
+
+    protected void showDialogParkListView() {
+        final ArrayAdapter parkAdapter = new ArrayAdapter<>(context,
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.park_array));
+
+        final ListView parkList = new ListView(context);
+        parkList.setAdapter(parkAdapter);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        parkList.setLayoutParams(lp);
+        LinearLayout linear = new LinearLayout(context);
+        linear.setOrientation(LinearLayout.VERTICAL);
+        linear.addView(parkList);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+        final AlertDialog dialog = alertDialogBuilder
+                .setView(linear)
+                .setCancelable(false)
+                .create();
+
+        parkList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String title = adapterView.getItemAtPosition(i).toString();
+                ((TextView) findViewById(R.id.detail_park_title)).setText(title);
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    protected void showDialogCarListView() {
+        final List<Car> cars = new ArrayList<>(getW4MApplication().getLoggedUser(context).getMyCars());
+        Car car = new Car();
+        cars.add(car);
+
+        final BaseAdapter carAdapter = new ArrayAdapter<Car>(context, android.R.layout.simple_list_item_2,
+                android.R.id.text1, cars) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                TextView text1 = (TextView) v.findViewById(android.R.id.text1);
+
+                TextView text2 = (TextView) v.findViewById(android.R.id.text2);
+                text2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                text2.setTextColor(ContextCompat.getColor(context, R.color.w4mGray));
+
+                if(position < cars.size() - 1) {
+                    text1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+
+                    Car car = cars.get(position);
+                    String carTitle = car.getBrand() + " " + car.getModel();
+                    String carDescription = car.getColor() + " • " + car.getPlate();
+
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, applyDimensionDIP(12), 0, 0);
+
+                    text1.setText(carTitle);
+                    text1.setLayoutParams(params);
+                    text1.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+                    RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    params2.setMargins(0, 0, 0, applyDimensionDIP(12));
+                    params2.addRule(RelativeLayout.BELOW, text1.getId());
+                    text2.setLayoutParams(params2);
+                    text2.setText(carDescription);
+                } else {
+                    text1.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                            RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    params.addRule(RelativeLayout.CENTER_IN_PARENT);
+                    text1.setLayoutParams(params);
+                    text1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    text1.setText("ADICIONAR UM NOVO CARRO");
+                }
+
+                return v;
+            }
+        };
+
+        final ListView carList = new ListView(context);
+        carList.setAdapter(carAdapter);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        carList.setLayoutParams(lp);
+        LinearLayout linear = new LinearLayout(context);
+        linear.setOrientation(LinearLayout.VERTICAL);
+        linear.addView(carList);
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+        final AlertDialog dialog = alertDialogBuilder
+                .setView(linear)
+                .setCancelable(false)
+                .create();
+
+        carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Car car = (Car) adapterView.getItemAtPosition(i);
+
+                if(i < cars.size() - 1) {
+                    String carTitle = car.getBrand() + " " + car.getModel();
+                    String carDescription = car.getColor() + " • " + car.getPlate();
+                    ((TextView) findViewById(R.id.txt_car_main)).setText(carTitle);
+                    ((TextView) findViewById(R.id.car_description)).setText(carDescription);
+                } else {
+                    startActivityForResult(new Intent(context, CarActivity.class), REQUEST_CODE_CAR);
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void checkTitleStep1() {
