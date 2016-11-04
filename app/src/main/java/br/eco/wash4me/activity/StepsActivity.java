@@ -395,9 +395,11 @@ public class StepsActivity extends W4MActivity implements
             carContainer.setVisibility(View.VISIBLE);
             carEmptyContainer.setVisibility(View.GONE);
 
-            Car first = getW4MApplication().getLoggedUser(context).getMyCars().get(0);
+            if(getW4MApplication().getOrderRequest().getCar() == null) {
+                Car first = getW4MApplication().getLoggedUser(context).getMyCars().get(0);
 
-            getW4MApplication().getOrderRequest().setCar(first);
+                getW4MApplication().getOrderRequest().setCar(first);
+            }
         }
 
         Car car = getW4MApplication().getOrderRequest().getCar();
@@ -447,7 +449,7 @@ public class StepsActivity extends W4MActivity implements
 
         final AlertDialog dialog = alertDialogBuilder
                 .setView(linear)
-                .setCancelable(false)
+                .setCancelable(true)
                 .create();
 
         parkList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -531,7 +533,7 @@ public class StepsActivity extends W4MActivity implements
 
         final AlertDialog dialog = alertDialogBuilder
                 .setView(linear)
-                .setCancelable(false)
+                .setCancelable(true)
                 .create();
 
         carList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
