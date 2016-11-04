@@ -1,24 +1,32 @@
 package br.eco.wash4me.activity.base;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -41,6 +49,10 @@ import static br.eco.wash4me.activity.base.W4MApplication.log;
 
 public class W4MActivity extends AppCompatActivity {
     private static ProgressDialog progressDialog;
+
+    private static final int TEXT_DIALOG_PADDING = 25;
+    private static final int DIALOG_TEXT_SIZE = 17;
+    public static final int MY_PERMISSIONS = 1;
 
     protected Context context = this;
     protected Toolbar toolbar;
@@ -306,7 +318,7 @@ public class W4MActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 progressDialog = null;
             } catch (Exception ex) {
-                log("[MBActivity.toggleProgressOff] Dialog Error: " + ex.getMessage());
+                log("[W4MActivity.toggleProgressOff] Dialog Error: " + ex.getMessage());
             }
         }
     }
@@ -314,5 +326,98 @@ public class W4MActivity extends AppCompatActivity {
     public void hideKeyboard(IBinder key) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(key, 0);
+    }
+
+    protected void showOkAlert(String msg) {
+        getBasicAlert(msg)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .create().show();
+    }
+
+    protected void showOkAlert(String msg, DialogInterface.OnClickListener action) {
+        getBasicAlert(msg)
+                .setPositiveButton("OK", action)
+                .create().show();
+    }
+
+    private AlertDialog.Builder getBasicAlert(String msg) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+        alertDialogBuilder
+                .setView(getDialogView(msg))
+                .setCancelable(false);
+
+        return alertDialogBuilder;
+    }
+
+    private View getDialogView(String message) {
+        final TextView input = new TextView(context);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        int padding = applyDimensionDIP(TEXT_DIALOG_PADDING);
+        input.setText(message);
+        input.setLayoutParams(lp);
+        input.setTextSize(TypedValue.COMPLEX_UNIT_SP, DIALOG_TEXT_SIZE);
+        input.setGravity(Gravity.CENTER_HORIZONTAL);
+        LinearLayout linear = new LinearLayout(context);
+        linear.setPadding(padding, padding, padding, 0);
+        linear.setLayoutParams(lp);
+        linear.addView(input);
+
+        return linear;
+    }
+
+    protected Integer applyDimensionDIP(Integer value) {
+        return Float.valueOf(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                value, getResources().getDisplayMetrics())).intValue();
+    }
+
+    protected Boolean hasPermissions() {
+        int permissionCheckCoarse = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        int permissionCheckFine = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        Boolean hasPermission = permissionCheckCoarse == PackageManager.PERMISSION_GRANTED &&
+                permissionCheckFine == PackageManager.PERMISSION_GRANTED;
+
+        return hasPermission;
+    }
+
+    protected Boolean checkPermissions() {
+        int permissionCheckCoarse = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        int permissionCheckFine = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+
+        Boolean hasPermission = permissionCheckCoarse == PackageManager.PERMISSION_GRANTED &&
+                permissionCheckFine == PackageManager.PERMISSION_GRANTED;
+
+        if (!hasPermission) {
+            showOkAlert("O aplicativo PRECISA da sua permissão para funcionar corretamente.", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    requestPermissionsAndRestart();
+                }
+            });
+        }
+
+        return hasPermission;
+    }
+
+    private void requestPermissionsAndRestart() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{ Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION },
+                MY_PERMISSIONS);
     }
 }

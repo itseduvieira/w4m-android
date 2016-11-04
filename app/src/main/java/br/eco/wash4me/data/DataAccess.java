@@ -2,6 +2,7 @@ package br.eco.wash4me.data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -22,7 +24,9 @@ import com.facebook.GraphResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +39,7 @@ import br.eco.wash4me.activity.base.W4MApplication;
 import br.eco.wash4me.entity.Account;
 import br.eco.wash4me.entity.Model;
 import br.eco.wash4me.entity.Order;
+import br.eco.wash4me.entity.Place;
 import br.eco.wash4me.entity.Product;
 import br.eco.wash4me.entity.Supplier;
 import br.eco.wash4me.entity.User;
@@ -105,7 +110,7 @@ public class DataAccess {
                         loggedUser.setName(graphResponse.getJSONObject().getString("name"));
                         loggedUser.setEmail(graphResponse.getJSONObject().getString("email"));
 
-                        ImageRequest request = buildImageRequest(context, url, new Callback<Bitmap>() {
+                        ImageRequest request = buildImageRequest(url, new Callback<Bitmap>() {
                             @Override
                             public void execute(Bitmap bitmap) {
                                 W4MApplication.getInstance().setProfilePicture(bitmap);
@@ -195,6 +200,106 @@ public class DataAccess {
         queueRequest(context, request);
     }
 
+    public void getMyPlaceInfo(final Context context, final Location myLocation, final Callback<Place> callback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("sensor", "true");
+        parameters.put("latlng", myLocation.getLatitude() + "," + myLocation.getLongitude());
+
+        String url = "http://maps.googleapis.com/maps/api/geocode/json" + buildParameters(parameters);
+
+        JsonObjectRequest request = buildRequest(context, url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                List<Place> places = parsePlaces(response, myLocation);
+
+                callback.execute(places.size() > 0 ? places.get(0) : null);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.execute(null);
+            }
+        });
+
+        queueRequest(context, request);
+    }
+
+    private List<Place> parsePlaces(JSONObject resultEncoded, Location myLocation) {
+        List<Place> places = new ArrayList<>();
+
+        try {
+            JSONArray routeArray = resultEncoded.getJSONArray("results");
+
+            for(int i = 0; i < routeArray.length(); i++) {
+                Place place = new Place();
+
+                JSONObject placeJSON = routeArray.getJSONObject(i);
+                JSONArray components = placeJSON.getJSONArray("address_components");
+
+                for(int j = 0; j < components.length(); j++) {
+                    JSONObject component = components.getJSONObject(j);
+                    JSONArray types = component.getJSONArray("types");
+
+                    type:
+                    for(int k = 0; k < types.length(); k++) {
+                        String type = types.getString(k);
+
+                        if("route".equals(type)) {
+                            place.setAddress(component.getString("long_name"));
+
+                            break type;
+                        } else if("street_number".equals(type)) {
+                            String number = component.getString("long_name");
+
+                            if(number.contains("-")) {
+                                number = number.split("-")[0];
+                            }
+
+                            place.setNumber(number);
+
+                            break type;
+                        } else if("neighborhood".equals(type)) {
+                            place.setNeighbourhood(component.getString("long_name"));
+
+                            break type;
+                        } else if("administrative_area_level_2".equals(type)) {
+                            place.setCity(component.getString("long_name"));
+
+                            break type;
+                        } else if("administrative_area_level_1".equals(type)) {
+                            place.setState(component.getString("short_name"));
+
+                            break type;
+                        } else if("postal_code".equals(type)) {
+                            place.setZipCode(component.getString("long_name"));
+
+                            break type;
+                        }
+                    }
+                }
+
+                if(place.getAddress() == null || place.getAddress().trim().equals("")) {
+                    place.setAddress(placeJSON.getString("formatted_address"));
+                }
+
+                place.setLatitude(myLocation.getLatitude());
+                place.setLongitude(myLocation.getLongitude());
+                place.setTitle(place.getAddress());
+                if(place.getNumber() != null && !place.getNumber().equals("")) {
+                    place.setTitle(place.getAddress() + ", " + place.getNumber());
+                }
+                place.setDescription((place.getNeighbourhood() != null ? place.getNeighbourhood() + ", " : "") +
+                        (place.getCity() != null ? place.getCity() + " - " : "") +
+                        place.getState());
+                places.add(place);
+            }
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+        }
+
+        return places;
+    }
+
     private String buildAPIURL(String service) {
         return String.format("%s/%s", W4MApplication.getInstance().getWsUrl(), service);
     }
@@ -220,7 +325,28 @@ public class DataAccess {
         });
     }
 
-    private ImageRequest buildImageRequest(final Context context, String url, final Callback<Bitmap> callback) {
+    private JsonObjectRequest buildRequest(final Context context, final String url, final Response.Listener<JSONObject> listener) {
+        return buildRequest(context, url, listener,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        logErrorResponse(context, url, error);
+                    }
+                });
+    }
+
+    private JsonObjectRequest buildRequest(final Context context, final String url, Response.Listener<JSONObject> response, final Response.ErrorListener errorListener) {
+        return new JsonObjectRequest(Request.Method.GET, url, null, response, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                logErrorResponse(context, url, error);
+
+                errorListener.onErrorResponse(error);
+            }
+        });
+    }
+
+    private ImageRequest buildImageRequest(String url, final Callback<Bitmap> callback) {
         return new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override

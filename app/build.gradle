@@ -7,7 +7,7 @@ android {
     defaultConfig {
         applicationId "br.eco.wash4me"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 3
         versionName "1.2"
         multiDexEnabled true
@@ -41,6 +41,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.16.0'
     compile 'com.google.firebase:firebase-storage:9.4.0'
     compile 'com.google.firebase:firebase-auth:9.4.0'
+    compile 'com.google.android.gms:play-services:9.4.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

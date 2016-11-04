@@ -7,14 +7,11 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
 import android.text.method.PasswordTransformationMethod;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -77,21 +74,21 @@ public class LoginActivity extends W4MActivity {
 
         switch (id) {
             case android.R.id.home:
-                if(mLoginFormView.getVisibility() == View.VISIBLE) {
+                if (mLoginFormView.getVisibility() == View.VISIBLE) {
                     mLoginFormView.setVisibility(View.GONE);
                     loginUserType.setVisibility(View.VISIBLE);
 
                     btnSignup.setVisibility(View.VISIBLE);
 
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                } else if(forgotPassForm.getVisibility() == View.VISIBLE) {
+                } else if (forgotPassForm.getVisibility() == View.VISIBLE) {
                     forgotPassForm.setVisibility(View.GONE);
                     mLoginFormView.setVisibility(View.VISIBLE);
 
                     btnSignup.setVisibility(View.VISIBLE);
 
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                } else if(findViewById(R.id.signup_form).getVisibility() == View.VISIBLE) {
+                } else if (findViewById(R.id.signup_form).getVisibility() == View.VISIBLE) {
                     findViewById(R.id.signup_form).setVisibility(View.GONE);
                     loginUserType.setVisibility(View.VISIBLE);
 
@@ -135,7 +132,7 @@ public class LoginActivity extends W4MActivity {
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        if(credendials != null) {
+        if (credendials != null) {
             mEmailView.setText(credendials.getUsername());
             mPasswordView.setText(credendials.getPassword());
         }
@@ -303,11 +300,14 @@ public class LoginActivity extends W4MActivity {
                 Snackbar.make(mainView, "Usuário ou senha inválidos.", Snackbar.LENGTH_INDEFINITE)
                         .setAction("ENTENDI", new View.OnClickListener() {
                             @Override
-                            public void onClick(View view) { }
+                            public void onClick(View view) {
+                            }
                         })
                         .show();
             }
         });
     }
+
+
 }
 

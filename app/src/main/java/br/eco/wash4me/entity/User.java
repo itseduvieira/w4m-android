@@ -10,11 +10,13 @@ public class User {
     private String name;
     private String email;
     private List<Car> myCars;
+    private List<Place> myPlaces;
     private String token;
     private Type type = Type.VISITOR;
 
     public User() {
         myCars = new ArrayList<>();
+        myPlaces = new ArrayList<>();
     }
 
     public static final User VISITOR = buildVisitor();
@@ -76,6 +78,14 @@ public class User {
 
     public void setMyCars(List<Car> myCars) {
         this.myCars = myCars;
+    }
+
+    public List<Place> getMyPlaces() {
+        return myPlaces;
+    }
+
+    public void setMyPlaces(List<Place> myPlaces) {
+        this.myPlaces = myPlaces;
     }
 
     public enum Type {

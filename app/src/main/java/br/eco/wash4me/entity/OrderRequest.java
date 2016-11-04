@@ -9,6 +9,7 @@ public class OrderRequest {
     private List<Product> products;
     private GregorianCalendar date;
     private Car car;
+    private Place place;
 
     public OrderRequest() {
         products = new ArrayList<>();
@@ -37,6 +38,14 @@ public class OrderRequest {
 
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
+
+    public void setPlace(Place place) {
+        this.place = place;
     }
 
     public Double calculatePrice() {

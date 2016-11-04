@@ -1,16 +1,21 @@
 package br.eco.wash4me.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +25,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,15 +49,19 @@ import br.eco.wash4me.R;
 import br.eco.wash4me.activity.base.W4MActivity;
 import br.eco.wash4me.entity.Car;
 import br.eco.wash4me.entity.OrderRequest;
+import br.eco.wash4me.entity.Place;
 import br.eco.wash4me.entity.Product;
 import br.eco.wash4me.utils.Callback;
 
+import static br.eco.wash4me.activity.base.W4MApplication.log;
 import static br.eco.wash4me.data.DataAccess.getDataAccess;
 import static br.eco.wash4me.utils.Constants.TAG_STEP_1_VIEW;
 import static br.eco.wash4me.utils.Constants.TAG_STEP_2_VIEW;
 import static br.eco.wash4me.utils.Constants.TAG_STEP_3_VIEW;
 
-public class StepsActivity extends W4MActivity {
+public class StepsActivity extends W4MActivity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
     public static final int REQUEST_CODE_CAR = 0;
     private TextView title;
     private RecyclerView gridProducts;
@@ -58,6 +71,12 @@ public class StepsActivity extends W4MActivity {
     private Button btnNext;
     private View progress;
     private OrderRequest request;
+    private Place myPlace;
+
+    private GoogleApiClient mGoogleApiClient;
+
+    private static final LocationRequest REQUEST = LocationRequest.create()
+            .setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,8 +167,15 @@ public class StepsActivity extends W4MActivity {
                 }
             }
         });
+
+        if (hasPermissions()) {
+            setupLocationListener();
+        } else {
+            checkPermissions();
+        }
     }
 
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CAR) {
             if (resultCode == RESULT_OK) {
@@ -162,6 +188,150 @@ public class StepsActivity extends W4MActivity {
 
                 checkCarViews();
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setupLocationListener();
+                } else {
+                    if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
+                            !ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        myPlace = getDefaultPlace();
+
+                        showOkAlert("O aplicativo PRECISA da sua permissão para funcionar corretamente.");
+                    } else {
+                        hideProgress();
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        try {
+            LocationServices.FusedLocationApi.requestLocationUpdates(
+                    mGoogleApiClient,
+                    REQUEST,
+                    this);
+        } catch (SecurityException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        //TODO: Implement location connection suspended
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        //TODO: Implement location connection failed
+    }
+
+    @Override
+    public void onLocationChanged(final Location location) {
+        log("[StepsActivity.onLocationChanged] Location changed " + location);
+
+        convertLocationToPlace(location, new Callback<Place>() {
+            @Override
+            public void execute(final Place place) {
+                if (myPlace == null) {
+                    log("[StepsActivity.onLocationChanged] First location set [" + place.getLatitude() + "," + place.getLongitude() + "]");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getW4MApplication().getOrderRequest().setPlace(place);
+                            setMyPlace(place);
+                        }
+                    });
+                }
+
+                myPlace = place;
+            }
+        });
+    }
+
+    private void setMyPlace(Place place) {
+        String title = place.getTitle()
+                .toUpperCase().replace("RUA", "R")
+                .replace("AVENIDA", "AV")
+                .replace("ALAMEDA", "AL");
+
+        if (title.length() > 24) {
+            ((TextView) findViewById(R.id.place_main)).setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        } else {
+            ((TextView) findViewById(R.id.place_main)).setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        }
+
+        ((TextView) findViewById(R.id.place_main)).setText(title);
+        ((TextView) findViewById(R.id.place_description)).setText(place.getDescription());
+    }
+
+    private void setupLocationListener() {
+        if (mGoogleApiClient == null) {
+            //showMyPlaceLoading();
+
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
+
+    private void convertLocationToPlace(final Location location, final Callback<Place> callback) {
+        getDataAccess().getMyPlaceInfo(context, location, new Callback<Place>() {
+            @Override
+            public void execute(Place place) {
+                if (place == null) {
+                    log("[StepsActivity.convertLocationToPlace] Place for " + location.getLatitude() + ":" + location.getLongitude() + " is null");
+
+                    place = getDefaultPlace();
+                }
+
+                callback.execute(place);
+            }
+        });
+    }
+
+    private Place getDefaultPlace() {
+        List<Place> places = getW4MApplication().getLoggedUser(context).getMyPlaces();
+        if (!places.isEmpty()) {
+            return places.get(0);
+        } else {
+            Place place = new Place();
+            place.setAddress("Praça da Sé");
+            place.setNeighbourhood("Centro");
+            place.setNumber("1");
+            place.setCity("São Paulo");
+            place.setState("SP");
+            place.setLatitude(-23.550460);
+            place.setLongitude(-46.634058);
+            place.setTitle(place.getAddress() + ", " + place.getNumber());
+            place.setDescription(place.getNeighbourhood() + ", " + place.getCity() + " - " + place.getState());
+
+            return place;
         }
     }
 
@@ -198,6 +368,14 @@ public class StepsActivity extends W4MActivity {
         title.setText("Escolha o Local");
 
         checkCarViews();
+
+        Place choosed = getW4MApplication().getOrderRequest().getPlace();
+
+        if(choosed != null) {
+            setMyPlace(choosed);
+        } else {
+            setMyPlace(getDefaultPlace());
+        }
     }
 
     private void checkCarViews() {
