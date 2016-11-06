@@ -12,10 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -41,13 +44,16 @@ public class LoginActivity extends W4MActivity {
     private Button btnVisitor;
     private Button btnMember;
     private LoginButton loginButton;
+    private LoginButton loginButtonSignup;
     private RelativeLayout mainView;
     private Account credendials;
     private View forgotPassForm;
     private View btnShowForgotPass;
+    private Button btnShowSignup;
     private Button btnSignup;
 
-    private CallbackManager callbackManager;
+    private CallbackManager callbackManagerLogin;
+    private CallbackManager callbackManagerSignup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +71,8 @@ public class LoginActivity extends W4MActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        callbackManagerLogin.onActivityResult(requestCode, resultCode, data);
+        callbackManagerSignup.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -78,21 +85,25 @@ public class LoginActivity extends W4MActivity {
                     mLoginFormView.setVisibility(View.GONE);
                     loginUserType.setVisibility(View.VISIBLE);
 
-                    btnSignup.setVisibility(View.VISIBLE);
+                    btnShowSignup.setVisibility(View.VISIBLE);
 
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 } else if (forgotPassForm.getVisibility() == View.VISIBLE) {
                     forgotPassForm.setVisibility(View.GONE);
                     mLoginFormView.setVisibility(View.VISIBLE);
 
-                    btnSignup.setVisibility(View.VISIBLE);
+                    btnShowSignup.setVisibility(View.VISIBLE);
 
                     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+                    if(AccessToken.getCurrentAccessToken() != null) {
+                        LoginManager.getInstance().logOut();
+                    }
                 } else if (findViewById(R.id.signup_form).getVisibility() == View.VISIBLE) {
                     findViewById(R.id.signup_form).setVisibility(View.GONE);
                     loginUserType.setVisibility(View.VISIBLE);
 
-                    btnSignup.setVisibility(View.VISIBLE);
+                    btnShowSignup.setVisibility(View.VISIBLE);
 
                     getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 }
@@ -114,12 +125,15 @@ public class LoginActivity extends W4MActivity {
         mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         btnVisitor = (Button) findViewById(R.id.btn_visitor);
         btnMember = (Button) findViewById(R.id.btn_member);
-        callbackManager = CallbackManager.Factory.create();
+        callbackManagerLogin = CallbackManager.Factory.create();
+        callbackManagerSignup = CallbackManager.Factory.create();
         loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
+        loginButtonSignup = (LoginButton) findViewById(R.id.facebook_signup_button);
         mainView = (RelativeLayout) findViewById(R.id.login_main_view);
         credendials = getW4MApplication().getAccount(context);
         btnShowForgotPass = findViewById(R.id.btn_show_forgot_pass);
-        forgotPassForm = findViewById(R.id.email_pass_form);
+        forgotPassForm = findViewById(R.id.forgot_form);
+        btnShowSignup = (Button) findViewById(R.id.btn_show_signup);
         btnSignup = (Button) findViewById(R.id.btn_signup);
     }
 
@@ -156,6 +170,8 @@ public class LoginActivity extends W4MActivity {
         btnVisitor.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                getW4MApplication().setLoggedUser(context, User.VISITOR);
+
                 startActivity(new Intent(LoginActivity.this, StepsActivity.class));
             }
         });
@@ -172,17 +188,34 @@ public class LoginActivity extends W4MActivity {
 
         loginButton.setReadPermissions(Arrays.asList(
                 "public_profile", "email"));
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        loginButton.registerCallback(callbackManagerLogin, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(final LoginResult loginResult) {
+                loginWithFacebook();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+        loginButtonSignup.setReadPermissions(Arrays.asList(
+                "public_profile", "email"));
+        loginButtonSignup.registerCallback(callbackManagerSignup, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 getDataAccess().getFacebookLoginData(context, new Callback<User>() {
                     @Override
                     public void execute(User user) {
-                        getW4MApplication().setLoggedUser(context, user);
-
-                        finish();
-
-                        startActivity(new Intent(LoginActivity.this, StepsActivity.class));
+                        ((TextView) findViewById(R.id.name_signup)).setText(user.getName());
+                        ((TextView) findViewById(R.id.email_signup)).setText(user.getEmail());
+                        findViewById(R.id.password_signup).requestFocus();
                     }
                 }, new Callback<Void>() {
                     @Override
@@ -208,26 +241,104 @@ public class LoginActivity extends W4MActivity {
             @Override
             public void onClick(View view) {
                 findViewById(R.id.login_form).setVisibility(View.GONE);
-                findViewById(R.id.email_pass_form).setVisibility(View.VISIBLE);
+                findViewById(R.id.forgot_form).setVisibility(View.VISIBLE);
 
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        });
+
+        btnShowSignup.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSignupForm();
             }
         });
 
         btnSignup.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                findViewById(R.id.login_form).setVisibility(View.GONE);
-                findViewById(R.id.email_pass_form).setVisibility(View.GONE);
-                findViewById(R.id.user_type_form).setVisibility(View.GONE);
-                findViewById(R.id.signup_form).setVisibility(View.VISIBLE);
-                btnSignup.setVisibility(View.GONE);
+                showProgress("Fazendo Cadastro...", mEmailView.getWindowToken(), mPasswordView.getWindowToken());
 
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                User user = new User();
+
+                getDataAccess().doSignup(context, user, new Callback<User>() {
+                    @Override
+                    public void execute(User newUser) {
+                        hideProgress();
+
+                        Account account = new Account();
+                        account.setUsername(newUser.getEmail());
+
+                        getW4MApplication().saveAccount(context, account);
+
+                        getW4MApplication().setLoggedUser(context, newUser);
+
+                        finish();
+
+                        startActivity(new Intent(LoginActivity.this, StepsActivity.class));
+                    }
+                }, new Callback<Void>() {
+                    @Override
+                    public void execute(Void aVoid) {
+                        log("[btnSignup.onClick] ERROR at sign up");
+                    }
+                });
             }
         });
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        if(AccessToken.getCurrentAccessToken() != null) {
+            loginWithFacebook();
+        }
+    }
+
+    private void loginWithFacebook() {
+        getDataAccess().getFacebookLoginData(context, new Callback<User>() {
+            @Override
+            public void execute(final User facebookUser) {
+                Account account = new Account();
+                account.setUsername(facebookUser.getEmail());
+                account.setPassword(facebookUser.getFacebookId());
+
+                getDataAccess().doFacebookLogin(context, account, new Callback<User>() {
+                    @Override
+                    public void execute(User user) {
+                        getW4MApplication().setLoggedUser(context, user);
+
+                        finish();
+
+                        startActivity(new Intent(LoginActivity.this, StepsActivity.class));
+                    }
+                }, new Callback<Void>() {
+                    @Override
+                    public void execute(Void aVoid) {
+                        Snackbar.make(findViewById(R.id.toolbar), "Complete seu cadastro no formulário acima.", Snackbar.LENGTH_LONG).show();
+
+                        showSignupForm();
+
+                        ((TextView) findViewById(R.id.name_signup)).setText(facebookUser.getName());
+                        ((TextView) findViewById(R.id.email_signup)).setText(facebookUser.getEmail());
+                        findViewById(R.id.password_signup).requestFocus();
+                    }
+                });
+            }
+        }, new Callback<Void>() {
+            @Override
+            public void execute(Void aVoid) {
+                log("[setupViews.registerCallback] ERROR at getting data from Facebook");
+            }
+        });
+    }
+
+    private void showSignupForm() {
+        findViewById(R.id.login_form).setVisibility(View.GONE);
+        findViewById(R.id.forgot_form).setVisibility(View.GONE);
+        findViewById(R.id.user_type_form).setVisibility(View.GONE);
+        findViewById(R.id.signup_form).setVisibility(View.VISIBLE);
+        btnShowSignup.setVisibility(View.GONE);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void attemptLogin() {

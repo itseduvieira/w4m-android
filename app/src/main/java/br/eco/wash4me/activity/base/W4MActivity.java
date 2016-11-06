@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ import br.eco.wash4me.activity.PaymentActivity;
 import br.eco.wash4me.activity.ProfileActivity;
 import br.eco.wash4me.activity.StepsActivity;
 import br.eco.wash4me.activity.SuppliersActivity;
+import br.eco.wash4me.entity.User;
 import br.eco.wash4me.utils.Callback;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -213,53 +215,96 @@ public class W4MActivity extends AppCompatActivity {
     }
 
     protected void setupNavigationDrawer() {
+        Boolean visitor = getW4MApplication().getLoggedUser(context).getType().equals(User.Type.VISITOR);
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        View hView =  navigationView.getHeaderView(0);
-        profileImage = (CircleImageView) hView.findViewById(R.id.profile_image);
-        userName = (TextView) hView.findViewById(R.id.name_user);
-        userEmail = (TextView) hView.findViewById(R.id.email_user);
 
-
-        userName.setText(getW4MApplication().getLoggedUser(context).getName());
-        userEmail.setText(getW4MApplication().getLoggedUser(context).getEmail());
-
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                drawerLayout.closeDrawers();
-
-                int id = menuItem.getItemId();
-
-                switch(id) {
-                    case R.id.navigation_item_new_order:
-                        startActivity(new Intent(context, StepsActivity.class));
-                        break;
-                    case R.id.navigation_item_my_orders:
-                        startActivity(new Intent(context, MyOrdersActivity.class));
-                        break;
-                    case R.id.navigation_item_suppliers:
-                        startActivity(new Intent(context, SuppliersActivity.class));
-                        break;
-                    case R.id.navigation_item_chat:
-                        startActivity(new Intent(context, ChatActivity.class));
-                        break;
-                    case R.id.navigation_item_profile:
-                        startActivity(new Intent(context, ProfileActivity.class));
-                        break;
-                    case R.id.navigation_item_finance:
-                        startActivity(new Intent(context, PaymentActivity.class));
-                        break;
-                    case R.id.navigation_item_exit:
-                        logout();
-                        break;
-                    default:
-                        Snackbar.make(drawerLayout, menuItem.getTitle(), Snackbar.LENGTH_LONG).show();
+        if(visitor) {
+            View header = getLayoutInflater().inflate(R.layout.drawer_header_visitor, navigationView, false);
+            navigationView.addHeaderView(header);
+            navigationView.inflateMenu(R.menu.drawer_visitor);
+            profileImage = (CircleImageView) header.findViewById(R.id.profile_image);
+            Button btnSignIn = (Button) header.findViewById(R.id.btn_visitor_signin);
+            btnSignIn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    finish();
                 }
+            });
 
-                return true;
-            }
-        });
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    drawerLayout.closeDrawers();
+
+                    int id = menuItem.getItemId();
+
+                    switch (id) {
+                        case R.id.navigation_item_suppliers:
+                            startActivity(new Intent(context, SuppliersActivity.class));
+                            break;
+                        case R.id.navigation_item_chat:
+                            startActivity(new Intent(context, ChatActivity.class));
+                            break;
+                        case R.id.navigation_item_exit:
+                            logout();
+                            break;
+                        default:
+                            Snackbar.make(drawerLayout, menuItem.getTitle(), Snackbar.LENGTH_LONG).show();
+                    }
+
+                    return true;
+                }
+            });
+        } else {
+            View header = getLayoutInflater().inflate(R.layout.drawer_header, navigationView, false);
+            navigationView.addHeaderView(header);
+            navigationView.inflateMenu(R.menu.drawer);
+            profileImage = (CircleImageView) header.findViewById(R.id.profile_image);
+            userName = (TextView) header.findViewById(R.id.name_user);
+            userEmail = (TextView) header.findViewById(R.id.email_user);
+
+            userName.setText(getW4MApplication().getLoggedUser(context).getName());
+            userEmail.setText(getW4MApplication().getLoggedUser(context).getEmail());
+
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    drawerLayout.closeDrawers();
+
+                    int id = menuItem.getItemId();
+
+                    switch (id) {
+                        case R.id.navigation_item_new_order:
+                            startActivity(new Intent(context, StepsActivity.class));
+                            break;
+                        case R.id.navigation_item_my_orders:
+                            startActivity(new Intent(context, MyOrdersActivity.class));
+                            break;
+                        case R.id.navigation_item_suppliers:
+                            startActivity(new Intent(context, SuppliersActivity.class));
+                            break;
+                        case R.id.navigation_item_chat:
+                            startActivity(new Intent(context, ChatActivity.class));
+                            break;
+                        case R.id.navigation_item_profile:
+                            startActivity(new Intent(context, ProfileActivity.class));
+                            break;
+                        case R.id.navigation_item_finance:
+                            startActivity(new Intent(context, PaymentActivity.class));
+                            break;
+                        case R.id.navigation_item_exit:
+                            logout();
+                            break;
+                        default:
+                            Snackbar.make(drawerLayout, menuItem.getTitle(), Snackbar.LENGTH_LONG).show();
+                    }
+
+                    return true;
+                }
+            });
+        }
 
         getW4MApplication().getProfilePicture(context, new Callback<Bitmap>() {
             @Override

@@ -12,7 +12,8 @@ public class User {
     private List<Car> myCars;
     private List<Place> myPlaces;
     private String token;
-    private Type type = Type.VISITOR;
+    private String facebookId;
+    private Type type = Type.MEMBER;
 
     public User() {
         myCars = new ArrayList<>();
@@ -21,8 +22,9 @@ public class User {
 
     public static final User VISITOR = buildVisitor();
 
-    public static User buildVisitor() {
+    private static User buildVisitor() {
         User result = new User();
+        result.setType(Type.VISITOR);
         result.setToken("JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJ2aXNpd" +
                 "G9yQHdhc2g0bWUuZWNvLmJyIiwicGFzc3dvcmQiOiIkMmEkMTAkanhCdGouMTNsU2dMM2RDcFJHblhRZWxK" +
                 "WFhCOFFrUXQ3VnlTNGU0Y0VRcThpWjdkMHRsRDYiLCJuYW1lIjoiVmlzaXRvciIsIm1vYmlsZSI6IjAiLCJ" +
@@ -86,6 +88,14 @@ public class User {
 
     public void setMyPlaces(List<Place> myPlaces) {
         this.myPlaces = myPlaces;
+    }
+
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
     }
 
     public enum Type {

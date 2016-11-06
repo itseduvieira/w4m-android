@@ -12,20 +12,26 @@
         android:scaleType="centerCrop"
         android:src="@drawable/login_background"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/w4mDarkAlpha"/>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/W4MTheme.Toolbar"
-        android:background="@color/w4mDarkAlpha"
+        android:background="@android:color/transparent"
         app:theme="@style/ThemeOverlay.AppCompat.ActionBar">
 
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/email_pass_form"
+        android:id="@+id/forgot_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="2dp"
         android:visibility="gone"
+        app:cardBackgroundColor="#FAFFFFFF"
         android:layout_margin="16dp"
         android:layout_centerInParent="true">
 
@@ -76,7 +82,8 @@
         android:layout_centerInParent="true"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="2dp"
+        app:cardBackgroundColor="#FAFFFFFF"
         android:visibility="gone">
 
         <LinearLayout
@@ -88,6 +95,28 @@
             android:paddingTop="24dp"
             android:paddingBottom="8dp"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_marginBottom="8dp"
+                android:text="PREENCHA OS DADOS ABAIXO E EM SEGUIDA SERÁ ENVIADO UM EMAIL PARA CONFIRMAÇÃO"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/name_signup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nome Completo"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -130,7 +159,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/email_signup_button"
+                android:id="@+id/btn_signup"
                 style="@style/W4MTheme.Button.Accent"
                 android:layout_marginTop="12dp"
                 android:text="FAZER CADASTRO" />
@@ -144,7 +173,8 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="16dp"
                 android:textAllCaps="true"
-                android:text="CONECTAR COM FACEBOOK"
+                app:com_facebook_login_text="CONECTAR COM FACEBOOK"
+                app:com_facebook_logout_text="CONECTADO COM FACEBOOK"
                 android:elevation="2dp"
                 android:layout_gravity="center_horizontal" />
 
@@ -158,7 +188,8 @@
         android:layout_centerInParent="true"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="2dp"
+        app:cardBackgroundColor="#FAFFFFFF"
         android:visibility="gone">
 
         <LinearLayout
@@ -214,6 +245,7 @@
                 android:paddingBottom="16dp"
                 android:layout_marginTop="12dp"
                 android:textAllCaps="true"
+                app:com_facebook_logout_text="CONECTADO COM FACEBOOK"
                 android:elevation="2dp"
                 android:layout_gravity="center_horizontal" />
 
@@ -239,18 +271,26 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:visibility="visible"
-        app:cardBackgroundColor="#EEFFFFFF"
-        app:cardCornerRadius="4dp">
+        app:cardBackgroundColor="#FAFFFFFF"
+        app:cardCornerRadius="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingTop="50dp"
-            android:paddingBottom="50dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp"
             android:clipToPadding="false"
             android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="12sp"
+                android:layout_marginBottom="16dp"
+                android:text="COM WASH4ME VOCÊ LAVA SEU CARRO SEM PRECISAR SAIR DE CASA"/>
 
             <Button
                 android:id="@+id/btn_visitor"
@@ -262,8 +302,8 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp">
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -276,7 +316,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:textAlignment="center"
-                    android:padding="5dp"
+                    android:textSize="12sp"
+                    android:padding="8dp"
                     android:text="OU"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -294,9 +335,8 @@
     </android.support.v7.widget.CardView>
 
     <Button
-        android:id="@+id/btn_signup"
+        android:id="@+id/btn_show_signup"
         style="@style/W4MTheme.Button.Bottom.Transparent"
         android:textColor="@color/w4mTextColorInverse"
-        android:background="@color/w4mDarkAlpha"
         android:text="NÃO É CADASTRADO? CLIQUE AQUI"/>
 </RelativeLayout>

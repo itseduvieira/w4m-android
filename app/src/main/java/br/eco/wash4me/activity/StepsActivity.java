@@ -91,13 +91,9 @@ public class StepsActivity extends W4MActivity implements
 
         setupViews();
 
-        if (getW4MApplication().isLogged(context)) {
-            setupToolbarMenu();
+        setupToolbarMenu();
 
-            setupNavigationDrawer();
-        } else {
-            setupToolbarClose();
-        }
+        setupNavigationDrawer();
 
         showTotal();
     }
@@ -202,6 +198,8 @@ public class StepsActivity extends W4MActivity implements
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setupLocationListener();
+
+                    onStart();
                 } else {
                     if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) ||
                             !ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
@@ -218,14 +216,18 @@ public class StepsActivity extends W4MActivity implements
 
     @Override
     protected void onStart() {
-        mGoogleApiClient.connect();
+        if(mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
 
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        mGoogleApiClient.disconnect();
+        if(mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
 
         super.onStop();
     }

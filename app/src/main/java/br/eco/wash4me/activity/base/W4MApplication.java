@@ -1,11 +1,13 @@
 package br.eco.wash4me.activity.base;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -22,8 +24,6 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import br.eco.wash4me.R;
-import br.eco.wash4me.activity.LoginActivity;
-import br.eco.wash4me.activity.StepsActivity;
 import br.eco.wash4me.entity.Account;
 import br.eco.wash4me.entity.Car;
 import br.eco.wash4me.entity.OrderRequest;
@@ -51,6 +51,36 @@ public class W4MApplication extends Application {
         FontOverride.setDefaultFont(this, "SANS_SERIF", "fonts/brandon_med.otf");
 
         w4mApplication = this;
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+
+            @Override
+            public void onActivityCreated(Activity activity,
+                                          Bundle savedInstanceState) {
+
+                activity.setRequestedOrientation(
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) { }
+
+            @Override
+            public void onActivityResumed(Activity activity) { }
+
+            @Override
+            public void onActivityPaused(Activity activity) { }
+
+            @Override
+            public void onActivityStopped(Activity activity) { }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle bundle) { }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) { }
+        });
     }
 
     public static W4MApplication getInstance() {

@@ -85,11 +85,53 @@ public class DataAccess {
         queueRequest(context, request);
     }
 
+    public void doSignup(Context context, User user, final Callback<User> callback, final Callback<Void> errorCallback) {
+        Map<String, String> parameters = new HashMap<>();
+        //parameters.put("username", account.getUsername());
+        //parameters.put("password", account.getPassword());
+
+        GsonRequest<User> request = buildRequest(context, buildBaseURL(AUTHENTICATE), Request.Method.POST,
+                User.class, parameters, new Response.Listener<User>() {
+                    @Override
+                    public void onResponse(User user) {
+                        callback.execute(user);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        errorCallback.execute(null);
+                    }
+                });
+
+        queueRequest(context, request);
+    }
+
+    public void doFacebookLogin(Context context, Account account, final Callback<User> callback, final Callback<Void> errorCallback) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("username", account.getUsername());
+        parameters.put("facebook", account.getPassword());
+
+        GsonRequest<User> request = buildRequest(context, buildBaseURL(AUTHENTICATE_FB), Request.Method.POST,
+                User.class, parameters, new Response.Listener<User>() {
+                    @Override
+                    public void onResponse(User user) {
+                        callback.execute(user);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        errorCallback.execute(null);
+                    }
+                });
+
+        queueRequest(context, request);
+    }
+
     public void getFacebookLoginData(final Context context, final Callback<User> callback, final Callback<Void> errorCallback) {
-        final User loggedUser = new User();
+        final User facebookUser = new User();
 
         final Bundle parametersPicture = new Bundle();
-        parametersPicture.putString("fields", "picture.width(150).height(150),name,email");
+        parametersPicture.putString("fields", "picture.width(150).height(150),name,email,id");
 
         new AsyncTask<Void, Void, GraphResponse>() {
             @Override
@@ -107,14 +149,15 @@ public class DataAccess {
                     try {
                         String url = graphResponse.getJSONObject().getJSONObject("picture")
                                 .getJSONObject("data").getString("url");
-                        loggedUser.setName(graphResponse.getJSONObject().getString("name"));
-                        loggedUser.setEmail(graphResponse.getJSONObject().getString("email"));
+                        facebookUser.setName(graphResponse.getJSONObject().getString("name"));
+                        facebookUser.setEmail(graphResponse.getJSONObject().getString("email"));
+                        facebookUser.setFacebookId(graphResponse.getJSONObject().getString("id"));
 
                         ImageRequest request = buildImageRequest(url, new Callback<Bitmap>() {
                             @Override
                             public void execute(Bitmap bitmap) {
                                 W4MApplication.getInstance().setProfilePicture(bitmap);
-                                callback.execute(loggedUser);
+                                callback.execute(facebookUser);
                             }
                         });
 
