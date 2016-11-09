@@ -7,11 +7,11 @@
     <string name="prompt_password">Senha</string>
     <string name="action_sign_in">Fazer Login</string>
     <string name="action_sign_in_short">Fazer Login</string>
-    <string name="error_invalid_email">Este endereço de email é inválido</string>
+    <string name="error_invalid_email">Este endereço de username é inválido</string>
     <string name="error_invalid_password">Esta senha é muito pequena</string>
     <string name="error_incorrect_password">A senha está incorreta</string>
     <string name="error_field_required">Este campo é obrigatório</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing username completions."</string>
     <string name="title_activity_settings">Preferências</string>
     <!-- Strings related to Settings -->
 

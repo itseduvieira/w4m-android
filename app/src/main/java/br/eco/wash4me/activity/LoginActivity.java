@@ -18,6 +18,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -38,6 +39,8 @@ public class LoginActivity extends W4MActivity {
     private TextInputEditText mPasswordView;
     private TextInputEditText mPasswordSignupView;
     private TextInputEditText mPasswordConfirmSignupView;
+    private TextInputEditText mNameSignupView;
+    private TextInputEditText mEmailSignupView;
     private View mLoginFormView;
     private View loginUserType;
     private Button mEmailSignInButton;
@@ -121,6 +124,8 @@ public class LoginActivity extends W4MActivity {
         mPasswordView = (TextInputEditText) findViewById(R.id.password);
         mPasswordSignupView = (TextInputEditText) findViewById(R.id.password_signup);
         mPasswordConfirmSignupView = (TextInputEditText) findViewById(R.id.password_confirm_signup);
+        mEmailSignupView = (TextInputEditText) findViewById(R.id.email_signup);
+        mNameSignupView = (TextInputEditText) findViewById(R.id.name_signup);
         mEmailView = (TextInputEditText) findViewById(R.id.email);
         mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         btnVisitor = (Button) findViewById(R.id.btn_visitor);
@@ -214,7 +219,7 @@ public class LoginActivity extends W4MActivity {
                     @Override
                     public void execute(User user) {
                         ((TextView) findViewById(R.id.name_signup)).setText(user.getName());
-                        ((TextView) findViewById(R.id.email_signup)).setText(user.getEmail());
+                        ((TextView) findViewById(R.id.email_signup)).setText(user.getUsername());
                         findViewById(R.id.password_signup).requestFocus();
                     }
                 }, new Callback<Void>() {
@@ -257,32 +262,63 @@ public class LoginActivity extends W4MActivity {
         btnSignup.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgress("Fazendo Cadastro...", mEmailView.getWindowToken(), mPasswordView.getWindowToken());
+                if(mNameSignupView.getText().toString().isEmpty() || mEmailSignupView.getText().toString().isEmpty() ||
+                        mPasswordSignupView.getText().toString().isEmpty() || mPasswordConfirmSignupView.getText().toString().isEmpty()) {
+                    Snackbar.make(findViewById(R.id.toolbar), "Preencha corretamente TODOS os campos.", Snackbar.LENGTH_LONG).show();
+                } else {
+                    if(!mEmailSignupView.getText().toString().contains("@") && !mEmailSignupView.getText().toString().contains("//.")) {
+                        Snackbar.make(findViewById(R.id.toolbar), "O email não está em um formato válido.", Snackbar.LENGTH_LONG).show();
 
-                User user = new User();
+                        mEmailSignupView.requestFocus();
+                    } else {
+                        if(!mPasswordSignupView.getText().toString().equals(mPasswordConfirmSignupView.getText().toString())) {
+                            Snackbar.make(findViewById(R.id.toolbar), "As senhas digitadas não combinam.", Snackbar.LENGTH_LONG).show();
+                        } else {
+                            final String password = mPasswordSignupView.getText().toString();
 
-                getDataAccess().doSignup(context, user, new Callback<User>() {
-                    @Override
-                    public void execute(User newUser) {
-                        hideProgress();
+                            if(password.length() < 6) {
+                                Snackbar.make(findViewById(R.id.toolbar), "A senha precisa conter mais de SEIS caracteres.", Snackbar.LENGTH_LONG).show();
+                            } else {
+                                final User user = new User();
+                                user.setName(mNameSignupView.getText().toString());
+                                user.setUsername(mEmailSignupView.getText().toString());
+                                if(AccessToken.getCurrentAccessToken() != null) {
+                                    user.setFacebookId(Profile.getCurrentProfile().getId());
+                                }
 
-                        Account account = new Account();
-                        account.setUsername(newUser.getEmail());
+                                showProgress("Fazendo Cadastro...", mEmailView.getWindowToken(), mPasswordView.getWindowToken());
 
-                        getW4MApplication().saveAccount(context, account);
+                                getDataAccess().doSignup(context, user, password, new Callback<User>() {
+                                    @Override
+                                    public void execute(User newUser) {
+                                        hideProgress();
 
-                        getW4MApplication().setLoggedUser(context, newUser);
+                                        Account account = new Account();
+                                        account.setUsername(newUser.getUsername());
+                                        account.setPassword(password);
 
-                        finish();
+                                        getW4MApplication().saveAccount(context, account);
 
-                        startActivity(new Intent(LoginActivity.this, StepsActivity.class));
+                                        getW4MApplication().setLoggedUser(context, user);
+
+                                        finish();
+
+                                        startActivity(new Intent(LoginActivity.this, StepsActivity.class));
+                                    }
+                                }, new Callback<Void>() {
+                                    @Override
+                                    public void execute(Void aVoid) {
+                                        hideProgress();
+
+                                        log("[btnSignup.onClick] ERROR at sign up");
+
+                                        Snackbar.make(findViewById(R.id.toolbar), "Erro ao fazer cadastro no sistema.", Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }
                     }
-                }, new Callback<Void>() {
-                    @Override
-                    public void execute(Void aVoid) {
-                        log("[btnSignup.onClick] ERROR at sign up");
-                    }
-                });
+                }
             }
         });
 
@@ -297,13 +333,17 @@ public class LoginActivity extends W4MActivity {
         getDataAccess().getFacebookLoginData(context, new Callback<User>() {
             @Override
             public void execute(final User facebookUser) {
-                Account account = new Account();
-                account.setUsername(facebookUser.getEmail());
+                final Account account = new Account();
+                account.setUsername(facebookUser.getUsername());
                 account.setPassword(facebookUser.getFacebookId());
 
                 getDataAccess().doFacebookLogin(context, account, new Callback<User>() {
                     @Override
                     public void execute(User user) {
+                        account.setPassword("");
+
+                        getW4MApplication().saveAccount(context, account);
+
                         getW4MApplication().setLoggedUser(context, user);
 
                         finish();
@@ -318,7 +358,7 @@ public class LoginActivity extends W4MActivity {
                         showSignupForm();
 
                         ((TextView) findViewById(R.id.name_signup)).setText(facebookUser.getName());
-                        ((TextView) findViewById(R.id.email_signup)).setText(facebookUser.getEmail());
+                        ((TextView) findViewById(R.id.email_signup)).setText(facebookUser.getUsername());
                         findViewById(R.id.password_signup).requestFocus();
                     }
                 });

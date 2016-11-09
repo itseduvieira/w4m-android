@@ -52,7 +52,7 @@ public class OrderRequest {
         Double total = 0.0;
 
         for(Product p : products) {
-            total += p.getPrice();
+            total += p.getPrice(getCar());
         }
 
         return total;

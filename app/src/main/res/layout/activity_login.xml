@@ -96,14 +96,6 @@
             android:paddingBottom="8dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:layout_marginBottom="8dp"
-                android:text="PREENCHA OS DADOS ABAIXO E EM SEGUIDA SERÁ ENVIADO UM EMAIL PARA CONFIRMAÇÃO"/>
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -114,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Nome Completo"
                     android:inputType="textEmailAddress"
+                    android:imeOptions="actionNext"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -128,6 +121,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
+                    android:imeOptions="actionNext"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -140,6 +134,8 @@
                     android:id="@+id/password_signup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
                     android:hint="@string/prompt_password"
                     android:maxLines="1" />
 
@@ -153,6 +149,8 @@
                     android:id="@+id/password_confirm_signup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:imeOptions="actionDone"
                     android:hint="Confirme a Senha"
                     android:maxLines="1" />
 
@@ -211,6 +209,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_email"
+                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
 
@@ -226,7 +225,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
                     android:imeActionLabel="@string/action_sign_in_short"
-                    android:imeOptions="actionUnspecified"
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
                     android:maxLines="1" />
 
             </android.support.design.widget.TextInputLayout>
@@ -279,8 +279,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingTop="18dp"
-            android:paddingBottom="18dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
             android:clipToPadding="false"
             android:orientation="vertical">
 
@@ -289,7 +289,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="12sp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="20dp"
                 android:text="COM WASH4ME VOCÊ LAVA SEU CARRO SEM PRECISAR SAIR DE CASA"/>
 
             <Button

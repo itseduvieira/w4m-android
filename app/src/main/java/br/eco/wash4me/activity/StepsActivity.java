@@ -587,8 +587,13 @@ public class StepsActivity extends W4MActivity implements
             public void execute(List<Product> products) {
                 progress.setVisibility(View.GONE);
 
-                productsAdapter = new ProductsAdapter(context, products);
-                gridProducts.setAdapter(productsAdapter);
+                if(products.isEmpty()) {
+                    findViewById(R.id.products_empty_message).setVisibility(View.VISIBLE);
+                } else {
+                    findViewById(R.id.products_empty_message).setVisibility(View.GONE);
+                    productsAdapter = new ProductsAdapter(context, products);
+                    gridProducts.setAdapter(productsAdapter);
+                }
             }
         });
 
@@ -858,7 +863,7 @@ public class StepsActivity extends W4MActivity implements
             Product item = getProducts().get(position);
             holder.productTitle.setText(item.getName());
             holder.productDescription.setText(item.getDescription());
-            holder.productPrice.setText(String.format("R$%d", item.getPrice().intValue()));
+            holder.productPrice.setText(String.format("R$%d", item.getPrice(getW4MApplication().getOrderRequest().getCar()).intValue()));
 
             StaggeredGridLayoutManager.LayoutParams layoutParams =
                     (StaggeredGridLayoutManager.LayoutParams) holder.itemView.getLayoutParams();

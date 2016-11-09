@@ -1,14 +1,12 @@
 package br.eco.wash4me.entity;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
     private Integer id;
     private String name;
-    private String email;
+    private String username;
     private List<Car> myCars;
     private List<Place> myPlaces;
     private String token;
@@ -50,12 +48,12 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Type getType() {

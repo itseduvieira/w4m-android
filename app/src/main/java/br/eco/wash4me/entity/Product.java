@@ -5,7 +5,9 @@ public class Product {
     private String name;
     private String description;
     private Boolean featured;
-    private Double price;
+    private Double priceSmall;
+    private Double priceMedium;
+    private Double priceLarge;
 
     public Integer getId() {
         return id;
@@ -39,12 +41,38 @@ public class Product {
         this.featured = featured;
     }
 
-    public Double getPrice() {
-        return price;
+    public Double getPrice(Car car) {
+        if(car.getSize().equals("S")) {
+            return getPriceSmall();
+        } else if(car.getSize().equals("M")) {
+            return getPriceMedium();
+        } else {
+            return getPriceLarge();
+        }
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public Double getPriceSmall() {
+        return priceSmall;
+    }
+
+    public void setPriceSmall(Double priceSmall) {
+        this.priceSmall = priceSmall;
+    }
+
+    public Double getPriceMedium() {
+        return priceMedium;
+    }
+
+    public void setPriceMedium(Double priceMedium) {
+        this.priceMedium = priceMedium;
+    }
+
+    public Double getPriceLarge() {
+        return priceLarge;
+    }
+
+    public void setPriceLarge(Double priceLarge) {
+        this.priceLarge = priceLarge;
     }
 
     @Override

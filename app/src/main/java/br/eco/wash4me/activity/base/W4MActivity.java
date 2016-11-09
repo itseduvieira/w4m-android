@@ -266,7 +266,7 @@ public class W4MActivity extends AppCompatActivity {
             userEmail = (TextView) header.findViewById(R.id.email_user);
 
             userName.setText(getW4MApplication().getLoggedUser(context).getName());
-            userEmail.setText(getW4MApplication().getLoggedUser(context).getEmail());
+            userEmail.setText(getW4MApplication().getLoggedUser(context).getUsername());
 
             navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
                 @Override

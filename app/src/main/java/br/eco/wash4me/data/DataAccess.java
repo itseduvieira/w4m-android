@@ -85,12 +85,18 @@ public class DataAccess {
         queueRequest(context, request);
     }
 
-    public void doSignup(Context context, User user, final Callback<User> callback, final Callback<Void> errorCallback) {
+    public void doSignup(Context context, User user, String password, final Callback<User> callback, final Callback<Void> errorCallback) {
         Map<String, String> parameters = new HashMap<>();
-        //parameters.put("username", account.getUsername());
-        //parameters.put("password", account.getPassword());
+        parameters.put("username", user.getUsername());
+        parameters.put("password", password);
+        parameters.put("name", user.getName());
+        parameters.put("role", "customer");
 
-        GsonRequest<User> request = buildRequest(context, buildBaseURL(AUTHENTICATE), Request.Method.POST,
+        if(user.getFacebookId() != null) {
+            parameters.put("facebookId", user.getFacebookId());
+        }
+
+        GsonRequest<User> request = buildRequest(context, buildBaseURL(SIGNUP), Request.Method.POST,
                 User.class, parameters, new Response.Listener<User>() {
                     @Override
                     public void onResponse(User user) {
@@ -150,7 +156,7 @@ public class DataAccess {
                         String url = graphResponse.getJSONObject().getJSONObject("picture")
                                 .getJSONObject("data").getString("url");
                         facebookUser.setName(graphResponse.getJSONObject().getString("name"));
-                        facebookUser.setEmail(graphResponse.getJSONObject().getString("email"));
+                        facebookUser.setUsername(graphResponse.getJSONObject().getString("email"));
                         facebookUser.setFacebookId(graphResponse.getJSONObject().getString("id"));
 
                         ImageRequest request = buildImageRequest(url, new Callback<Bitmap>() {
@@ -194,12 +200,12 @@ public class DataAccess {
                 Product[].class, new Response.Listener<Product[]>() {
                     @Override
                     public void onResponse(Product[] products) {
-                        callback.execute(Arrays.asList(products));
+                        callback.execute(products == null ? new ArrayList<Product>() : Arrays.asList(products));
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.execute(null);
+                        callback.execute(new ArrayList<Product>());
                     }
                 });
 

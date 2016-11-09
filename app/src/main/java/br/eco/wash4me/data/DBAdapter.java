@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
 
 public class DBAdapter {
 	private SQLiteDatabase database;
@@ -62,7 +61,7 @@ public class DBAdapter {
 		
 		ContentValues values = new ContentValues();
 		values.put(DBHelper.LOGGED_USER_ID, user.getId());
-		values.put(DBHelper.LOGGED_USER_EMAIL, user.getEmail());
+		values.put(DBHelper.LOGGED_USER_EMAIL, user.getUsername());
 		values.put(DBHelper.LOGGED_USER_TYPE, user.getType().toString());
 		values.put(DBHelper.LOGGED_USER_NAME, user.getName());
 		//values.put(DBHelper.LOGGED_USER_BASE_LATITUDE, Double.valueOf(user.getBaseLocation().getLatitude()).toString());
@@ -85,7 +84,7 @@ public class DBAdapter {
 		if(cursor != null && cursor.moveToFirst()) {
 			user = new User();
 			user.setId(cursor.getInt(cursor.getColumnIndex(DBHelper.LOGGED_USER_ID)));
-			user.setEmail(cursor.getString(cursor.getColumnIndex(DBHelper.LOGGED_USER_EMAIL)));
+			user.setUsername(cursor.getString(cursor.getColumnIndex(DBHelper.LOGGED_USER_EMAIL)));
 			user.setName(cursor.getString(cursor.getColumnIndex(DBHelper.LOGGED_USER_NAME)));
 			user.setType("DRIVER".equals(cursor.getString(cursor.getColumnIndex(DBHelper.LOGGED_USER_TYPE))) ? User.Type.VISITOR : User.Type.MEMBER);
             //Location baseLocation = new Location("");
